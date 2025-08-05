@@ -1,0 +1,24 @@
+---
+// src/components/blocks/TimelineItem.astro
+
+export interface Props {
+  stepNumber: string;
+  title: string;
+  description: string;
+}
+
+const { stepNumber, title, description } = Astro.props;
+---
+<li class="max-w-max px-10">
+  <div class="absolute left-0 md:-left-11 lg:-left-[52px] bg-black text-backgroundBody text-lg font-bold rounded-full px-3.5 lg:px-6 py-5 lg:py-8 flex items-center justify-center md:border-[18px] border-backgroundBody dark:border-[#151515]">
+    <span class="text-black dark:text-backgroundBody text-xl bg-gradient-to-r from-white to-gray-400 dark:bg-gradient-to-r dark:from-white dark:to-[#BDBDBD] text-transparent dark:text-transparent bg-clip-text dark:bg-clip-text font-semibold inline-block">
+      {stepNumber}
+    </span>
+  </div>
+  <div class="ml-[30px]">
+    <h3>{title}</h3>
+    <p class="max-w-[483px] mt-1 sm:mt-3 md:mt-5">
+      {description}
+    </p>
+  </div>
+</li>

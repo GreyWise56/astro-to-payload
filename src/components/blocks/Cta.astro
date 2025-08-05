@@ -1,0 +1,56 @@
+---
+// src/components/blocks/Cta.astro
+import { Image } from 'astro:assets';
+
+export interface Props {
+  headingPart1: string;
+  headingPart2: string;
+  subheading: string;
+  sliderImages: ImageMetadata[];
+  button: {
+    text: string;
+    url: string;
+  }
+}
+
+const { 
+  headingPart1,
+  headingPart2,
+  subheading,
+  sliderImages,
+  button
+} = Astro.props;
+---
+<section class="pt-14 md:pt-16 lg:pt-[88px] xl:pt-[100px] pb-[70px] lg:pb-[140px] relative">
+  <div class="container">
+    <h2 class="text-center xl:text-[96px] font-normal xl:leading-[1.1] xl:tracking-[-2.88px]">
+      {headingPart1}
+      <div class="cta-slider-container max-sm:block sm:inline-block max-sm:mb-5 translate-y-2 sm:translate-y-[20px] max-sm:mt-2.5">
+        <div class="cta-inline-slider">
+          {sliderImages.map((image, index) => (
+            <div class="slide">
+              <Image src={image} alt={`Slide ${index + 1}`} />
+            </div>
+          ))}
+        </div>
+      </div>
+      {headingPart2}
+      <span class="font-instrument sm:mt-10 italic block max-md:inline-block">
+        {subheading}
+      </span>
+    </h2>
+
+    <ul class="flex justify-center items-center mt-14 list-none">
+      <li class="block md:inline-block w-full mx-auto md:w-auto text-center">
+        <a href={button.url} class="rv-button rv-button-primary block md:inline-block">
+          <div class="rv-button-top">
+            <span>{button.text}</span>
+          </div>
+          <div class="rv-button-bottom">
+            <span class="text-nowrap">{button.text}</span>
+          </div>
+        </a>
+      </li>
+    </ul>
+  </div>
+</section>

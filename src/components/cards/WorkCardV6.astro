@@ -1,0 +1,51 @@
+---
+// src/components/cards/WorkCardV6.astro
+import { Image } from 'astro:assets';
+
+export interface Work {
+  image: ImageMetadata;
+  altText: string;
+  category: string;
+  year: string;
+  title: string;
+  url: string;
+  arrowIcon: ImageMetadata;
+}
+
+const { work } = Astro.props as { work: Work };
+---
+
+<div class="reveal-me underline-hover-effect group relative">
+  <a href={work.url}>
+    <figure class="overflow-hidden">
+      <Image
+        src={work.image}
+        alt={work.altText}
+        class="w-full h-full transition-all duration-500 group-hover:scale-125 group-hover:rotate-3"
+      />
+    </figure>
+  </a>
+  <div class="mt-[24px] mb-2 md:mb-3.5 flex items-center justify-between">
+    <p class="text-[13px] leading-6 tracking-[8px] uppercase font-normal text-secondary dark:text-backgroundBody">
+      {work.category}
+    </p>
+    <p class="text-base md:text-xl leading-8 tracking-[0.48px] text-secondary dark:text-backgroundBody">
+      {work.year}
+    </p>
+  </div>
+  <a href={work.url}>
+    <div class="blog-title">
+      <h3 class="text[25px] md:text-3xl lg:text-4xl lg:leading-[1.2] lg:tracking-[-0.72px]">
+        {work.title}
+      </h3>
+    </div>
+  </a>
+  <div class="border-b dark:border-dark mt-6"></div>
+
+  <a href={work.url}>
+    <div class="uppercase absolute top-1/2 left-1/2 -translate-x-[90%] translate-y-[35%] group-hover:translate-x-[-50%] group-hover:translate-y-[-50%] transition-all duration-500 ease-in-out opacity-0 group-hover:opacity-100 flex justify-center items-center gap-1 bg-primary px-8 py-6 w-[136px] h-[74px] scale-95 group-hover:scale-100">
+      <span class="text-secondary">view</span>
+      <Image src={work.arrowIcon} alt="Arrow Icon" />
+    </div>
+  </a>
+</div>

@@ -1,0 +1,91 @@
+---
+// src/components/layout/Footer.astro
+import { Image } from 'astro:assets';
+
+// Define the shape for a column of links
+export interface LinkColumn {
+  title: string;
+  links: { text: string; url: string }[];
+}
+
+// Define all the props the component will accept
+export interface Props {
+  reachUsText?: string;
+  scheduleCard?: {
+    logo: ImageMetadata;
+    title: string;
+    subtitle: string;
+    buttonUrl: string;
+    arrowIcon: ImageMetadata;
+  };
+  linkColumns?: LinkColumn[];
+  backgroundText?: string;
+}
+
+// Set default values for all props, making them optional
+const { 
+  reachUsText = "Book a quick 15 min meeting where we discuss if our offer <br/> would work for your case",
+  scheduleCard,
+  linkColumns = [],
+  backgroundText = "JAM GROUP"
+} = Astro.props;
+---
+
+<footer id="main-footer" class="relative lg:fixed lg:-z-10 bg-black bottom-0 w-full pt-20 sm:pt-24 md:pt-36 pb-24 lg:pb-48 overflow-hidden">
+  <div class="container">
+    <!-- Footer Content Grid -->
+    <div class="flex flex-col sm:flex-row flex-wrap gap-y-10 sm:gap-y-16 justify-center sm:justify-between relative z-10">
+      
+      <!-- Reach Us Section -->
+      <div class="pr-8 max-lg:basis-full">
+        <h5 class="uppercase text-sm font-satoshi text-white tracking-[3px] mb-4 sm:mb-8 font-bold">
+          Reach Us
+        </h5>
+        <p class="text-white text-sm max-md:font-semibold mb-5" set:html={reachUsText}></p>
+        
+        <!-- Renders the schedule card only if the data is provided -->
+        {scheduleCard && (
+          <div class="flex p-4 group bg-primary bg-opacity-30 gap-4 justify-between items-center backdrop-blur-2xl max-w-[360px]">
+            <Image class="h-[55px] w-auto" src={scheduleCard.logo} alt="logo" />
+            <div>
+              <h6 class="text-sm font-satoshi text-white font-bold">{scheduleCard.title}</h6>
+              <p class="text-sm text-white">{scheduleCard.subtitle}</p>
+            </div>
+            <a href={scheduleCard.buttonUrl}>
+              <figure class="bg-primary w-[55px] h-[55px] cursor-pointer relative overflow-hidden">
+                <Image src={scheduleCard.arrowIcon} alt="Arrow Icon" class="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 group-hover:-translate-y-12 group-hover:translate-x-8 transition-all duration-500 opacity-100 group-hover:opacity-0" />
+                <Image src={scheduleCard.arrowIcon} alt="Arrow Icon" class="absolute translate-y-12 -translate-x-4 transition-all duration-500 opacity-0 group-hover:opacity-100 group-hover:translate-x-[19px] group-hover:translate-y-5" />
+              </figure>
+            </a>
+          </div>
+        )}
+      </div>
+
+      <!-- Link Columns -->
+      {linkColumns.map(column => (
+        <div>
+          <h5 class="uppercase text-sm font-satoshi text-white tracking-[3px] mb-4 sm:mb-8 font-bold">
+            {column.title}
+          </h5>
+          <ul>
+            {column.links.map(link => (
+              <li class="mb-4">
+                <a href={link.url} class="block text-white transition-colors duration-300 font-semibold hover:text-primary">
+                  {link.text}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+
+    </div>
+  </div>
+  
+  <!-- Footer Background Text -->
+  <div class="absolute w-full bottom-0">
+    <h5 class="w-full bottom-0 absolute footer-text text-center font-satoshi font-medium text-4xl xs:text-5xl sm:text-6xl md:text-[88px] lg:text-[120px] xl:text-[150px] 2xl:text-[170px] tracking-widest text-nowrap translate-y-[30%] left-1/2 -translate-x-1/2">
+      {backgroundText}
+    </h5>
+  </div>
+</footer>

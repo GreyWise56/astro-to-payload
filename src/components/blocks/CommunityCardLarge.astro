@@ -1,0 +1,32 @@
+---
+// src/components/blocks/CommunityCardLarge.astro
+import { Image } from 'astro:assets';
+
+export interface Props {
+  heading: string;
+  buttonText: string;
+  buttonUrl: string;
+  imageSrc: ImageMetadata;
+  imageAlt?: string;
+}
+
+const { 
+  heading, 
+  buttonText, 
+  buttonUrl, 
+  imageSrc,
+  imageAlt = "Community Image"
+} = Astro.props;
+---
+<div class="col-span-full flex flex-col-reverse md:flex-row max-md:gap-y-8 gap-x-4 justify-center md:justify-between items-start md:items-center border dark:border-dark p-6 md:p-10 reveal-me">
+  <div class="max-md:block max-md:w-full">
+    <h3 class="mb-8 md:my-8 lg:text-4xl leading-[1.2] tracking-[-1.08px]" set:html={heading}></h3>
+    <a href={buttonUrl} class="rv-button rv-button-secondary block md:inline-block w-full md:w-auto">
+      <div class="rv-button-top text-center"><span>{buttonText}</span></div>
+      <div class="rv-button-bottom text-center"><span>{buttonText}</span></div>
+    </a>
+  </div>
+  <figure class="max-md:w-full">
+    <Image src={imageSrc} alt={imageAlt} class="max-md:w-full" />
+  </figure>
+</div>

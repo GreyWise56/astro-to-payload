@@ -1,0 +1,26 @@
+---
+// src/components/blocks/HeroV10.astro
+import { Image } from 'astro:assets';
+
+export interface Props {
+  image: ImageMetadata;
+  heading: string;
+}
+
+const { image, heading } = Astro.props;
+---
+
+<section class="pt-[118px] md:pt-[143px] lg:pt-[120px] pb-16 md:pb-20 lg:pb-[95px] xl:pb-[120px]">
+  <div class="relative w-full reveal-me">
+    <figure class="hero-img-container">
+      <Image src={image} alt="Hero background image" class="w-[98%] mx-auto min-h-fit scale-hero-img" />
+    </figure>
+    <div class="container">
+      <h1
+        class="text-center text-backgroundBody font-medium md:font-semibold absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 max-sm:py-4"
+        set:html={heading}
+      >
+      </h1>
+    </div>
+  </div>
+</section>

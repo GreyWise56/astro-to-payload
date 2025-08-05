@@ -1,0 +1,50 @@
+---
+// src/components/blocks/PortfolioGrid.astro
+import { Image } from 'astro:assets';
+// Corrected relative path for the icon
+import arrowIcon from '../../assets/images/icons/arrow-Icon.svg'; 
+
+export interface Project {
+  title: string;
+  imageUrl: ImageMetadata;
+  projectUrl: string;
+}
+
+export interface Props {
+  projects: Project[];
+}
+
+const { projects } = Astro.props;
+---
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+  {projects.map(project => (
+    <div class="relative group cursor-pointer reveal-me">
+      <a href={project.projectUrl} class="w-full">
+        <figure class="overflow-hidden">
+          <Image
+            class="w-full h-full block transition-all duration-500 group-hover:scale-125 group-hover:rotate-3"
+            src={project.imageUrl}
+            alt={project.title}
+          />
+        </figure>
+        <div class="bg-secondary/60 backdrop-blur w-[calc(100%-20px)] py-2.5 pl-5 sm:pl-10 mx-2.5 absolute bottom-4 pr-2.5 flex items-center justify-between transition-all duration-500">
+          <h3 class="text-backgroundBody text-2xl lg:text-[32px]">
+            {project.title}
+          </h3>
+          <figure class="bg-primary p-7 lg:p-8 cursor-pointer relative overflow-hidden">
+            <Image
+              src={arrowIcon}
+              alt="Arrow Icon"
+              class="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 group-hover:-translate-y-12 group-hover:translate-x-8 transition-all duration-500 opacity-100 group-hover:opacity-0"
+            />
+            <Image
+              src={arrowIcon}
+              alt="Arrow Icon"
+              class="absolute translate-y-8 -translate-x-12 transition-all duration-500 opacity-0 group-hover:opacity-100 group-hover:-translate-x-2.5 group-hover:-translate-y-2"
+            />
+          </figure>
+        </div>
+      </a>
+    </div>
+  ))}
+</div>

@@ -1,0 +1,57 @@
+---
+// src/components/blocks/TestimonialCard-v7.astro
+import { Image } from 'astro:assets';
+
+export interface Props {
+  authorName: string;
+  authorTitle: string;
+  authorAvatar: ImageMetadata;
+  quote: string;
+  companyLogoLight: ImageMetadata;
+  companyLogoDark: ImageMetadata;
+  date: string;
+}
+
+const { 
+  authorName,
+  authorTitle,
+  authorAvatar,
+  quote,
+  companyLogoLight,
+  companyLogoDark,
+  date,
+} = Astro.props;
+---
+<div class="min-w-[380px] md:min-w-[408px] max-w-[380px] md:max-w-[408px] border dark:border-backgroundBody/10 p-5 ml-7">
+  <div class="flex items-center space-x-4 pb-4">
+    <Image src={authorAvatar} alt={authorName} class="rounded-full w-16 h-16"/>
+    <div>
+      <h3 class="text-[22px] leading-[28.8px] tracking-wide">{authorName}</h3>
+      <p class="text-[15px] font-light leading-6 mt-[2px]">{authorTitle}</p>
+    </div>
+  </div>
+
+  <span>
+    <svg class="block w-full h-[2px]" viewBox="0 0 362 2" fill="none">
+      <path d="M0 1H362" class="stroke-secondary dark:stroke-backgroundBody" stroke-dasharray="6 6" stroke-opacity="0.1"/>
+    </svg>
+  </span>
+
+  <p class="text-base md:text-xl md:leading-7 md:tracking-[0.4px] text-colorText dark:text-backgroundBody/70 py-4 text-wrap">
+    {quote}
+  </p>
+
+  <span>
+     <svg class="block w-full h-[2px]" viewBox="0 0 362 2" fill="none">
+      <path d="M0 1H362" class="stroke-secondary dark:stroke-backgroundBody" stroke-dasharray="6 6" stroke-opacity="0.1"/>
+    </svg>
+  </span>
+
+  <div class="flex justify-between items-center pt-4">
+    <div class="flex items-center space-x-1">
+      <Image src={companyLogoLight} alt="Company Logo" class="inline dark:hidden" />
+      <Image src={companyLogoDark} alt="Company Logo" class="dark:inline hidden" />
+    </div>
+    <span class="text-colorText text-sm font-light leading-5">{date}</span>
+  </div>
+</div>

@@ -1,0 +1,60 @@
+---
+// src/pages/team-details.astro
+import BaseLayout from '../layouts/BaseLayout.astro';
+import TeamMemberDetail from '../components/blocks/TeamMemberDetail.astro';
+import Cta from '../components/blocks/Cta.astro'; // Using the existing CTA component
+
+// Import Prop Types
+import type { Props as TeamMemberDetailProps } from '../components/blocks/TeamMemberDetail.astro';
+import type { Props as CtaProps } from '../components/blocks/Cta.astro';
+
+// --- Asset Imports ---
+import teamMemberImage from '../assets/images/team/single-team.png';
+import twitterIcon from '../assets/images/icons/x-twitter.svg';
+import twitterIconDark from '../assets/images/icons/x-twitter-dark.svg';
+import facebookIcon from '../assets/images/icons/facebook.svg';
+import facebookIconDark from '../assets/images/icons/facebook-dark.svg';
+import youtubeIcon from '../assets/images/icons/youtube.svg';
+import youtubeIconDark from '../assets/images/icons/youtube-dark.svg';
+import agent1 from '../assets/images/agent/01.jpg';
+import agent2 from '../assets/images/agent/02.jpg';
+import agent3 from '../assets/images/agent/03.jpg';
+
+// --- Page Data ---
+
+const teamMemberData: TeamMemberDetailProps = {
+    name: "Marvin McKinney",
+    role: "Founder",
+    image: teamMemberImage,
+    bio: "Enthusiasts of open-source and no-code tools, a professional UI/UX designer with 17 years of industry experience, I'm a visionary entrepreneur, crafting innovative tech solutions. StaticMania and KEEP Design System are my other breakthrough moves.",
+    skills: ["Ui/Ux designer", "product designer", "frontend Developer"],
+    portfolio: [
+        { name: "Dribbble", url: "https://dribbble.com" },
+        { name: "Behance", url: "https://www.behance.net" },
+        { name: "Artstation", url: "https://www.artstation.com" }
+    ],
+    socials: [
+        { name: "Twitter", url: "https://x.com/home", iconLight: twitterIcon, iconDark: twitterIconDark },
+        { name: "Facebook", url: "https://www.facebook.com/staticmania", iconLight: facebookIcon, iconDark: facebookIconDark },
+        { name: "YouTube", url: "https://www.youtube.com", iconLight: youtubeIcon, iconDark: youtubeIconDark }
+    ]
+};
+
+const ctaData: CtaProps = {
+    headingPart1: "Let's Talk!",
+    headingPart2: "with us.",
+    subheading: "A virtual coffee?",
+    sliderImages: [agent1, agent2, agent3],
+    button: {
+        text: "Contact Us",
+        url: "/contact"
+    }
+};
+---
+
+<BaseLayout title="Team Details | JAM Group" description={`Details for team member ${teamMemberData.name}`}>
+    
+        <TeamMemberDetail {...teamMemberData} />
+        <Cta {...ctaData} />
+    
+</BaseLayout>

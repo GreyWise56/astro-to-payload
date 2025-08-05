@@ -1,0 +1,83 @@
+---
+// src/components/blocks/BlogV10.astro
+import { Image } from 'astro:assets';
+
+export interface Post {
+  date: string;
+  title: string;
+  url: string;
+  image: ImageMetadata;
+  altText: string;
+}
+
+export interface Props {
+  heading: string;
+  button: {
+    text: string;
+    url: string;
+  };
+  posts: Post[];
+  // Re-used from another component, so we don't need to import the actual images here
+  arrowIcon: ImageMetadata;
+  arrowIconDark: ImageMetadata;
+}
+
+const { heading, button, posts, arrowIcon, arrowIconDark } = Astro.props;
+---
+
+<section class="pt-14 md:pt-16 lg:pt-[88px] xl:pt-[100px] pb-14 md:pb-16 lg:pb-[88px] xl:pb-[100px] relative overflow-hidden">
+  <div class="container">
+    <div class="flex flex-col md:flex-row gap-y-4 gap-x-10 justify-center lg:justify-between items-start md:items-center mb-10 md:mb-20 max-md:px-10">
+      <div>
+        <h2 class="text-appear" set:html={heading}></h2>
+      </div>
+      <ul class="reveal-me">
+        <li class="block md:inline-block w-[90%] mx-auto md:w-auto">
+          <a href={button.url} class="rv-button rv-button-white block md:inline-block text-center">
+            <div class="rv-button-top">
+              <span>{button.text}</span>
+            </div>
+            <div class="rv-button-bottom">
+              <span>{button.text}</span>
+            </div>
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <article class="mt-20 [&>*:not(last-child)]:mb-10">
+      {posts.map(post => (
+        <div class="border-b dark:border-dark pb-10 flex flex-col-reverse gap-y-7 lg:flex-row justify-center md:justify-normal items-center reveal-me underline-hover-effect group">
+          <div class="max-lg:self-center lg:self-center max-lg:max-w-96">
+            <div class="rv-badge mb-5">
+              <span class="rv-badge-text">{post.date}</span>
+            </div>
+            <a href={post.url}>
+              <div class="blog-title mb-6 lg:mb-10">
+                <h3 class="text-[25px] md:text-3xl lg:text-4xl lg:leading-[1.2] lg:tracking-[-0.72px]">
+                  {post.title}
+                </h3>
+              </div>
+            </a>
+            <a href={post.url} class="rv-button rv-button-primary2">
+              <div class="rv-button-top !text-center flex items-center">
+                <span class="pr-1">READ MORE</span>
+                <Image class="inline dark:hidden" src={arrowIcon} alt="Arrow Icon" />
+                <Image class="hidden dark:inline" src={arrowIconDark} alt="Arrow Icon" />
+              </div>
+              <div class="rv-button-bottom !text-center flex items-center">
+                <span class="pr-1">READ MORE</span>
+                <Image class="inline" src={arrowIcon} alt="Arrow Icon" />
+              </div>
+            </a>
+          </div>
+          <figure class="overflow-hidden max-w-[370px] w-full">
+            <a href={post.url}>
+              <Image src={post.image} alt={post.altText} class="w-full h-full transition-all duration-500 group-hover:scale-125 group-hover:rotate-3" />
+            </a>
+          </figure>
+        </div>
+      ))}
+    </article>
+  </div>
+</section>

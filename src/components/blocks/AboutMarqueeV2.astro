@@ -1,0 +1,67 @@
+---
+// src/components/blocks/AboutMarqueeV2.astro
+
+/*
+================================================================================
+Component: AboutMarqueeV2
+Description: A block that displays a prominent heading followed by a skewed,
+             infinitely scrolling marquee of images.
+================================================================================
+*/
+
+import MarqueeImageCard from '../cards/MarqueeImageCard.astro';
+import type { Props as MarqueeImage } from '../cards/MarqueeImageCard.astro';
+
+// Define the properties for the entire block
+export interface Props {
+  heading: string;
+  marqueeImages: MarqueeImage[];
+}
+
+const { heading, marqueeImages } = Astro.props;
+---
+
+<!--
+================================================================================
+This section includes a heading and the marquee. Note that the inline style
+for the `transform` is kept, as it's likely a starting point for a GSAP
+animation defined in a global script.
+================================================================================
+-->
+<section
+  id="about"
+  class="pt-10 sm:pt-16 md:pt-[100px] relative overflow-hidden"
+  aria-labelledby="about-heading"
+>
+  <div class="container">
+    <!-- Section Header -->
+    <div>
+      <h2
+        id="about-heading"
+        class="reveal-text-2 text-3xl lg:text-5xl lg:leading-[1.5] text-secondary dark:text-backgroundBody mb-8"
+        set:html={heading}
+      />
+    </div>
+  </div>
+
+  <!-- Skew Marquee Start -->
+  <div
+    style="transform: translate3d(-200px, 0px, 0px) scale3d(1, 1, 1) rotateX(30deg) rotateY(17deg) rotateZ(342deg) skew(7deg, 359deg); transform-style: preserve-3d;"
+    id="skew-Marquee"
+    aria-label="Project showcase gallery"
+  >
+    <div class="pb-20 lg:pb-32 pt-20">
+      <!-- Marquee Wrapper -->
+      <div class="relative">
+        <!-- Infinite Scroll Container -->
+        <div
+          class="z-50 flex gap-5 w-fit flex-nowrap whitespace-nowrap will-change-transform marquee-inner reveal-me"
+          aria-live="polite"
+        >
+          <!-- Loop through marqueeImages and render a card for each -->
+          {marqueeImages.map((item) => <MarqueeImageCard {...item} />)}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

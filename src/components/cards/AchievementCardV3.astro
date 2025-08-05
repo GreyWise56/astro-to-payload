@@ -1,0 +1,36 @@
+---
+// src/components/cards/AchievementCardV3.astro
+
+/*
+================================================================================
+Component: AchievementCardV3
+Description: A card that displays a single achievement metric with an animated
+             counter. The animation is triggered by a global script targeting
+             the 'counter' class and 'data-value' attribute.
+================================================================================
+*/
+
+// Define the properties for a single achievement card
+export interface Props {
+  value: number;
+  suffix?: string; // Optional suffix like '+' or '%'
+  description: string;
+}
+
+const { value, suffix, description } = Astro.props;
+---
+
+<div
+        class="border dark:border-dark p-5 md:p-[30px] space-y-3 flex justify-center flex-col items-center min-w-[280px] lg:min-w-[320px] min-h-[180px] lg:min-h-[212px]"
+        id="counter"
+      >
+  <h2 class="lg:text-7xl">
+    {/*
+      FIX: Added a default value of 0 inside the span.
+      This provides a fallback if the counter script fails and gives
+      the script a starting point for the animation.
+    */}
+    <span class="counter" data-value={value}>0</span>{suffix}
+  </h2>
+  <p>{description}</p>
+</div>

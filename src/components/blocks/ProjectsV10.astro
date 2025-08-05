@@ -1,0 +1,49 @@
+---
+// src/components/blocks/ProjectsV10.astro
+import ProjectCardV10, { type Project } from '../cards/ProjectCardV10.astro';
+
+export interface Props {
+  heading: string;
+  description: string;
+  button: {
+    text: string;
+    url: string;
+  };
+  projects: Project[];
+}
+
+const { heading, description, button, projects } = Astro.props;
+---
+
+<section class="pt-14 md:pt-16 lg:pt-[88px] xl:pt-[100px] pb-14 md:pb-16 lg:pb-[88px] xl:pb-[100px] relative">
+  <div class="container">
+    <div class="flex flex-col md:flex-row gap-y-3 md:gap-x-10 justify-center lg:justify-start items-center mb-10 md:mb-20">
+      <div class="md:flex-1">
+        <h2 class="text-appear" set:html={heading}></h2>
+      </div>
+      <div class="md:flex-1">
+        <p class="text-appear max-md:text-justify md:text-right md:justify-self-end max-w-md">
+          {description}
+        </p>
+        <ul class="justify-self-end max-md:w-full mt-5 md:mt-10 reveal-me">
+          <li class="block md:inline-block w-full mx-auto md:w-auto text-center">
+            <a href={button.url} class="rv-button rv-button-white block md:inline-block">
+              <div class="rv-button-top">
+                <span>{button.text}</span>
+              </div>
+              <div class="rv-button-bottom">
+                <span>{button.text}</span>
+              </div>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 justify-items-center items-center md:items-start gap-[30px] gap-y-10 mb-[60px]">
+      {projects.map(project => (
+        <ProjectCardV10 project={project} />
+      ))}
+    </div>
+  </div>
+</section>

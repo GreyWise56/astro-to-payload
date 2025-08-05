@@ -1,0 +1,32 @@
+---
+// src/components/blocks/ImageMarquee.astro
+import { Image } from 'astro:assets';
+
+export interface Props {
+  images: ImageMetadata[];
+  direction?: 'normal' | 'reverse';
+}
+
+const { images, direction = 'normal' } = Astro.props;
+
+const marqueeContainerClass = direction === 'reverse' 
+  ? 'marquee-reverse-container' 
+  : 'marquee-container';
+
+// Duplicate images for a seamless loop
+const marqueeImages = [...images, ...images];
+---
+
+<div class={marqueeContainerClass + " reveal-me"}>
+  <div class="flex items-center justify-around gap-5 md:gap-[30px] pt-5 md:pt-[30px]">
+    {marqueeImages.map((image, index) => (
+      <div class="min-w-60 md:min-w-[370px] h-72 md:h-[460px] ml-5 md:ml-[30px]">
+        <Image 
+          src={image} 
+          alt={`Marquee image ${index + 1}`} 
+          class="w-full h-full object-cover" 
+        />
+      </div>
+    ))}
+  </div>
+</div>

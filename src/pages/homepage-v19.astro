@@ -1,0 +1,234 @@
+---
+// src/pages/homepage-v19.astro
+import BaseLayout from '../layouts/BaseLayout.astro';
+import HeroV19 from '../components/blocks/HeroV19.astro';
+import AboutV13 from '../components/blocks/AboutV13.astro';
+import AchievementsV3 from '../components/blocks/AchievementsV3.astro';
+import FeaturedProjectsV19 from '../components/blocks/FeaturedProjectsV19.astro';
+import ElevateBrandV2 from '../components/blocks/ElevateBrandV2.astro';
+import OurExpertiseV19 from '../components/blocks/OurExpertiseV19.astro';
+import ProcessV19 from '../components/blocks/ProcessV19.astro';
+import PricingV19 from '../components/blocks/PricingV19.astro';
+import TestimonialsV19 from '../components/blocks/TestimonialsV19.astro';
+import BlogV19 from '../components/blocks/BlogV19.astro';
+import Cta from '../components/blocks/Cta.astro';
+
+import type { Props as HeroV19Props } from '../components/blocks/HeroV19.astro';
+import type { Props as AboutV13Props } from '../components/blocks/AboutV13.astro';
+import type { Props as AchievementsV3Props } from '../components/blocks/AchievementsV3.astro';
+import type { Props as FeaturedProjectsV19Props } from '../components/blocks/FeaturedProjectsV19.astro';
+import type { Props as ElevateBrandV2Props } from '../components/blocks/ElevateBrandV2.astro';
+import type { Props as OurExpertiseV19Props } from '../components/blocks/OurExpertiseV19.astro';
+import type { Props as ProcessV19Props } from '../components/blocks/ProcessV19.astro';
+import type { Props as PricingV19Props } from '../components/blocks/PricingV19.astro';
+import type { Props as TestimonialsV19Props } from '../components/blocks/TestimonialsV19.astro';
+import type { Props as BlogV19Props } from '../components/blocks/BlogV19.astro';
+import type { Props as CtaProps } from '../components/blocks/Cta.astro';
+
+// --- Asset Imports ---
+import gradientBg from '../assets/images/hero-gradient-background.png';
+import heroImg1 from '../assets/images/hero/startup-hero-1.jpg';
+import heroImg2 from '../assets/images/hero/startup-hero-2.jpg';
+import circleLogoLight from '../assets/images/icons/text-circle-logo.png';
+import circleLogoDark from '../assets/images/icons/text-circle-dark-logo.png';
+import projectImg1 from '../assets/images/blog-img/blog-img-26.png';
+import projectImg2 from '../assets/images/blog-img/blog-img-27.png';
+import projectImg3 from '../assets/images/blog-img/blog-img-28.png';
+import projectImg4 from '../assets/images/blog-img/blog-img-29.png';
+import arrowIconDark from '../assets/images/home-5/ArrowUpRight-dark.svg';
+import pricingBg from '../assets/images/pricing-gradient.png';
+import avatar1 from '../assets/images/avatar/review-8.png';
+import avatar2 from '../assets/images/avatar/review-2.png';
+import avatar3 from '../assets/images/avatar/review-7.png';
+import avatar4 from '../assets/images/avatar/review-4.png';
+import avatar5 from '../assets/images/avatar/review-7.png';
+import avatar6 from '../assets/images/avatar/review-6.png';
+import avatar7 from '../assets/images/avatar/review-5.png';
+import blogImg1 from '../assets/images/blog-img/blogV4-img-3.png';
+import blogImg2 from '../assets/images/blog-img/blogV4-img-1.png';
+import blogImg3 from '../assets/images/blog-img/blogV4-img-2.png';
+import agent1 from '../assets/images/agent/14.png';
+import agent2 from '../assets/images/agent/12.png';
+import agent3 from '../assets/images/agent/13.png';
+
+// --- SVG Data as Strings ---
+const expertiseIcon1 = `<svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 60 60" fill="none"><rect width="60" height="60" class="dark:fill-secondary fill-backgroundBody" /><path fill-rule="evenodd" clip-rule="evenodd" d="M30.6422 28.5873L26.8523 21.4072L23.0599 28.5873C22.7916 29.1124 22.4037 29.5671 21.9274 29.9148C21.4483 30.2643 20.8946 30.498 20.31 30.5973L12.5001 32.1224L17.9525 38.6224C18.3203 39.0237 18.5974 39.4995 18.765 40.0174C18.9312 40.5343 18.9833 41.081 18.9175 41.62L17.88 50.0001L25.0724 46.535C25.6282 46.2696 26.2364 46.132 26.8523 46.1325C27.4307 46.132 28.0007 46.2701 28.5148 46.535L35.8696 49.7851L34.8297 41.5C34.7639 40.961 34.8159 40.4143 34.9822 39.8974C35.1497 39.3795 35.4268 38.9037 35.7946 38.5024L41.202 32.1124L33.3922 30.5873C32.8075 30.488 32.2539 30.2543 31.7747 29.9048C31.2997 29.5599 30.9119 29.1088 30.6422 28.5873Z" class="stroke-secondary dark:stroke-backgroundBody" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" /><path d="M46.4725 11.8704C46.7073 11.6365 46.708 11.2566 46.4741 11.0218C46.2402 10.7871 45.8603 10.7864 45.6256 11.0203L46.4725 11.8704ZM36.9283 19.6854C36.6935 19.9192 36.6928 20.2991 36.9267 20.5339C37.1606 20.7686 37.5405 20.7693 37.7752 20.5355L36.9283 19.6854ZM47.9234 19.09C48.1582 18.8562 48.159 18.4763 47.9252 18.2415C47.6914 18.0067 47.3115 18.0059 47.0767 18.2397L47.9234 19.09ZM41.2768 24.0147C41.042 24.2486 41.0412 24.6284 41.275 24.8633C41.5088 25.0981 41.8887 25.0989 42.1235 24.8651L41.2768 24.0147ZM39.2259 10.4252C39.4607 10.1914 39.4615 9.81146 39.2277 9.57665C38.9939 9.34183 38.614 9.34102 38.3791 9.57483L39.2259 10.4252ZM32.5768 15.3524C32.342 15.5862 32.3411 15.9661 32.5749 16.2009C32.8088 16.4357 33.1887 16.4366 33.4235 16.2027L32.5768 15.3524ZM45.6256 11.0203L36.9283 19.6854L37.7752 20.5355L46.4725 11.8704L45.6256 11.0203ZM47.0767 18.2397L41.2768 24.0147L42.1235 24.8651L47.9234 19.09L47.0767 18.2397ZM38.3791 9.57483L32.5768 15.3524L33.4235 16.2027L39.2259 10.4252L38.3791 9.57483Z" class="fill-secondary dark:fill-backgroundBody" /></svg>`;
+const expertiseIcon2 = `<svg xmlns="http://www.w3.org/2000/svg" width="61" height="60" viewBox="0 0 61 60" fill="none"><rect width="60" height="60" transform="translate(0.333252)" class="dark:fill-secondary fill-backgroundBody" /><path d="M31.0833 12.5C31.0833 12.0858 30.7475 11.75 30.3333 11.75C29.919 11.75 29.5833 12.0858 29.5833 12.5H31.0833ZM29.5833 47.5C29.5833 47.9142 29.919 48.25 30.3333 48.25C30.7475 48.25 31.0833 47.9142 31.0833 47.5H29.5833ZM37.7532 16.875C37.7532 16.4608 37.4174 16.125 37.0032 16.125C36.589 16.125 36.2532 16.4608 36.2532 16.875H37.7532ZM36.2532 43.125C36.2532 43.5392 36.589 43.875 37.0032 43.875C37.4174 43.875 37.7532 43.5392 37.7532 43.125H36.2532ZM44.4133 21.25C44.4133 20.8358 44.0775 20.5 43.6633 20.5C43.2491 20.5 42.9133 20.8358 42.9133 21.25H44.4133ZM42.9133 38.75C42.9133 39.1642 43.2491 39.5 43.6633 39.5C44.0775 39.5 44.4133 39.1642 44.4133 38.75H42.9133ZM51.0833 25.625C51.0833 25.2108 50.7475 24.875 50.3333 24.875C49.919 24.875 49.5833 25.2108 49.5833 25.625H51.0833ZM49.5833 34.375C49.5833 34.7892 49.919 35.125 50.3333 35.125C50.7475 35.125 51.0833 34.7892 51.0833 34.375H49.5833ZM22.9133 43.125C22.9133 43.5392 23.2491 43.875 23.6633 43.875C24.0775 43.875 24.4133 43.5392 24.4133 43.125H22.9133ZM24.4133 16.875C24.4133 16.4608 24.0775 16.125 23.6633 16.125C23.2491 16.125 22.9133 16.4608 22.9133 16.875H24.4133ZM16.2532 38.75C16.2532 39.1642 16.589 39.5 17.0032 39.5C17.4174 39.5 17.7532 39.1642 17.7532 38.75H16.2532ZM17.7532 21.25C17.7532 20.8358 17.4174 20.5 17.0032 20.5C16.589 20.5 16.2532 20.8358 16.2532 21.25H17.7532ZM9.58325 34.375C9.58325 34.7892 9.91904 35.125 10.3333 35.125C10.7475 35.125 11.0833 34.7892 11.0833 34.375H9.58325ZM11.0833 25.625C11.0833 25.2108 10.7475 24.875 10.3333 24.875C9.91904 24.875 9.58325 25.2108 9.58325 25.625H11.0833ZM29.5833 12.5V47.5H31.0833V12.5H29.5833ZM36.2532 16.875V43.125H37.7532V16.875H36.2532ZM42.9133 21.25V38.75H44.4133V21.25H42.9133ZM49.5833 25.625V34.375H51.0833V25.625H49.5833ZM24.4133 43.125V16.875H22.9133V43.125H24.4133ZM17.7532 38.75V21.25H16.2532V38.75H17.7532ZM11.0833 34.375V25.625H9.58325V34.375H11.0833Z" class="fill-secondary dark:fill-backgroundBody" /></svg>`;
+const expertiseIcon3 = `<svg xmlns="http://www.w3.org/2000/svg" width="61" height="60" viewBox="0 0 61 60" fill="none"><rect width="60" height="60" transform="translate(0.666504)" class="dark:fill-secondary fill-backgroundBody" /><path fill-rule="evenodd" clip-rule="evenodd" d="M24.2636 10L14.9521 27.7771H24.2636L17.2807 50L46.3807 27.7771H33.5779L40.5607 10H24.2636Z" class="stroke-secondary dark:stroke-backgroundBody" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg>`;
+
+// --- Page Data ---
+const heroData: HeroV19Props = {
+    headingPart1: "Helping",
+    headingPart2: "startups scale",
+    italicHeading: " design better",
+    description: "From branding to digital product development, we turn ideas into <br class='hidden lg:block' /> impactful businesses.",
+    button: { text: "Get Started", url: "/contact" },
+    image1: heroImg1,
+    image2: heroImg2,
+    circleLogoLight: circleLogoLight,
+    circleLogoDark: circleLogoDark,
+    circleText: "Discover other project on Webflow.",
+    gradientBackground: gradientBg
+};
+
+const aboutV13Data: AboutV13Props = {
+    badge: "About Us",
+    heading: "Data driven agency for visionary startups",
+    subheading: "At Rivor Marketing Agency, we believe in creating impactful, data-driven marketing campaigns that connect brands with their audiences. Our team of strategists, creatives, and data analysts work together to deliver measurable results that fuel business growth.",
+    description: "With years of experience in startup acceleration, we craft innovative strategies that help businesses thrive in competitive markets.",
+    button: { text: "Learn More", url: "/team" }
+};
+
+const achievementsData: AchievementsV3Props = {
+    achievements: [
+        { value: 81, description: "Startups accelerated" },
+        { value: 30, suffix: " +", description: "Investor ready branding" },
+        { value: 99, suffix: " %", description: "Human centered design" }
+    ],
+    button: { text: "See Our Success Stories", url: "#" }
+};
+
+const featuredProjectsData: FeaturedProjectsV19Props = {
+    heading: `Our featured <br class="hidden md:block" /> <span class="font-instrument italic pr-[4px]">projects</span>`,
+    description: "Include a portfolio grid showcasing previous branding & startup projects",
+    button: { text: "View More Projects", url: "/project-02" },
+    projects: [
+        { image: projectImg1, altText: "Haliya mono project", title: "Haliya mono", description: "Innovative design solutions for a growing tech brand.", url: "/project-details", arrowIcon: arrowIconDark },
+        { image: projectImg2, altText: "Atlas chatart project", title: "Atlas chatart", description: "A disruptive branding project for a global SaaS company.", url: "/project-details", arrowIcon: arrowIconDark },
+        { image: projectImg3, altText: "O mobilya project", title: "O mobilya", description: "Digital transformation for a new eCommerce platform.", url: "/project-details", arrowIcon: arrowIconDark },
+        { image: projectImg4, altText: "Brandom asly project", title: "Brandom asly", description: "Innovative design solutions for a growing tech brand.", url: "/project-details", arrowIcon: arrowIconDark }
+    ]
+};
+
+const elevateBrandData: ElevateBrandV2Props = {
+    heading: `Helping startups build <i class="font-instrument"> the future </i>`,
+    subheading: "We shape brands that stand the test of time",
+    button: { text: "Explore Our Services", url: "/services" },
+    services: [
+        { number: "01", title: "Branding", description: "Define your mission, values, and market positioning.", url: "/services-details" },
+        { number: "02", title: "Product design", description: "Create a compelling logo, color scheme, and typography.", url: "/services-details" },
+        { number: "03", title: "Growth strategy", description: "Establish consistency across all brand assets.", url: "/services-details" },
+        { number: "04", title: "Development", description: "Establish consistency across all brand assets.", url: "/services-details" }
+    ]
+};
+
+const ourExpertiseData: OurExpertiseV19Props = {
+    badge: "Why Choose Rivor",
+    heading: `Strategic thinking <i class="font-instrument"> Creative </i> <br class="hidden md:block" /> <i class="font-instrument">execution</i> Lasting impact.`,
+    description: "Let me know if you need something more tailored!",
+    button: { text: "Start Your Journey", url: "/team" },
+    expertiseItems: [
+        { iconSvg: expertiseIcon1, title: "Startup focused expertise", description: "We understand what it takes to launch and grow a business.." },
+        { iconSvg: expertiseIcon2, title: "Fundraising ready solutions", description: "Helping startups craft compelling pitch decks and brand messaging." },
+        { iconSvg: expertiseIcon3, title: "Data driven approach", description: "Every decision is backed by insights and research." }
+    ]
+};
+
+const processData: ProcessV19Props = {
+    badge: "Process",
+    heading: `A proven framework for <i class="font-instrument">startup success</i>`,
+    steps: [
+        { stepNumber: "Step 01", title: "Strategy Session", description: "Understanding your brand’s goals and target audience." },
+        { stepNumber: "Step 02", title: "Content Creation", description: "Designing high-impact posts, reels, and videos." },
+        { stepNumber: "Step 03", title: "Execution", description: "Creating engaging brand and digital experiences." },
+        { stepNumber: "Step 04", title: "Optimization", description: "Analyzing and refining strategies for maximum results." }
+    ],
+    button: {
+        text: "Start Your Journey",
+        url: "/contact"
+    }
+};
+
+const pricingData: PricingV19Props = {
+    badge: "Pricing",
+    heading: `Tailored plans for startups <i class="font-instrument"> of </i> <br class="hidden md:block" /> <i class="font-instrument"> all sizes </i>`,
+    description: "Transparent pricing for every stage of growth. Choose a package that fits your business needs and budget.",
+    plans: [
+        {
+            badge: "Starter Package",
+            price: "$999",
+            features: [
+                "Basic Components & variants",
+                "Basic Components & variants",
+                "Lifetime updates"
+            ],
+            button: { text: "Get Started", url: "#" }
+        },
+        {
+            badge: "Growth Package",
+            price: "$2,499",
+            features: [
+                "Logo & Brand Identity (5 Concepts)",
+                "Full Brand Strategy & Messaging Guide",
+                "Stationery & Social Media Branding",
+                "Two Rounds of Revisions"
+            ],
+            button: { text: "Get Started", url: "#" },
+            isFeatured: true,
+            featuredBg: pricingBg
+        },
+        {
+            badge: "Premium Package",
+            price: "$4,999",
+            features: [
+                "Complete Brand Identity & Guidelines",
+                "Website & Social Media Branding",
+                "Lifetime updates",
+                "Advanced Market Research",
+                "Dedicated Branding Consultant"
+            ],
+            button: { text: "Get Started", url: "#" }
+        }
+    ]
+};
+
+const testimonialsData: TestimonialsV19Props = {
+    badge: "Testimonial",
+    heading: `What startups say <i class="font-instrument">about us</i>`,
+    testimonials: [
+        { quote: `"Working with was an absolute game changer for our business. From the very first meeting."`, author: { avatar: avatar1, name: "Cindy Ibanez", title: "Founder of Product Hunt" } },
+        { quote: `"Working with was an absolute game changer for our business. From the very first meeting."`, author: { avatar: avatar2, name: "Darrell Steward", title: "Product design" } },
+        { quote: `"Working with was an absolute game changer for our business. From the very first meeting."`, author: { avatar: avatar3, name: "Wade Warren", title: "Founder of Product Hunt" } },
+        { quote: `"Working with was an absolute game changer for our business. From the very first meeting."`, author: { avatar: avatar4, name: "Arlene McCoy", title: "Founder of Product Hunt" } },
+        { quote: `"Working with was an absolute game changer for our business. From the very first meeting."`, author: { avatar: avatar5, name: "Marvin McKinney", title: "Founder of Product Hunt" } },
+        { quote: `"Working with was an absolute game changer for our business. From the very first meeting."`, author: { avatar: avatar6, name: "Jacob Jones", title: "Founder of Product Hunt" } },
+        { quote: `"Working with was an absolute game changer for our business. From the very first meeting."`, author: { avatar: avatar7, name: "Jacob Jones", title: "Founder of Product Hunt" } }
+    ]
+};
+
+const blogData: BlogV19Props = {
+    badge: "Blog",
+    heading: "Stay ahead with expert insights on business strategies",
+    button: { text: "Explore Our Blog", url: "/blog" },
+    posts: [
+        { image: blogImg1, altText: "Business team collaborating on 2025 strategy planning session", category: "Engagement", title: "The Future of Business Strategy in 2025", url: "/blog-details", isActive: true },
+        { image: blogImg2, altText: "Small business owner analyzing investment trends with digital charts", category: "Event", title: "Top Investment Trends for Small Businesses", url: "/blog-details" },
+        { image: blogImg3, altText: "Video marketing team discussing risk management strategies for business", category: "Video Marketing", title: "Keeping Your Business Safe with Risk Management", url: "/blog-details" }
+    ]
+};
+
+const ctaData: CtaProps = {
+    headingPart1: "Let’s Create",
+    headingPart2: "Content",
+    subheading: "That Delivers Results",
+    sliderImages: [agent1, agent2, agent3],
+    button: {
+        text: "Start Your Project",
+        url: "/contact"
+    }
+};
+---
+
+<BaseLayout title="Homepage v19 | JAM Group" description="A homepage for a brand strategy agency.">
+    <HeroV19 {...heroData} />
+    <AboutV13 {...aboutV13Data} />
+    <AchievementsV3 {...achievementsData} />
+    <FeaturedProjectsV19 {...featuredProjectsData} />
+    <ElevateBrandV2 {...elevateBrandData} />
+    <OurExpertiseV19 {...ourExpertiseData} />
+    <ProcessV19 {...processData} />
+    <PricingV19 {...pricingData} />
+    <TestimonialsV19 {...testimonialsData} />
+    <BlogV19 {...blogData} />
+    <Cta {...ctaData} />
+</BaseLayout>

@@ -1,0 +1,44 @@
+---
+// src/components/blocks/AwardsV10.astro
+export interface Award {
+  year: string;
+  title: string;
+  category: string;
+}
+
+export interface Props {
+  heading: string;
+  description: string;
+  awards: Award[];
+}
+
+const { heading, description, awards } = Astro.props;
+---
+
+<section class="pt-14 md:pt-16 lg:pt-[88px] xl:pt-[100px] pb-14 md:pb-16 lg:pb-[88px] xl:pb-[100px] relative overflow-hidden">
+  <div class="container flex flex-col md:flex-row justify-center md:justify-between max-md:items-start gap-x-8 gap-y-3 mb-9 md:mb-20">
+    <div class="flex-1">
+      <h2 class="text-appear sm:text-nowrap" set:html={heading}></h2>
+    </div>
+    <p class="max-w-md text-appear md:self-end flex-1 md:text-right">
+      {description}
+    </p>
+  </div>
+
+  <div class="divide-y-[1px] dark:divide-dark [&>*:first-child]:border-t max-md:last:border-b dark:last:border-dark dark:[&>*:first-child]:border-dark sm:px-10 reveal-me">
+    {awards.map(award => (
+      <div class="grid grid-cols-12 max-md:text-center py-10 px-5 text-left items-center h-full relative group overflow-hidden">
+        <div class="w-full h-full absolute bg-secondary dark:bg-primary/90 left-0 top-0 origin-bottom scale-y-0 transition-transform ease-in-out duration-500 group-hover:scale-y-100 group-hover:origin-top"></div>
+        <span class="font-instrument max-md:col-span-2 group-hover:text-white transition-colors duration-300 justify-self-center col-span-2 italic text-[19px] font-normal leading-[1.4] relative z-20">
+          {award.year}
+        </span>
+        <h3 class="text-xl sm:text-2xl md:text-[28px] lg:text-4xl xl:text-5xl xl:leading-[1.2] max-md:col-span-10 col-span-8 group-hover:text-white transition-colors duration-300 relative z-20">
+          {award.title}
+        </h3>
+        <p class="text-[21px] leading-[1.4] text-secondary dark:text-backgroundBody group-hover:text-white transition-colors duration-300 max-md:col-span-2 col-span-2 relative z-20">
+          {award.category}
+        </p>
+      </div>
+    ))}
+  </div>
+</section>

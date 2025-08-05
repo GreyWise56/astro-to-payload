@@ -1,0 +1,77 @@
+---
+// src/components/blocks/AboutWithStatsV8.astro
+
+/*
+================================================================================
+Component: AboutWithStatsV8
+Description: A block that displays an "about" section with an image and text,
+             followed by a grid of statistical counters.
+================================================================================
+*/
+
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import StatCardV8 from '../cards/StatCardV8.astro';
+import type { Props as Stat } from '../cards/StatCardV8.astro';
+
+// Define the properties for the entire block
+export interface Props {
+  heading: string;
+  image: ImageMetadata;
+  imageAlt: string;
+  description: string;
+  button: {
+    text: string;
+    url: string;
+  };
+  stats: Stat[];
+}
+
+const { heading, image, imageAlt, description, button, stats } = Astro.props;
+---
+
+<section
+  class="pt-28 md:pt-32 lg:pt-44 xl:pt-[200px] pb-14 md:pb-16 lg:pb-[88px] xl:pb-[100px]"
+>
+  <div class="container">
+    <div>
+      <h2 class="text-appear">{heading}</h2>
+      <div
+        class="mt-8 md:mt-16 mb-20 md:mb-28 flex flex-col md:flex-row items-center justify-between gap-y-5 md:gap-x-20"
+      >
+        <figure class="w-full md:w-96 md:h-[305px] reveal-me">
+          <Image src={image} alt={imageAlt} class="w-full" />
+        </figure>
+        <figcaption>
+          <p class="max-w-xl reveal-me">
+            {description}
+          </p>
+          <ul class="justify-self-start max-md:w-full mt-7 md:mt-14 reveal-me">
+            <li
+              class="block md:inline-block w-full mx-auto md:w-auto text-center"
+            >
+              <a
+                href={button.url}
+                class="rv-button rv-button-white block md:inline-block"
+              >
+                <div class="rv-button-top">
+                  <span>{button.text}</span>
+                </div>
+                <div class="rv-button-bottom">
+                  <span>{button.text}</span>
+                </div>
+              </a>
+            </li>
+          </ul>
+        </figcaption>
+      </div>
+    </div>
+
+    <div
+      class="flex max-xl:flex-wrap items-center justify-center gap-[30px] pt-[75px] reveal-me"
+    >
+      <!-- Loop through stats and render a card for each -->
+      {stats.map((stat) => <StatCardV8 {...stat} />)}
+    </div>
+  </div>
+</section>

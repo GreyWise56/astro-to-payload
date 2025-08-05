@@ -1,0 +1,122 @@
+---
+// src/layouts/BaseLayout.astro
+import Header from '../components/layout/Header.astro';
+import Footer from '../components/layout/Footer.astro';
+import GlobalUI from '../components/layout/GlobalUI.astro';
+// REMOVED: No longer need to import GradientShadow here
+// import GradientShadow from '../components/layout/GradientShadow.astro'; 
+
+// --- Asset Imports ---
+import logoLight from '../assets/images/logo.png';
+import logoDark from '../assets/images/logo-white.png';
+import footerLogo from '../assets/images/logo.svg';
+import arrowIcon from '../assets/images/icons/arrow-Icon.svg';
+
+export interface Props {
+  title: string;
+  description: string;
+}
+const { title, description } = Astro.props;
+
+// --- Data Definitions for Layout ---
+const navLinksData = [
+  { text: "Home", url: "#", sublinks: [{ text: "Homepage 07", subtitle: "Design Studio", url: "/homepage-v7" }] },
+  { text: "About", url: "/about" },
+  { text: "Services", url: "/services" },
+  { text: "Blog", url: "/blog" },
+];
+const menuSocialsData = [
+  { url: "https://www.facebook.com", iconPaths: ["M10 17.5C14.1421 17.5 17.5 14.1421 17.5 10C17.5 5.85786 14.1421 2.5 10 2.5C5.85786 2.5 2.5 5.85786 2.5 10C2.5 14.1421 5.85786 17.5 10 17.5Z", "M13.125 6.875H11.875C11.3777 6.875 10.9008 7.07254 10.5492 7.42418C10.1975 7.77581 10 8.25272 10 8.75V17.5", "M7.5 11.25H12.5"] },
+];
+const footerLinkColumnsData = [
+  { title: "Resources", links: [{ text: "Blog", url: "/blog" }] },
+  { title: "Company", links: [{ text: "About", url: "/about" }] },
+];
+const scheduleCardData = { 
+    logo: footerLogo, 
+    title: "Schedule a Free Meeting", 
+    subtitle: "1 spot left", 
+    buttonUrl: "/contact", 
+    arrowIcon: arrowIcon 
+};
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>{title}</title>
+  <meta name="robots" content="noindex, Nofollow, Noimageindex" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=5" />
+  <meta name="description" content={description} />
+
+  <link href="/assets/css/main.css" rel="stylesheet" />
+  
+  <link rel="icon" type="image/svg+xml" href="/assets/images/favicon.svg" />
+  <link rel="shortcut icon" href="/assets/images/favicon.ico" />
+  <script is:inline>
+    const theme = (() => {
+      if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
+        return localStorage.getItem('theme');
+      }
+      if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        return 'dark';
+      }
+      return 'light';
+    })();
+    if (theme === 'dark') {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  </script>
+</head>
+<body>
+
+  <GlobalUI />
+  <Header 
+    logoLight={logoLight} 
+    logoDark={logoDark}
+    navLinks={navLinksData}
+    address="2261 Market Street #5039 San Francisco, CA 94114"
+    socials={menuSocialsData}
+  />
+  
+  <main class="lg:mb-[600px] relative z-10 bg-backgroundBody dark:bg-dark">
+    <slot />
+  </main>
+  
+  <Footer 
+    scheduleCard={scheduleCardData}
+    linkColumns={footerLinkColumnsData}
+    backgroundText="JAM GROUP"
+  />
+  
+  <script is:inline src="/assets/js/lib/imagesloaded.pkgd.min.js"></script>
+  <script is:inline src="/assets/js/lib/gsap.min.js"></script>
+  <script is:inline src="/assets/js/lib/ScrollTrigger.min.js"></script>
+  <script is:inline src="/assets/js/lib/lenis.min.js"></script>
+  <script is:inline src="/assets/js/lib/split-types.min.js"></script>
+  <script is:inline src="/assets/js/lib/matter.min.js"></script>
+  <script is:inline src="/assets/js/career-tabs.js"></script>
+  <script is:inline src="/assets/js/lib/swiper.min.js"></script>
+  <script is:inline src="/assets/js/lib/headroom.min.js"></script>
+  <script is:inline src="/assets/js/lib/vanila-marquee.min.js"></script>
+  
+  <script is:inline src="/assets/js/script.js"></script>
+  
+  <script is:inline>
+      function adjustMainMargin() {
+        const footer = document.getElementById('main-footer');
+        const main = document.querySelector('main');
+        if (footer && main && window.innerWidth >= 1024) {
+          const footerHeight = footer.offsetHeight;
+          main.style.marginBottom = `${footerHeight}px`;
+        } else if (main) {
+          main.style.marginBottom = '0px';
+        }
+      }
+      window.addEventListener('load', adjustMainMargin);
+      window.addEventListener('resize', adjustMainMargin);
+    </script>
+</body>
+</html>

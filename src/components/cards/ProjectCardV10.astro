@@ -1,0 +1,42 @@
+---
+// src/components/cards/ProjectCardV10.astro
+import { Image } from 'astro:assets';
+
+export interface Project {
+  image: ImageMetadata;
+  altText: string;
+  date: string;
+  year: string;
+  title: string;
+  url: string;
+}
+
+const { project } = Astro.props as { project: Project };
+---
+
+<div class="reveal-me border dark:border-dark px-3.5 md:px-5 pt-3.5 md:pt-5 pb-7 underline-hover-effect group">
+  <a href={project.url}>
+    <figure class="overflow-hidden">
+      <Image
+        src={project.image}
+        alt={project.altText}
+        class="w-full h-full transition-all duration-500 group-hover:scale-125 group-hover:rotate-3"
+      />
+    </figure>
+  </a>
+  <div class="mt-[26px] mb-2.5 flex justify-between items-center">
+    <p class="text-[13px] leading-[14.4px] tracking-[0.96px] uppercase font-normal text-secondary dark:text-white">
+      {project.date}
+    </p>
+    <p class="text-base md:text-[22px] leading-8 tracking-[0.48px] text-secondary dark:text-white">
+      {project.year}
+    </p>
+  </div>
+  <a href={project.url}>
+    <div class="blog-title">
+      <h3 class="text-3xl lg:text-[42px] xl:text-[50px] font-normal lg:leading-[1.2] lg:tracking-[-1.68px]">
+        {project.title}
+      </h3>
+    </div>
+  </a>
+</div>

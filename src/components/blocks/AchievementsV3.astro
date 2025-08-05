@@ -1,0 +1,54 @@
+---
+// src/components/blocks/AchievementsV3.astro
+
+/*
+================================================================================
+Component: AchievementsV3
+Description: A block that displays a grid of achievement cards and a call-to-
+             action button.
+================================================================================
+*/
+
+import AchievementCardV3 from '../cards/AchievementCardV3.astro';
+import type { Props as Achievement } from '../cards/AchievementCardV3.astro';
+
+// Define the properties for the entire block
+export interface Props {
+  achievements: Achievement[];
+  button: {
+    text: string;
+    url: string;
+  };
+}
+
+const { achievements, button } = Astro.props;
+---
+
+<section
+  class="pb-14 pt-14 md:pb-16 md:pt-16 lg:pb-[88px] lg:pt-[88px] xl:pb-[100px] xl:pt-[100px]"
+>
+  <div class="container">
+    <div
+      class="flex flex-wrap items-center justify-center gap-[30px] reveal-me"
+    >
+      <!-- Loop through achievements and render a card for each -->
+      {achievements.map((achievement) => <AchievementCardV3 {...achievement} />)}
+    </div>
+
+    <ul class="justify-self-center max-md:w-full mt-7 md:mt-14 reveal-me">
+      <li class="block md:inline-block w-full mx-auto md:w-auto text-center">
+        <a
+          href={button.url}
+          class="rv-button rv-button-white block md:inline-block"
+        >
+          <div class="rv-button-top">
+            <span>{button.text}</span>
+          </div>
+          <div class="rv-button-bottom">
+            <span>{button.text}</span>
+          </div>
+        </a>
+      </li>
+    </ul>
+  </div>
+</section>

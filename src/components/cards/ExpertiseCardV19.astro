@@ -1,0 +1,25 @@
+---
+// src/components/cards/ExpertiseCardV19.astro
+
+/*
+================================================================================
+Component: ExpertiseCardV19
+Description: A card component for a single expertise item, displaying an icon,
+             title, and description.
+================================================================================
+*/
+
+export interface Props {
+  iconSvg: string; // Pass the entire SVG markup as a string
+  title: string;
+  description: string;
+}
+
+const { iconSvg, title, description } = Astro.props;
+---
+
+<div class="border dark:border-dark flex-1 px-[30px] py-20">
+  <span set:html={iconSvg} />
+  <h5 class="mb-2.5 mt-5">{title}</h5>
+  <p>{description}</p>
+</div>

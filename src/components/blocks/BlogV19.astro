@@ -1,0 +1,67 @@
+---
+// src/components/blocks/BlogV19.astro
+
+/*
+================================================================================
+Component: BlogV19
+Description: A block that displays a header and a grid of featured blog posts.
+================================================================================
+*/
+
+import BlogPostCardV19 from '../cards/BlogPostCardV19.astro';
+import type { Props as BlogPost } from '../cards/BlogPostCardV19.astro';
+
+// Define the properties for the entire block
+export interface Props {
+  badge: string;
+  heading: string;
+  posts: BlogPost[];
+  button: {
+    text: string;
+    url: string;
+  };
+}
+
+const { badge, heading, posts, button } = Astro.props;
+---
+
+<section
+  class="pt-14 md:pt-16 lg:pt-[88px] xl:pt-[100px] pb-14 md:pb-16 lg:pb-[88px] xl:pb-[100px] z-20"
+  aria-labelledby="blog-heading"
+>
+  <div class="container">
+    <!-- Section Header -->
+    <div class="text-center mb-10 md:mb-20">
+      <div class="rv-badge mb-3 reveal-me">
+        <span class="rv-badge-text">{badge}</span>
+      </div>
+      <h2 id="blog-heading" class="text-appear">
+        {heading}
+      </h2>
+    </div>
+
+    <!-- Blog Posts grid  -->
+    <div
+      class="flex max-lg:flex-wrap items-start justify-center max-lg:gap-y-5 md:space-x-[30px] overflow-hidden"
+      aria-label="Featured blog posts"
+    >
+      <!-- Loop through posts and render a card for each -->
+      {posts.map((post) => <BlogPostCardV19 {...post} />)}
+    </div>
+
+    <div class="flex justify-center mt-[56px] mx-auto reveal-me">
+      <a
+        href={button.url}
+        class="rv-button rv-button-white block md:inline-block w-full md:w-auto text-center"
+        aria-label="View all blog posts and articles"
+      >
+        <div class="rv-button-top">
+          <span>{button.text}</span>
+        </div>
+        <div class="rv-button-bottom">
+          <span>{button.text}</span>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>

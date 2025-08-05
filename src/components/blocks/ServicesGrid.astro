@@ -1,0 +1,21 @@
+---
+// src/components/blocks/ServicesGrid.astro
+import ServiceCard from './ServiceCard.astro';
+import type { Props as ServiceCardProps } from './ServiceCard.astro';
+
+export interface Props {
+  services: ServiceCardProps[];
+}
+
+const { services } = Astro.props;
+---
+<div class="flex max-sm:px-5 max-xl:flex-wrap max-xl:gap-5 justify-center [&>*:not(:last-child)]:border-l dark:[&>*:not(:last-child)]:border-l-dark [&>*:last-child]:border-l dark:[&>*:last-child]:border-l-dark [&>*:last-child]:border-r dark:[&>*:last-child]:border-r-dark [&>*]:border-y dark:[&>*]:border-y-dark max-xl:[&>*:first-child]:border-r dark:max-xl:[&>*:first-child]:border-dark max-xl:[&>*:nth-child(2)]:border-r dark:max-xl:[&>*:nth-child(2)]:border-dark max-2xl:[&>*:nth-child(3)]:border-r dark:max-2xl:[&>*:nth-child(3)]:border-dark xl:px-5">
+  {services.map(service => (
+    <ServiceCard 
+      title={service.title}
+      description={service.description}
+      listItems={service.listItems}
+      url={service.url}
+    />
+  ))}
+</div>

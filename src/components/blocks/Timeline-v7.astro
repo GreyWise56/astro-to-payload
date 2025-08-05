@@ -1,0 +1,44 @@
+---
+// src/components/blocks/Timeline-v7.astro
+import { Image } from 'astro:assets';
+import SectionHeaderCentered from './SectionHeaderCentered.astro';
+import TimelineItem from './TimelineItem.astro';
+import type { Props as TimelineItemProps } from './TimelineItem.astro';
+
+export interface Props {
+  badgeText: string;
+  heading: string;
+  stickyImage: ImageMetadata;
+  timelineItems: TimelineItemProps[];
+}
+
+const { badgeText, heading, stickyImage, timelineItems } = Astro.props;
+---
+<section class="pt-14 md:pt-16 lg:pt-[88px] xl:pt-[100px] pb-14 md:pb-16 lg:pb-[88px] xl:pb-[100px]">
+  <div class="container">
+    <SectionHeaderCentered
+      badgeText={badgeText}
+      heading={heading}
+      italicizedWord=""
+      description=""
+    />
+
+    <div class="flex flex-col md:flex-row gap-20 reveal-me mt-8 md:mt-20">
+      <figure class="sticky top-7">
+        <Image src={stickyImage} alt="Process Image" />
+      </figure>
+
+      <div>
+        <ul class="relative space-y-10 lg:space-y-28 xl:space-y-[170px] md:border-l border-secondary dark:border-backgroundBody">
+          {timelineItems.map(item => (
+            <TimelineItem
+              stepNumber={item.stepNumber}
+              title={item.title}
+              description={item.description}
+            />
+          ))}
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>

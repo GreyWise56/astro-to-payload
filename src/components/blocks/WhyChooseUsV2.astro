@@ -1,0 +1,75 @@
+---
+// src/components/blocks/WhyChooseUsV2.astro
+
+/*
+================================================================================
+Component: WhyChooseUsV2
+Description: A block that displays a centered heading, a two-column layout
+             with a list of features on the left and an image on the right,
+             and a CTA button below.
+================================================================================
+*/
+
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import FeatureItemV2 from '../cards/FeatureItemV2.astro';
+import type { Props as Feature } from '../cards/FeatureItemV2.astro';
+
+// Define the properties for the entire block
+export interface Props {
+  heading: string;
+  subheading: string;
+  features: Feature[];
+  image: ImageMetadata;
+  imageAlt: string;
+  button: {
+    text: string;
+    url: string;
+  };
+}
+
+const { heading, subheading, features, image, imageAlt, button } = Astro.props;
+---
+
+<!--
+================================================================================
+The structure is preserved from the static HTML. The component maps over the
+`features` prop to render the list of FeatureItemV2 cards.
+================================================================================
+-->
+<section
+  class="pt-14 md:pt-16 lg:pt-[88px] xl:pt-[100px] pb-14 md:pb-16 lg:pb-[88px] xl:pb-[100px] relative overflow-hidden"
+>
+  <div class="container">
+    <!-- Section Header -->
+    <div class="text-center mb-8 md:mb-14">
+      <h2 class="mt-3 text-appear" set:html={heading}></h2>
+      <p class="text-appear">{subheading}</p>
+    </div>
+
+    <!-- Content Area -->
+    <div class="flex flex-col-reverse md:flex-row gap-y-8 gap-x-[30px]">
+      <div class="md:w-1/2 [&>*]:border-b">
+        <!-- Loop through features and render a card for each -->
+        {features.map((feature) => <FeatureItemV2 {...feature} />)}
+      </div>
+      <figure class="md:w-1/2 reveal-me">
+        <Image src={image} alt={imageAlt} class="w-full h-full" />
+      </figure>
+    </div>
+
+    <!-- Button -->
+    <ul class="flex justify-center mt-14 reveal-me">
+      <li>
+        <a href={button.url} class="rv-button rv-button-sm rv-button-primary">
+          <div class="rv-button-top">
+            <span>{button.text}</span>
+          </div>
+          <div class="rv-button-bottom">
+            <span>{button.text}</span>
+          </div>
+        </a>
+      </li>
+    </ul>
+  </div>
+</section>

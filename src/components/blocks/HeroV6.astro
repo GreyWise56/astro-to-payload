@@ -1,0 +1,61 @@
+---
+// src/components/blocks/HeroV6.astro
+import { Image } from 'astro:assets';
+
+export interface Props {
+  gradientImage: ImageMetadata;
+  italicHeading: string;
+  mainHeading: string;
+  button: {
+    text: string;
+    url: string;
+  };
+  bannerImage: ImageMetadata;
+}
+
+const { gradientImage, italicHeading, mainHeading, button, bannerImage } = Astro.props;
+---
+
+<section class="relative overflow-hidden">
+  <div class="relative overflow-hidden pt-28 md:pt-36 lg:pt-[220px] pb-12 sm:pb-28 lg:pb-[120px]">
+    <div
+      id="hero-gradient-wrapper"
+      class="absolute w-full h-full top-[37%] left-0 -z-10 blur-[35px] md:blur-[60px] sm:scale-50 md:scale-75 lg:scale-90"
+    >
+      <Image
+        src={gradientImage}
+        alt="hero gradient background"
+        id="hero-gradient"
+        class="absolute left-1/2 top-[1/2] -translate-x-1/2 -translate-y-1/2"
+      />
+    </div>
+    <div class="container">
+      <div class="reveal-me text-center">
+        <h1 class="font-semibold">
+          <span class="font-instrument italic block font-normal">{italicHeading}</span>
+          {mainHeading}
+        </h1>
+
+        <ul class="flex justify-center list-none mt-10 md:mt-14">
+          <li class="block md:inline-block w-full text-center md:w-auto">
+            <a href={button.url} class="rv-button rv-button-sm rv-button-primary block md:inline-block">
+              <div class="rv-button-top">
+                <span>{button.text}</span>
+              </div>
+              <div class="rv-button-bottom">
+                <span class="text-nowrap">{button.text}</span>
+              </div>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <figure class="w-full reveal-me scale-small-img">
+    <Image
+      src={bannerImage}
+      alt="Hero Banner Big Image"
+      class="w-full"
+    />
+  </figure>
+</section>

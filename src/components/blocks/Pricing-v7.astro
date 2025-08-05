@@ -1,0 +1,160 @@
+---
+// src/components/blocks/Pricing-v7.astro
+import { Image } from 'astro:assets';
+import SectionHeaderCentered from './SectionHeaderCentered.astro';
+
+// Define the shape of a single pricing plan
+export interface Plan {
+  title: string;
+  description: string;
+  isSubscription: boolean; // Is this a subscription or a one-time project?
+  monthlyPrice?: string;
+  yearlyPrice?: string;
+  customPriceText?: string;
+  paymentDetails: string;
+  button: {
+    text: string;
+    url: string;
+  };
+  features: string[];
+  gradientImage: ImageMetadata;
+}
+
+export interface Props {
+  badgeText: string;
+  heading: string;
+  toggleDiscountText: string;
+  plans: Plan[];
+}
+
+const { badgeText, heading, toggleDiscountText, plans } = Astro.props;
+---
+<section class="pt-14 md:pt-16 lg:pt-[88px] xl:pt-[100px] pb-14 md:pb-16 lg:pb-[88px] xl:pb-[100px] relative overflow-hidden">
+  <div class="container">
+    <div>
+      <SectionHeaderCentered
+        badgeText={badgeText}
+        heading={heading}
+        italicizedWord=""
+        description=""
+      />
+
+      <div class="flex flex-row items-center justify-center gap-6 reveal-me mt-5 md:mt-8">
+        <p class="overflow-hidden text-ellipsis flex gap-2.5 font-satoshi text-[17px] font-normal leading-[1.4] tracking-[0.34px]">
+          <span>{toggleDiscountText}</span>
+        </p>
+        <div class="border-4 border-primary/20 p-[2px] rounded-full">
+          <div id="pricing-toggle" class="relative w-[177px] h-12 bg-primary rounded-full p-[3px] pb-1 cursor-pointer">
+            <div class="toggle-slider absolute w-[calc(50%-1px)] h-[calc(97%-4px)] bg-black rounded-full transition-transform duration-300 ease-in-out"></div>
+            <div class="relative flex h-full">
+              <div id="monthlyOption" class="toggle-option flex-1 flex items-center justify-center text-sm font-medium text-secondary z-10">Monthly</div>
+              <div id="yearlyOption" class="toggle-option flex-1 flex items-center justify-center text-sm font-medium text-secondary z-10">Yearly</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid lg:grid-cols-2 justify-center gap-x-10 mt-10 md:mt-20 gap-y-10 reveal-me">
+      {plans.map(plan => (
+        <div class="border border-secondary dark:border-backgroundBody px-[30px] pt-8 md:pt-20 pb-[30px] relative">
+          <Image src={plan.gradientImage} class="absolute top-0 left-0" alt="Gradient color" />
+          <div>
+            <div>
+              <h6 class="mb-4 max-md:text-3xl">{plan.title}</h6>
+              <p class="text-base">{plan.description}</p>
+            </div>
+
+            {plan.isSubscription ? (
+              <>
+                <div class="monthly-charge">
+                  <div class="flex flex-col md:flex-row items-start md:items-end gap-y-3 md:gap-y-6 gap-x-10 py-8">
+                    <p class="text-6xl leading-[60px] text-secondary dark:text-backgroundBody">{plan.monthlyPrice}</p>
+                    <p class="text-sm leading-[18px] tracking-[-0.2px]" set:html={plan.paymentDetails}></p>
+                  </div>
+                </div>
+                <div class="yearly-charge" style="display: none;">
+                  <div class="flex flex-col md:flex-row items-start md:items-end gap-y-3 md:gap-y-6 gap-x-10 py-8">
+                    <p class="text-6xl leading-[60px] text-secondary dark:text-backgroundBody">{plan.yearlyPrice}</p>
+                    <p class="text-sm leading-[18px] tracking-[-0.2px]" set:html={plan.paymentDetails}></p>
+                  </div>
+                </div>
+              </>
+            ) : (
+              <div class="flex flex-col md:flex-row items-start md:items-end gap-y-3 md:gap-y-6 gap-x-10 py-8">
+                <p class="text-6xl leading-[60px] text-secondary dark:text-backgroundBody">{plan.customPriceText}</p>
+                <p class="text-sm leading-[18px] tracking-[-0.2px]" set:html={plan.paymentDetails}></p>
+              </div>
+            )}
+            
+            <a href={plan.button.url} class={`rv-button ${plan.isSubscription ? 'rv-button-white' : 'rv-button-secondary'} !w-full`}>
+              <div class="rv-button-top !w-full !text-center"><span class="!font-normal">{plan.button.text}</span></div>
+              <div class="rv-button-bottom !w-full !text-center"><span class="!font-normal">{plan.button.text}</span></div>
+            </a>
+
+            <ul class="mt-8 [&>*:not(:last-child)]:mb-2 md:[&>*:not(:last-child)]:mb-3 md:ml-7">
+              {plan.features.map(feature => (
+                <li class="list-none flex gap-[10px] text-[17px] leading-[1.5] text-secondary/70 dark:text-backgroundBody/70">
+                  <span>
+                    {/* The SVG icons have been truncated for brevity but should be here */}
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" class="inline dark:hidden" viewBox="0 0 24 24" fill="none"><path d="M12 2.25C10.0716 2.25 8.18657 2.82183 6.58319 3.89317C4.97982 4.96451 3.73013 6.48726 2.99218 8.26884C2.25422 10.0504 2.06114 12.0108 2.43735 13.9021C2.81355 15.7934 3.74215 17.5307 5.10571 18.8943C6.46928 20.2579 8.20656 21.1865 10.0979 21.5627C11.9892 21.9389 13.9496 21.7458 15.7312 21.0078C17.5127 20.2699 19.0355 19.0202 20.1068 17.4168C21.1782 15.8134 21.75 13.9284 21.75 12C21.7473 9.41498 20.7192 6.93661 18.8913 5.10872C17.0634 3.28084 14.585 2.25273 12 2.25ZM16.2806 10.2806L11.0306 15.5306C10.961 15.6004 10.8783 15.6557 10.7872 15.6934C10.6962 15.7312 10.5986 15.7506 10.5 15.7506C10.4014 15.7506 10.3038 15.7312 10.2128 15.6934C10.1218 15.6557 10.039 15.6004 9.96938 15.5306L7.71938 13.2806C7.57865 13.1399 7.49959 12.949 7.49959 12.75C7.49959 12.551 7.57865 12.3601 7.71938 12.2194C7.86011 12.0786 8.05098 11.9996 8.25 11.9996C8.44903 11.9996 8.6399 12.0786 8.78063 12.2194L10.5 13.9397L15.2194 9.21937C15.2891 9.14969 15.3718 9.09442 15.4628 9.0567C15.5539 9.01899 15.6515 8.99958 15.75 8.99958C15.8486 8.99958 15.9461 9.01899 16.0372 9.0567C16.1282 9.09442 16.2109 9.14969 16.2806 9.21937C16.3503 9.28906 16.4056 9.37178 16.4433 9.46283C16.481 9.55387 16.5004 9.65145 16.5004 9.75C16.5004 9.84855 16.481 9.94613 16.4433 10.0372C16.4056 10.1282 16.3503 10.2109 16.2806 10.2806Z" fill="black"/></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" class="hidden dark:block" viewBox="0 0 24 24" fill="none"><path d="M12 2.25C10.0716 2.25 8.18657 2.82183 6.58319 3.89317C4.97982 4.96451 3.73013 6.48726 2.99218 8.26884C2.25422 10.0504 2.06114 12.0108 2.43735 13.9021C2.81355 15.7934 3.74215 17.5307 5.10571 18.8943C6.46928 20.2579 8.20656 21.1865 10.0979 21.5627C11.9892 21.9389 13.9496 21.7458 15.7312 21.0078C17.5127 20.2699 19.0355 19.0202 20.1068 17.4168C21.1782 15.8134 21.75 13.9284 21.75 12C21.7473 9.41498 20.7192 6.93661 18.8913 5.10872C17.0634 3.28084 14.585 2.25273 12 2.25ZM16.2806 10.2806L11.0306 15.5306C10.961 15.6004 10.8783 15.6557 10.7872 15.6934C10.6962 15.7312 10.5986 15.7506 10.5 15.7506C10.4014 15.7506 10.3038 15.7312 10.2128 15.6934C10.1218 15.6557 10.039 15.6004 9.96938 15.5306L7.71938 13.2806C7.57865 13.1399 7.49959 12.949 7.49959 12.75C7.49959 12.551 7.57865 12.3601 7.71938 12.2194C7.86011 12.0786 8.05098 11.9996 8.25 11.9996C8.44903 11.9996 8.6399 12.0786 8.78063 12.2194L10.5 13.9397L15.2194 9.21937C15.2891 9.14969 15.3718 9.09442 15.4628 9.0567C15.5539 9.01899 15.6515 8.99958 15.75 8.99958C15.8486 8.99958 15.9461 9.01899 16.0372 9.0567C16.1282 9.09442 16.2109 9.14969 16.2806 9.21937C16.3503 9.28906 16.4056 9.37178 16.4433 9.46283C16.481 9.55387 16.5004 9.65145 16.5004 9.75C16.5004 9.84855 16.481 9.94613 16.4433 10.0372C16.4056 10.1282 16.3503 10.2109 16.2806 10.2806Z" fill="#fff"/></svg>
+                  </span>
+                  {feature}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .toggle-option.active {
+    color: white !important;
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const toggle = document.getElementById('pricing-toggle');
+    const slider = toggle?.querySelector('.toggle-slider') as HTMLElement;
+    const monthlyOption = document.getElementById('monthlyOption');
+    const yearlyOption = document.getElementById('yearlyOption');
+    const monthlyCharges = document.querySelectorAll('.monthly-charge');
+    const yearlyCharges = document.querySelectorAll('.yearly-charge');
+
+    if (!toggle || !slider || !monthlyOption || !yearlyOption) return;
+
+    let isYearly = false;
+
+    // Function to set the active state
+    function setActiveState() {
+      if (isYearly) {
+        slider.style.transform = 'translateX(calc(100% - 2px))';
+        // Use optional chaining (?.) to safely access classList
+        yearlyOption?.classList.add('active');
+        monthlyOption?.classList.remove('active');
+        monthlyCharges.forEach(el => (el as HTMLElement).style.display = 'none');
+        yearlyCharges.forEach(el => (el as HTMLElement).style.display = 'block');
+      } else {
+        slider.style.transform = 'translateX(0%)';
+        // Use optional chaining (?.) to safely access classList
+        monthlyOption?.classList.add('active');
+        yearlyOption?.classList.remove('active');
+        monthlyCharges.forEach(el => (el as HTMLElement).style.display = 'block');
+        yearlyCharges.forEach(el => (el as HTMLElement).style.display = 'none');
+      }
+    }
+
+    // Set initial state on load
+    setActiveState();
+
+    toggle.addEventListener('click', () => {
+      isYearly = !isYearly;
+      setActiveState();
+    });
+  });
+</script>

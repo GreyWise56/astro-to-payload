@@ -1,0 +1,133 @@
+---
+// src/components/blocks/ContactForm-v7.astro
+import SectionCtaHeading from './SectionCtaHeading.astro';
+
+export interface Props {
+    sliderImages: ImageMetadata[];
+}
+
+const { sliderImages } = Astro.props;
+
+// Data for the interest checkboxes
+const interests = [
+  { id: "uiux", value: "UI/UX Design", label: "UI/UX Design" },
+  { id: "webdesign", value: "Web Design", label: "Web Design" },
+  { id: "webdev", value: "Web Development", label: "Web Development" },
+  { id: "website", value: "Website Creation", label: "Website Creation" },
+  { id: "animation", value: "Animation", label: "Animation" },
+  { id: "others", value: "Others", label: "Others" },
+];
+
+// Data for the budget radio buttons
+const budgets = [
+  { id: "budget1", value: "$2k-4k", label: "$2k-4k" },
+  { id: "budget2", value: "$4k-6k", label: "$4k-6k" },
+  { id: "budget3", value: "$6k-8k", label: "$6k-8k" },
+];
+---
+
+<style>
+  .interest-btn {
+    cursor: pointer;
+    padding: 0.75rem 1.25rem;
+    border: 1px solid theme('colors.secondary / 10%');
+    background-color: theme('colors.backgroundBody');
+    color: theme('colors.colorText');
+    transition: all 0.3s ease;
+    display: inline-block;
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+  
+  .dark .interest-btn {
+    background-color: theme('colors.dark');
+    border-color: theme('colors.dark');
+    color: theme('colors.backgroundBody');
+  }
+
+  .interest-btn:hover {
+    border-color: theme('colors.primary');
+    color: theme('colors.primary');
+  }
+
+  .checkbox-wrapper input[type="checkbox"]:checked + .interest-btn,
+  .radio-wrapper input[type="radio"]:checked + .interest-btn {
+    background-color: theme('colors.primary');
+    border-color: theme('colors.primary');
+    color: white;
+  }
+</style>
+
+<section class="pt-14 md:pt-16 lg:pt-[88px] xl:pt-[100px] pb-[70px] lg:pb-[120px]">
+  <div class="container">
+    
+    <SectionCtaHeading 
+        sliderImages={sliderImages}
+        headingStart="Let's"
+        headingEnd="Create"
+        iconicText="Something Iconic"
+    />
+
+    <form action="#" class="grid grid-cols-1 md:grid-cols-2 gap-[30px] max-w-[800px] mt-20 mx-auto reveal-me">
+        <div class="md:col-span-full">
+            <label for="name" class="text-2xl leading-[1.2] tracking-[-0.48px] text-[#000000b3] dark:text-dark-100">
+            Your Data
+            </label>
+            <input
+            type="text"
+            id="name"
+            name="name"
+            placeholder="Name*"
+            class="py-4 pl-5 bg-backgroundBody dark:bg-dark focus:outline-none focus:border-primary border dark:border-dark w-full text-colorText text-xl leading-[1.4] tracking-[0.4px] mt-3"
+            />
+        </div>
+
+        <div class="md:col-span-full">
+            <label class="text-2xl leading-[1.2] tracking-[-0.48px] text-[#000000b3] dark:text-dark-100">
+            You are interested in
+            </label>
+            <div class="flex flex-wrap gap-6 mt-3">
+            {interests.map(interest => (
+                <div class="checkbox-wrapper">
+                <input type="checkbox" id={interest.id} name="interest" value={interest.value} class="hidden" />
+                <label for={interest.id} class="interest-btn">{interest.label}</label>
+                </div>
+            ))}
+            </div>
+        </div>
+
+        <div class="md:col-span-full">
+            <label class="text-2xl leading-[1.2] tracking-[-0.48px] text-[#000000b3] dark:text-dark-100">
+            Budget in USD:
+            </label>
+            <div class="flex flex-wrap gap-6 mt-3">
+            {budgets.map(budget => (
+                <div class="radio-wrapper">
+                <input type="radio" id={budget.id} name="budget" value={budget.value} class="hidden" />
+                <label for={budget.id} class="interest-btn">{budget.label}</label>
+                </div>
+            ))}
+            </div>
+        </div>
+
+        <div class="md:col-span-full">
+            <label for="Message" class="text-2xl leading-[1.2] tracking-[-0.48px] text-[#000000b3] dark:text-dark-100">
+            Project Details
+            </label>
+            <textarea
+            name="Message"
+            id="Message"
+            placeholder="Tell us about your project goals and timeline"
+            class="py-4 pl-5 min-h-44 bg-backgroundBody dark:bg-dark focus:outline-none focus:border-primary border dark:border-dark w-full text-colorText text-xl leading-[1.4] tracking-[0.4px] mt-3"
+            ></textarea>
+        </div>
+
+        <div class="md:col-span-full">
+            <button type="submit" class="rv-button rv-button-primary block w-full">
+                <div class="rv-button-top"><span>Send Message</span></div>
+                <div class="rv-button-bottom"><span class="text-nowrap">Send Message</span></div>
+            </button>
+        </div>
+    </form>
+  </div>
+</section>

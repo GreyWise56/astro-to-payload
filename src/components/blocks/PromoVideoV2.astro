@@ -1,0 +1,61 @@
+---
+// src/components/blocks/PromoVideoV2.astro
+
+/*
+================================================================================
+Component: PromoVideoV2
+Description: A block component that displays a full-width, auto-playing,
+             looping promotional video. Designed to be used with global
+             animation scripts that target the 'video-parents' and
+             'video-wrapper' classes.
+================================================================================
+*/
+
+import type { ImageMetadata } from 'astro';
+import { Image } from 'astro:assets';
+
+// Step 3: Define a Data Contract with TypeScript Props
+export interface Props {
+  videoSrc: string;
+  captionsSrc: string;
+  posterImage?: ImageMetadata; // Optional poster image
+}
+
+// Destructure the props
+const { videoSrc, captionsSrc, posterImage } = Astro.props;
+---
+
+<!--
+================================================================================
+Step 4: Build the Component
+- The static HTML is adapted into a reusable Astro component.
+- The `src` attributes for the video and track are replaced with props.
+- An optional `poster` attribute is added to the video tag.
+- The classes for GSAP animations (`video-parents`, `reveal-me-2`,
+  `video-wrapper`) are kept as they are controlled globally.
+================================================================================
+-->
+<section class="video-parents reveal-me-2 relative overflow-hidden">
+  <!-- Video Wrapper -->
+  <div class="w-full h-fit video-wrapper scale-50 origin-top">
+    <!-- Autoplay Muted Looping Promo Video -->
+    <video
+      class="w-full h-full"
+      autoplay
+      muted
+      loop
+      playsinline
+      id="promo-video"
+      poster={posterImage ? posterImage.src : undefined}
+    >
+      <source src={videoSrc} type="video/mp4" />
+      <track
+        src={captionsSrc}
+        kind="captions"
+        srclang="en"
+        label="English"
+      />
+      Your browser does not support the video tag.
+    </video>
+  </div>
+</section>

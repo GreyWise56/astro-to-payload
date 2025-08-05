@@ -1,0 +1,45 @@
+---
+// src/components/cards/TestimonialCardV19.astro
+
+/*
+================================================================================
+Component: TestimonialCardV19
+Description: A card for displaying a single testimonial, including the quote
+             and author details (avatar, name, title).
+================================================================================
+*/
+
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+// Define the properties for a single testimonial card
+export interface Props {
+  quote: string;
+  author: {
+    avatar: ImageMetadata;
+    name: string;
+    title: string;
+  };
+}
+
+const { quote, author } = Astro.props;
+---
+
+<div
+  class="border dark:border-dark p-[30px] min-w-[380px] md:min-w-[470px] ml-[30px]"
+>
+  <p class="text-[19px] tracking-normal leading-normal text-balance">
+    {quote}
+  </p>
+  <div class="flex items-center gap-4 mt-[29px]">
+    <Image src={author.avatar} alt={`Avatar of ${author.name}`} />
+    <div>
+      <h3 class="text-xl leading-[1.2] tracking-wide font-medium">
+        {author.name}
+      </h3>
+      <p class="text-base font-light leading-5 mt-[3.5px]">
+        {author.title}
+      </p>
+    </div>
+  </div>
+</div>

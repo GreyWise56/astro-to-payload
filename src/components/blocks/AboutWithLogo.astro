@@ -1,0 +1,37 @@
+---
+// src/components/blocks/AboutWithLogo.astro
+import { Image } from 'astro:assets';
+
+export interface Props {
+  logoLightSrc: ImageMetadata;
+  logoDarkSrc: ImageMetadata;
+  logoText?: string;
+  description: string;
+}
+
+const {
+  logoLightSrc,
+  logoDarkSrc,
+  logoText = "Building Brands, and Creating Impact",
+  description,
+} = Astro.props;
+---
+<section class="pb-14 md:pb-16 lg:pb-[88px] xl:pb-[100px] pt-28 md:pt-32 lg:pt-44 xl:pt-[200px] relative overflow-hidden about">
+  <div class="container">
+    <div class="flex flex-col items-center lg:items-stretch justify-center lg:justify-normal reveal-me">
+      <div class="relative w-[168px] h-[168px] bg-secondary dark:bg-backgroundBody rounded-[50%] flex items-center justify-center mx-auto">
+        <figure>
+          <Image src={logoLightSrc} alt="text-circle-logo" class="inline dark:hidden" />
+          <Image src={logoDarkSrc} alt="text-circle-logo" class="hidden dark:inline" />
+        </figure>
+        {logoText && (
+          <div class="text">
+            <p>{logoText}</p>
+          </div>
+        )}
+      </div>
+
+      <h3 class="mt-[34px] mx-auto reveal-text relative overflow-hidden" set:html={description}></h3>
+    </div>
+  </div>
+</section>

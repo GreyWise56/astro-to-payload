@@ -1,0 +1,47 @@
+---
+// src/components/blocks/TestimonialsV19.astro
+
+/*
+================================================================================
+Component: TestimonialsV19
+Description: A block that displays a header and a horizontally scrolling
+             marquee of testimonial cards.
+================================================================================
+*/
+
+import TestimonialCardV19 from '../cards/TestimonialCardV19.astro';
+import type { Props as Testimonial } from '../cards/TestimonialCardV19.astro';
+
+// Define the properties for the entire block
+export interface Props {
+  badge: string;
+  heading: string;
+  testimonials: Testimonial[];
+}
+
+const { badge, heading, testimonials } = Astro.props;
+---
+
+<section
+  class="pt-14 md:pt-16 lg:pt-[88px] xl:pt-[100px] pb-14 md:pb-16 lg:pb-[88px] xl:pb-[100px] relative overflow-hidden"
+>
+  <!-- Section Header -->
+  <div class="container">
+    <div class="text-center mb-10 md:mb-20">
+      <div class="rv-badge mb-3 reveal-me">
+        <span class="rv-badge-text">{badge}</span>
+      </div>
+      <h2 class="text-appear" set:html={heading}></h2>
+    </div>
+  </div>
+
+  <!-- Marquee Slider -->
+  <div class="marquee-container">
+    <div
+      class="flex items-center gap-4 md:gap-[30px] max-sm:mb-[1px] reveal-me"
+    >
+      <!-- Loop through testimonials and render a card for each -->
+      {testimonials.map((testimonial) => <TestimonialCardV19 {...testimonial} />)}
+    </div>
+  </div>
+</section>

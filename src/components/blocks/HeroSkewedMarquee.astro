@@ -1,0 +1,75 @@
+---
+// src/components/blocks/HeroSkewedMarquee.astro
+import { Image } from 'astro:assets';
+
+export interface Props {
+  headingPart1: string;
+  headingPart2: string;
+  inlineSliderImages: ImageMetadata[];
+  description: string;
+  skewedMarqueeImages: ImageMetadata[];
+  subheading: string;
+  gradientImage: ImageMetadata;
+}
+
+const {
+  headingPart1,
+  headingPart2,
+  inlineSliderImages,
+  description,
+  skewedMarqueeImages,
+  subheading,
+  gradientImage,
+} = Astro.props;
+---
+<section class="pt-32 md:pt-44 max-sm:px-3 pb-14 md:pb-16 lg:pb-[88px] xl:pb-[100px] relative overflow-hidden">
+  <div class="absolute w-2/6 h-2/6 top-40 left-[12%] -z-10 blur-[35px] md:blur-[60px]">
+    <Image 
+      src={gradientImage} 
+      alt="hero gradient background" 
+      id="hero-gradient" 
+      class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" 
+    />
+  </div>
+
+  <div class="max-w-screen-xl px-5 mx-auto">
+    <div class="reveal-me">
+      <h1 class="xl:text-[96px] font-semibold xl:leading-[1.1] xl:tracking-[-2.88px] max-lg:text-center">
+        {headingPart1}
+        <div class="cta-slider-container max-sm:block sm:inline-block max-sm:mb-7 translate-y-5" id="cta-img">
+          <div class="cta-inline-slider">
+            {inlineSliderImages.map((image, index) => (
+              <div class="slide">
+                <Image src={image} alt={`Slide ${index + 1}`} />
+              </div>
+            ))}
+          </div>
+        </div>
+        {headingPart2}
+      </h1>
+    </div>
+    <p class="mt-6 md:mt-10 max-w-[770px] max-lg:mx-auto reveal-me">
+      {description}
+    </p>
+  </div>
+
+  <div style="transform: translate3d(-200px, 0px, 0px) scale3d(1, 1, 1) rotateX(30deg) rotateY(17deg) rotateZ(342deg) skew(7deg, 359deg); transform-style: preserve-3d;" id="skew-Marquee">
+    <div class="pb-16 lg:pb-48 pt-24">
+      <div class="relative">
+        <div class="z-50 flex gap-5 w-fit flex-nowrap whitespace-nowrap will-change-transform marquee-inner reveal-me">
+          {[...skewedMarqueeImages, ...skewedMarqueeImages].map(image => (
+            <figure class="marquee-part flex items-center justify-center size-[370px] z-50 flex-shrink-0">
+              <Image src={image} alt="marquee image" />
+            </figure>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <h3 class="reveal-text-2 reveal-me">
+      {subheading}
+    </h3>
+  </div>
+</section>

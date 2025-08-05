@@ -1,0 +1,27 @@
+---
+// src/components/blocks/PromoVideo.astro
+
+export interface Props {
+  videoSrc: string; // The video file path
+  captionsSrc?: string; // An optional captions file path
+}
+
+const { videoSrc, captionsSrc } = Astro.props;
+---
+<section class="video-parents reveal-me-2 relative overflow-hidden">
+  <div class="w-full h-fit video-wrapper scale-50 origin-top">
+    <video class="w-full h-full" autoplay muted loop playsinline id="promo-video">
+      <source src={videoSrc} type="video/mp4" />
+      
+      {captionsSrc && (
+        <track
+          src={captionsSrc}
+          kind="captions"
+          srclang="en"
+          label="English"
+        />
+      )}
+      Your browser does not support the video tag.
+    </video>
+  </div>
+</section>

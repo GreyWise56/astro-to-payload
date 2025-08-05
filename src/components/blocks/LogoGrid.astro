@@ -1,0 +1,29 @@
+---
+// src/components/blocks/LogoGrid.astro
+import { Image } from 'astro:assets';
+
+export interface LogoPair {
+  light: ImageMetadata;
+  dark: ImageMetadata;
+  alt: string;
+}
+
+export interface Props {
+  logos: LogoPair[];
+}
+
+const { logos } = Astro.props;
+---
+
+<section class="pt-14 md:pt-16 lg:pt-[88px] xl:pt-[100px] pb-14 md:pb-16 lg:pb-[88px] xl:pb-[100px]">
+  <div class="container">
+    <div class="max-w-4xl mx-auto grid max-md:grid-cols-2 md:grid-cols-4 reveal-me border-t border-x [&>*]:border-r max-md:[&>*:nth-child(2)]:border-r-0 max-md:[&>*:nth-child(6)]:border-r-0 [&>*:nth-child(4)]:border-r-0 [&>*:nth-child(8)]:border-r-0 [&>*]:border-b dark:[&>*]:border-dark dark:border-dark">
+      {logos.map(logo => (
+        <figure class="px-12 py-8 flex justify-center items-center">
+          <Image src={logo.light} alt={logo.alt} class="inline dark:hidden" />
+          <Image src={logo.dark} alt={logo.alt} class="hidden dark:inline" />
+        </figure>
+      ))}
+    </div>
+  </div>
+</section>

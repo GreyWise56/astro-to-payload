@@ -1,0 +1,22 @@
+---
+// src/components/blocks/CommunityCardSmall.astro
+
+export interface Props {
+  badgeText: string;
+  heading: string;
+  buttonText: string;
+  buttonUrl: string;
+}
+
+const { badgeText, heading, buttonText, buttonUrl } = Astro.props;
+---
+<div class="col-span-full md:col-span-6 border dark:border-dark pt-10 pb-10 md:pb-[60px] text-center reveal-me">
+  <div class="rv-badge">
+    <span class="rv-badge-text">{badgeText}</span>
+  </div>
+  <h3 class="my-6 md:my-8 text-[25px] lg:text-4xl leading-[1.2] tracking-[-1.08px]" set:html={heading}></h3>
+  <a href={buttonUrl} target="_blank" class="rv-button rv-button-secondary block md:inline-block w-[90%] max-md:mx-auto md:w-auto">
+    <div class="rv-button-top"><span>{buttonText}</span></div>
+    <div class="rv-button-bottom"><span>{buttonText}</span></div>
+  </a>
+</div>

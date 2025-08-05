@@ -1,0 +1,63 @@
+---
+// src/components/blocks/FaqV2.astro
+
+/*
+================================================================================
+Component: FaqV2
+Description: A block that displays a header and a multi-column grid of FAQ items.
+================================================================================
+*/
+
+import FaqItemV2 from '../cards/FaqItemV2.astro';
+import type { Props as FaqItemProps } from '../cards/FaqItemV2.astro';
+
+// Define the properties for the entire block
+export interface Props {
+  heading: string;
+  subheading: string;
+  faqs: FaqItemProps[];
+}
+
+const { heading, subheading, faqs } = Astro.props;
+
+// Logic to distribute the FAQs into three columns
+const columns: FaqItemProps[][] = [[], [], []];
+faqs.forEach((faq, index) => {
+  columns[index % 3].push(faq);
+});
+---
+
+<section
+  class="pt-14 md:pt-16 lg:pt-[88px] xl:pt-[100px] pb-14 md:pb-16 lg:pb-[88px] xl:pb-[100px] relative overflow-hidden"
+>
+  <div class="container">
+    <!-- Section Heading and Description -->
+    <div
+      class="flex flex-col md:flex-row gap-x-10 gap-y-5 justify-center lg:justify-between max-md:items-start md:items-end mb-10 lg:mb-20"
+    >
+      <div class="flex-1">
+        <h2 class="text-appear block md:hidden" set:html={heading}></h2>
+        <h2 class="text-appear md:block hidden" set:html={heading}></h2>
+      </div>
+      <div class="md:self-end md:justify-self-end flex-1">
+        <p class="text-appear max-w-lg md:text-right">
+          {subheading}
+        </p>
+      </div>
+    </div>
+
+    <!-- FAQ Accordion Items Grid -->
+    <div
+      class="w-full mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[30px] items-start"
+    >
+      <!-- Render the three columns -->
+      {columns.map(column => (
+        <div class="space-y-[30px]">
+          {column.map(faq => (
+            <FaqItemV2 question={faq.question} answer={faq.answer} />
+          ))}
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

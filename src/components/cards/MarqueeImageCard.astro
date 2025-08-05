@@ -1,0 +1,32 @@
+---
+// src/components/cards/MarqueeImageCard.astro
+
+/*
+================================================================================
+Component: MarqueeImageCard
+Description: A simple card component that renders a single image figure for
+             use within a marquee.
+================================================================================
+*/
+
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+// Define the properties for a single marquee image
+export interface Props {
+  image: ImageMetadata;
+  altText: string;
+}
+
+const { image, altText } = Astro.props;
+---
+
+<!--
+Renders a single figure for the marquee. The classes are kept for global
+styling and animation targeting.
+-->
+<figure
+  class="marquee-part flex items-center justify-center size-[370px] z-50 flex-shrink-0"
+>
+  <Image src={image} alt={altText} width="370" height="370" />
+</figure>

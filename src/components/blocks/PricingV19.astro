@@ -1,0 +1,46 @@
+---
+// src/components/blocks/PricingV19.astro
+
+/*
+================================================================================
+Component: PricingV19
+Description: A block that displays a header and a set of pricing plans.
+================================================================================
+*/
+
+import PricingCardV19 from '../cards/PricingCardV19.astro';
+import type { Props as PricingPlan } from '../cards/PricingCardV19.astro';
+
+// Define the properties for the entire block
+export interface Props {
+  badge: string;
+  heading: string;
+  description: string;
+  plans: PricingPlan[];
+}
+
+const { badge, heading, description, plans } = Astro.props;
+---
+
+<section
+  class="pb-14 pt-14 md:pb-16 md:pt-16 lg:pb-[88px] lg:pt-[88px] xl:pb-[100px] xl:pt-[100px] overflow-hidden"
+>
+  <div class="container">
+    <!-- Section Header -->
+    <div class="mb-7 lg:mb-14 text-center">
+      <div class="rv-badge reveal-me mb-3">
+        <span class="rv-badge-text">{badge}</span>
+      </div>
+
+      <h2 class="mb-3 text-center text-appear" set:html={heading}></h2>
+      <p class="max-w-3xl text-appear mx-auto">{description}</p>
+    </div>
+  </div>
+
+  <div
+    class="flex max-2xl:flex-wrap items-center justify-center gap-[30px] max-w-[1600px] max-sm:px-5 mx-auto"
+  >
+    <!-- Loop through plans and render a card for each -->
+    {plans.map((plan) => <PricingCardV19 {...plan} />)}
+  </div>
+</section>

@@ -1,0 +1,210 @@
+---
+// src/pages/about-v2.astro
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+// Import Block Components
+import PageHeaderV2 from "../components/blocks/PageHeaderV2.astro";
+import PromoVideoV2 from "../components/blocks/PromoVideoV2.astro";
+import AboutMarqueeV2 from "../components/blocks/AboutMarqueeV2.astro";
+import WhyChooseUsV2 from "../components/blocks/WhyChooseUsV2.astro";
+import TeamGridV2 from "../components/blocks/TeamGridV2.astro";
+import ServicesAccordionV2 from "../components/blocks/ServicesAccordionV2.astro";
+import ClientsV2 from "../components/blocks/ClientsV2.astro";
+import FaqV2 from "../components/blocks/FaqV2.astro";
+import CtaV2 from "../components/blocks/CtaV2.astro";
+
+// Import Prop Types
+import type { Props as PageHeaderProps } from "../components/blocks/PageHeaderV2.astro";
+import type { Props as PromoVideoProps } from "../components/blocks/PromoVideoV2.astro";
+import type { Props as AboutMarqueeProps } from "../components/blocks/AboutMarqueeV2.astro";
+import type { Props as WhyChooseUsProps } from "../components/blocks/WhyChooseUsV2.astro";
+import type { Props as TeamGridProps } from "../components/blocks/TeamGridV2.astro";
+import type { Props as ServicesAccordionProps } from "../components/blocks/ServicesAccordionV2.astro";
+import type { Props as ClientsProps } from "../components/blocks/ClientsV2.astro";
+import type { Props as FaqProps } from "../components/blocks/FaqV2.astro";
+import type { Props as CtaProps } from "../components/blocks/CtaV2.astro";
+
+// --- Asset Imports ---
+import marqueeImg1 from '../assets/images/marquee-img/hero-marquee-01.png';
+import marqueeImg2 from '../assets/images/marquee-img/hero-marquee-02.png';
+import marqueeImg3 from '../assets/images/marquee-img/hero-marquee-03.png';
+import marqueeImg4 from '../assets/images/marquee-img/hero-marquee-04.png';
+import marqueeImg5 from '../assets/images/marquee-img/hero-marquee-05.png';
+import whyChooseUsImg from '../assets/images/home-5/why-rivor.png';
+import teamImg1 from '../assets/images/home-ai/team/ai-team-1.png';
+import teamImg2 from '../assets/images/home-ai/team/ai-team-2.png';
+import teamImg3 from '../assets/images/team/team-2.png';
+import teamImg4 from '../assets/images/home-ai/team/ai-team-4.png';
+import teamImg5 from '../assets/images/team/team-3.png';
+import teamImg6 from '../assets/images/team/team-4.png';
+import servicesBg from '../assets/images/services-gradient-bg-2.png';
+import clientLogo1 from '../assets/images/icons/company/client-1.svg';
+import clientLogo2 from '../assets/images/icons/company/client-2.svg';
+import clientLogo3 from '../assets/images/icons/company/client-3.svg';
+import clientLogo4 from '../assets/images/icons/company/client-4.svg';
+import clientLogo5 from '../assets/images/icons/company/client-5.svg';
+import avatar1 from '../assets/images/avatar/review-5.png';
+import avatar2 from '../assets/images/avatar/review-2.png';
+import avatar3 from '../assets/images/avatar/review-8.png';
+
+
+// --- Page Data ---
+
+const pageHeaderData: PageHeaderProps = {
+  title: "About",
+  description:
+    "We are dedicated to transforming ideas into impactful solutions. With a focus on innovation and excellence, we partner with businesses around the globe to help them navigate complex challenges and achieve growth.",
+  largeTitle: "Company",
+};
+
+const promoVideoData: PromoVideoProps = {
+    videoSrc: "/assets/videos/promo.mp4",
+    captionsSrc: "/assets/captions/promo-captions.vtt",
+};
+
+const aboutMarqueeData: AboutMarqueeProps = {
+    heading: "Rivor Agency: Shaping the Future of Digital Innovation. We are dedicated to empowering blockchain pioneers and transforming the realm of digital ownership for today and beyond.",
+    marqueeImages: [
+        { image: marqueeImg1, altText: "Digital artwork showing blockchain technology visualization" },
+        { image: marqueeImg2, altText: "Rivor Agency digital innovation project example" },
+        { image: marqueeImg3, altText: "NFT artwork created through Rivor Agency platform" },
+        { image: marqueeImg4, altText: "Digital ownership concept illustration" },
+        { image: marqueeImg5, altText: "Blockchain innovation project by Rivor Agency" },
+    ]
+};
+
+const whyChooseUsData: WhyChooseUsProps = {
+  heading: `Why choose <i class="font-instrument">Rivor?</i>`,
+  subheading: "The Rivor Advantage — All That Works for You",
+  features: [
+    { title: "Proven AI Expertise", description: "Top AI experts with proven success." },
+    { title: "Tailored Solutions", description: "We are also the all AI have—each solution is tailored." },
+    { title: "Data-Driven Insights", description: "AI analytics for accurate decisions." },
+    { title: "Seamless Integration", description: "All that fits effortlessly into your existing systems." },
+    { title: "ROI-Focused results", description: "AI solutions to enhance efficiency and profits." },
+  ],
+  image: whyChooseUsImg,
+  imageAlt: "A collage of abstract shapes and designs representing AI Solutions",
+  button: { text: "Let’s Talk", url: "/contact" },
+};
+
+const teamGridData: TeamGridProps = {
+    heading: `<span class="font-instrument lg:text-[80px] italic"> Team </span> <br class="hidden md:block" /> Members`,
+    subheading: "Here’s a template to introduce a team member in an engaging and professional way.",
+    teamMembers: [
+        { name: "Henry", title: "Founder", image: teamImg1, url: "/team-details" },
+        { name: "Addison", title: "Founder", image: teamImg2, url: "/team-details" },
+        { name: "David Kim", title: "Founder", image: teamImg3, url: "/team-details" },
+        { name: "John Carter", title: "Founder", image: teamImg4, url: "/team-details" },
+        { name: "Emily", title: "Founder", image: teamImg5, url: "/team-details" },
+        { name: "Thompson", title: "Founder", image: teamImg6, url: "/team-details" },
+    ]
+};
+
+const servicesAccordionData: ServicesAccordionProps = {
+    heading: `<span class="font-instrument lg:text-[65px] italic">Cool</span> services`,
+    subheading: "For a comprehensive services section, outline your offerings in a clear and organized manner. Here’s a general template you can use.",
+    button: { text: "Explore Our Services", url: "/services" },
+    backgroundImage: servicesBg,
+    accordionItems: [
+        {
+            title: "UX & Research",
+            subtitle: "Creating a remarkable experience for every individual",
+            featureLists: [
+                ["User Research & Market Analysis", "Prototyping", "Concept Ideation", "Sketching & Wireframing"],
+                ["User Research & Market Analysis", "Prototyping", "Concept Ideation", "Sketching & Wireframing"]
+            ]
+        },
+        {
+            title: "Web Development",
+            subtitle: "Creating a remarkable experience for every individual",
+            featureLists: [
+                ["User Research & Market Analysis", "Prototyping", "Concept Ideation", "Sketching & Wireframing"],
+                ["User Research & Market Analysis", "Prototyping", "Concept Ideation", "Sketching & Wireframing"]
+            ]
+        },
+        {
+            title: "Web Design",
+            subtitle: "Creating a remarkable experience for every individual",
+            featureLists: [
+                ["User Research & Market Analysis", "Prototyping", "Concept Ideation", "Sketching & Wireframing"],
+                ["User Research & Market Analysis", "Prototyping", "Concept Ideation", "Sketching & Wireframing"]
+            ]
+        },
+        {
+            title: "Wordpress",
+            subtitle: "Creating a remarkable experience for every individual",
+            featureLists: [
+                ["User Research & Market Analysis", "Prototyping", "Concept Ideation", "Sketching & Wireframing"],
+                ["User Research & Market Analysis", "Prototyping", "Concept Ideation", "Sketching & Wireframing"]
+            ]
+        }
+    ]
+};
+
+const clientsData: ClientsProps = {
+    heading: `<span class="font-instrument italic">Have</span> <br class="hidden md:block" /> Trust in us`,
+    subheading: "Our agency is your gateway to discovering extraordinary artworks that resonate with your aesthetic sensibilities.",
+    logoMarquee: [
+        { src: clientLogo1, alt: "Client Logo 1" },
+        { src: clientLogo2, alt: "Client Logo 2" },
+        { src: clientLogo3, alt: "Client Logo 3" },
+        { src: clientLogo4, alt: "Client Logo 4" },
+        { src: clientLogo5, alt: "Client Logo 5" },
+    ],
+    logoMarqueeReverse: [
+        { src: clientLogo1, alt: "Client Logo 1" },
+        { src: clientLogo2, alt: "Client Logo 2" },
+        { src: clientLogo3, alt: "Client Logo 3" },
+        { src: clientLogo4, alt: "Client Logo 4" },
+        { src: clientLogo5, alt: "Client Logo 5" },
+    ],
+    testimonials: [
+        {
+            shortQuote: "The skeleton plan of a website can be broken down into three components",
+            longQuote: "Exceptional materials. The most durable glass ever in a <br /> smartphone. A beautiful new gold finish, achieved with an atomic-level.",
+            author: { name: "Kathryn Murphy", title: "CEO at Vercel", avatar: avatar1 }
+        },
+        {
+            shortQuote: "The skeleton plan of a website can be broken down into three components",
+            longQuote: "Exceptional materials. The most durable glass ever in a <br /> smartphone. A beautiful new gold finish, achieved with an atomic-level.",
+            author: { name: "John Deo", title: "CEO at W3School", avatar: avatar2 }
+        },
+        {
+            shortQuote: "The skeleton plan of a website can be broken down into three components",
+            longQuote: "Exceptional materials. The most durable glass ever in a <br /> smartphone. A beautiful new gold finish, achieved with an atomic-level.",
+            author: { name: "Zaks Addison", title: "Manager, Operations at Wacomm", avatar: avatar3 }
+        }
+    ]
+};
+
+const faqData: FaqProps = {
+    heading: `<span class="font-instrument italic">People</span> <br class="hidden md:block" /> Asked Us`,
+    subheading: "When detailing testimonials, include key elements that provide context and authenticity.",
+    faqs: [
+        { question: "What does it cost to work with you?", answer: "If you need to exchange a product, please contact us within 14 days of receiving your order. determine the best course of action and guide you through the exchange process." },
+        { question: "Whats your return policy?", answer: "If you need to exchange a product, please contact us within 14 days of receiving your order. determine the best course of action and guide you through the exchange process." },
+        { question: "How do I make a warranty claim?", answer: "If you need to exchange a product, please contact us within 14 days of receiving your order. determine the best course of action and guide you through the exchange process." },
+        { question: "Do I have to pay customs fees or duty on my package?", answer: "If you need to exchange a product, please contact us within 14 days of receiving your order. determine the best course of action and guide you through the exchange process." },
+        { question: "Where can I change or cancel my order?", answer: "If you need to exchange a product, please contact us within 14 days of receiving your order. determine the best course of action and guide you through the exchange process." },
+        { question: "How do I make a warranty claim?", answer: "If you need to exchange a product, please contact us within 14 days of receiving your order. determine the best course of action and guide you through the exchange process." },
+    ]
+};
+
+const ctaData: CtaProps = {
+    heading: `<span class="font-instrument lg:text-[100px] italic">New</span> <br class="hidden md:block" /> Project?`,
+    buttonUrl: "/contact"
+};
+---
+
+<BaseLayout title="About v2 | JAM Group" description="About the JAM Group company.">
+    <PageHeaderV2 {...pageHeaderData} />
+    <PromoVideoV2 {...promoVideoData} />
+    <AboutMarqueeV2 {...aboutMarqueeData} />
+    <WhyChooseUsV2 {...whyChooseUsData} />
+    <TeamGridV2 {...teamGridData} />
+    <ServicesAccordionV2 {...servicesAccordionData} />
+    <ClientsV2 {...clientsData} />
+    <FaqV2 {...faqData} />
+    <CtaV2 {...ctaData} />
+</BaseLayout>

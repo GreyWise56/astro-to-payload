@@ -1,0 +1,48 @@
+---
+// src/components/blocks/Testimonials-v7.astro
+import SectionHeaderCentered from './SectionHeaderCentered.astro';
+import TestimonialCardV7 from './TestimonialCard-v7.astro';
+import type { Props as TestimonialCardProps } from './TestimonialCard-v7.astro';
+
+export interface Props {
+  badgeText: string;
+  heading: string;
+  testimonialsRow1: TestimonialCardProps[];
+  testimonialsRow2: TestimonialCardProps[];
+}
+
+const { badgeText, heading, testimonialsRow1, testimonialsRow2 } = Astro.props;
+
+// Duplicate items for a seamless loop
+const marqueeItems1 = [...testimonialsRow1, ...testimonialsRow1];
+const marqueeItems2 = [...testimonialsRow2, ...testimonialsRow2];
+---
+<section class="pt-14 md:pt-16 lg:pt-[88px] xl:pt-[100px] pb-14 md:pb-16 lg:pb-[88px] xl:pb-[100px] relative overflow-hidden">
+  <div class="container">
+    <SectionHeaderCentered
+      badgeText={badgeText}
+      heading={heading}
+      italicizedWord=""
+      description=""
+    />
+  </div>
+  <div class="relative">
+    <div class="absolute left-0 top-0 h-full w-[15%] md:w-[20%] bg-gradient-to-r from-backgroundBody to-transparent dark:from-dark-gradient z-40"></div>
+    <div class="absolute right-0 top-0 h-full w-[15%] md:w-[20%] bg-gradient-to-l from-backgroundBody to-transparent dark:from-dark-gradient z-40"></div>
+    <div class="marquee-container reveal-me">
+      <div class="flex gap-5 md:gap-7">
+        {marqueeItems1.map(testimonial => <TestimonialCardV7 {...testimonial} />)}
+      </div>
+    </div>
+  </div>
+
+  <div class="relative">
+    <div class="absolute left-0 top-0 h-full w-[10%] md:w-[20%] bg-gradient-to-r from-backgroundBody to-transparent dark:from-dark-gradient z-40"></div>
+    <div class="absolute right-0 top-0 h-full w-[10%] md:w-[20%] bg-gradient-to-l from-backgroundBody to-transparent dark:from-dark-gradient z-40"></div>
+    <div class="marquee-reverse-container reveal-me mt-5 md:mt-7">
+      <div class="flex gap-5 md:gap-7">
+        {marqueeItems2.map(testimonial => <TestimonialCardV7 {...testimonial} />)}
+      </div>
+    </div>
+  </div>
+</section>

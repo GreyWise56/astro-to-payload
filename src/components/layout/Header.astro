@@ -1,0 +1,102 @@
+---
+// src/components/layout/Header.astro
+import { Image } from 'astro:assets';
+import GradientShadow from './GradientShadow.astro';
+
+export interface NavLink {
+  text: string;
+  url: string;
+  sublinks?: {
+    text: string;
+    subtitle: string;
+    url: string;
+  }[];
+}
+export interface SocialLink {
+  url:string;
+  iconPaths: string[];
+}
+export interface Props {
+  logoLight: ImageMetadata;
+  logoDark: ImageMetadata;
+  navLinks?: NavLink[];
+  address?: string;
+  socials?: SocialLink[];
+}
+const { logoLight, logoDark, navLinks = [], address, socials = [] } = Astro.props;
+---
+<style>
+  /* Dropdown hover effect */
+  .menu-list-item-dropdown {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease-in-out;
+  }
+  .menu-list-item:hover > .menu-list-item-dropdown {
+    opacity: 1;
+    pointer-events: auto;
+  }
+</style>
+
+<header id="header" class="w-full fixed z-[9999]">
+  <GradientShadow />
+  <nav class="z-[1000] w-full fixed px-5 sm:px-8 pt-1 sm:pt-5 nav-top" aria-label="Main navigation">
+    <div class="flex justify-between">
+      <a href="/">
+        <Image class="max-h-[68px] w-auto inline-block dark:hidden" src={logoLight} alt="JAM Group Logo" />
+        <Image class="max-h-[68px] w-auto dark:inline-block hidden" src={logoDark} alt="JAM Group Logo" />
+      </a>
+      <div class="flex items-center">
+        <div class="menu-open cursor-pointer relative h-[68px] w-[68px] before:content-[''] before:absolute before:top-[28px] before:left-1/2 before:w-9 before:h-0.5 before:bg-black dark:before:bg-backgroundBody before:-translate-x-1/2 before:transition-all before:duration-300 after:content-[''] after:absolute after:bottom-[28px] after:left-1/2 after:w-9 after:h-0.5 after:bg-black dark:after:bg-backgroundBody after:-translate-x-1/2 after:transition-all after:duration-300 hover:before:top-[25px] hover:after:bottom-[25px]"></div>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<nav data-lenis-prevent="true" class="menu fixed right-6 top-0 w-full min-h-screen overflow-y-auto z-[99999] opacity-0">
+  <div class="menu-close cursor-pointer sticky top-9 left-[89%] sm:left-[90%] md:left-[93%] lg:left-[94.7%] xl:left-[96.5%] 2xl:left-[97%] h-[40px] w-[40px] text-white">
+    <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="30" height="30" viewBox="0 0 50 50">
+      <path d="M 7.71875 6.28125 L 6.28125 7.71875 L 23.5625 25 L 6.28125 42.28125 L 7.71875 43.71875 L 25 26.4375 L 42.28125 43.71875 L 43.71875 42.28125 L 26.4375 25 L 43.71875 7.71875 L 42.28125 6.28125 L 25 23.5625 Z" fill="#fff"></path>
+    </svg>
+  </div>
+  <div class="menu-wrapper relative max-w-[300px] sm:max-w-[400px] md:max-w-[580px] lg:max-w-[900px] xl:max-w-[1030px] mx-auto py-24 flex flex-col gap-8 md:gap-16">
+    <ul class="menu-list">
+      {navLinks.map(link => (
+        <li class="menu-list-item menu-list-item-anchor">
+          <a href={link.url} class="text-white text-[28px] md:text-[42px] xl:text-[56px] leading-[70px] xl:leading-[90px] menu-list-item-text">
+            {link.text}
+          </a>
+          {link.sublinks && (
+            <ul class="menu-list-item-dropdown relative md:absolute top-0 w-full md:w-[350px] lg:w-[600px] h-fit left-0 md:left-[48%] lg:left-[33%] xl:left-[44%] grid grid-cols-1 lg:grid-cols-2 gap-x-4 max-h-[60vh] md:max-h-none overflow-y-auto md:overflow-visible md:pb-0">
+              {link.sublinks.map(sublink => (
+                <li>
+                  <a href={sublink.url} class="text-white inline-block pb-1 pl-3 menu-list-item-dropdown-list text-base md:text-lg leading-8 md:leading-[50px]">
+                    {sublink.text} - <span class="font-instrument italic text-white text-sm">{sublink.subtitle}</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          )}
+        </li>
+      ))}
+    </ul>
+  </div>
+  <div class="menu-footer max-lg:hidden lg:block fixed bottom-0 w-full border-t border-white border-opacity-10">
+    <div class="menu-footer-content max-w-[300px] sm:max-w-[400px] md:max-w-[600px] lg:max-w-[900px] xl:max-w-[1130px] flex justify-between mx-auto py-8 flex-col md:flex-row">
+      <p class="text-sm w-full md:w-auto mb-4 md:mb-0 text-gray-400">{address}</p>
+      <div class="flex gap-6">
+        {socials.map(social => (
+          <span>
+            <a href={social.url}>
+              <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 20 20" fill="none" class="stroke-[#565656] hover:stroke-white duration-200">
+                {social.iconPaths.map(path => <path d={path} stroke-linecap="round" stroke-linejoin="round" />)}
+              </svg>
+            </a>
+          </span>
+        ))}
+      </div>
+    </div>
+  </div>
+</nav>
+
+<div class="menu-overflow fixed z-[9999] bg-[rgba(10,10,10,0.95)] backdrop-blur-[25px] w-full h-full pointer-events-none"></div>

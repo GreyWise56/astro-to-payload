@@ -1,0 +1,42 @@
+---
+// src/components/cards/ServiceRowV19.astro
+
+/*
+================================================================================
+Component: ServiceRowV19
+Description: A card component for a single service item, displayed as a large,
+             interactive row with a number, title, and description.
+================================================================================
+*/
+
+// Define the properties for a single service row
+export interface Props {
+  number: string;
+  title: string;
+  description: string;
+  url: string;
+}
+
+const { number, title, description, url } = Astro.props;
+---
+
+<a href={url} class="block">
+  <div
+    class="group flex items-start justify-between gap-5 py-5 md:py-10 transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] transform hover:scale-[1.010] hover:-translate-y-1 hover:backdrop-blur-sm"
+  >
+    <span
+      class="text-xl italic font-instrument leading-[32px] text-secondary/70 dark:text-backgroundBody/70 group-hover:text-secondary dark:group-hover:text-backgroundBody transition-colors duration-300 ease-in-out w-8"
+      >{number}</span
+    >
+    <h3
+      class="text-secondary/70 dark:text-backgroundBody/70 group-hover:text-secondary dark:group-hover:text-backgroundBody transition-colors duration-300 ease-in-out text-2xl sm:text-[55px] md:text-[67px] lg:text-[84px] xl:text-[88px] font-normal leading-tight xl:leading-[1.15] tracking-[-2px] xl:tracking-[-2.88px] text-nowrap md:w-[730px] mt-2"
+    >
+      {title}
+    </h3>
+    <p
+      class="text-xs md:text-base md:leading-[1.6] md:tracking-[0.32px] text-secondary/70 dark:text-backgroundBody/70 group-hover:text-secondary dark:group-hover:text-backgroundBody self-center transition-colors duration-300 ease-in-out ml-2.5 md:w-[370px]"
+    >
+      {description}
+    </p>
+  </div>
+</a>

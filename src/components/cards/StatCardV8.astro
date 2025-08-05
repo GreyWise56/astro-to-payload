@@ -1,0 +1,28 @@
+---
+// src/components/cards/StatCardV8.astro
+
+/*
+================================================================================
+Component: StatCardV8
+Description: A card for displaying a single statistic with an animated counter.
+================================================================================
+*/
+
+export interface Props {
+  value: number;
+  suffix?: string;
+  description: string;
+}
+
+const { value, suffix, description } = Astro.props;
+---
+
+<div
+  class="border dark:border-dark py-7 lg:py-10 px-9 lg:px-16 space-y-3 flex justify-center flex-col items-center min-w-[280px] lg:min-w-[320px] min-h-[180px]"
+  id="counter"
+>
+  <h2 class="lg:text-7xl">
+    <span class="counter" data-value={value}>0</span>{suffix}
+  </h2>
+  <p>{description}</p>
+</div>

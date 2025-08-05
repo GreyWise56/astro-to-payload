@@ -1,0 +1,159 @@
+---
+// src/pages/homepage-v6.astro
+import BaseLayout from '../layouts/BaseLayout.astro';
+import HeroV6 from '../components/blocks/HeroV6.astro';
+import AboutV6 from '../components/blocks/AboutV6.astro';
+import Marquee from '../components/blocks/Marquee.astro';
+import FeaturedWorkV6 from '../components/blocks/FeaturedWorkV6.astro';
+import { type Work } from '../components/cards/WorkCardV6.astro';
+import ServicesV6 from '../components/blocks/ServicesV6.astro';
+import { type Service } from '../components/cards/ServiceRowV6.astro';
+import LogoGrid from '../components/blocks/LogoGrid.astro';
+import { type LogoPair } from '../components/blocks/LogoGrid.astro';
+import ProcessV6 from '../components/blocks/ProcessV6.astro';
+import { type Step } from '../components/blocks/ProcessV6.astro';
+import TestimonialsV6 from '../components/blocks/TestimonialsV6.astro';
+import { type Testimonial } from '../components/cards/TestimonialCardV6.astro';
+import CtaFormV6 from '../components/blocks/CtaFormV6.astro';
+
+// --- Asset Imports ---
+import gradientBg from '../assets/images/hero-gradient-background.png';
+import heroBanner from '../assets/images/hero-banner.png';
+import workImg1 from '../assets/images/blog-img/blog-img-13.png';
+import workImg2 from '../assets/images/blog-img/blog-img-14.png';
+import workImg3 from '../assets/images/blog-img/blog-img-15.png';
+import workImg4 from '../assets/images/blog-img/blog-img-16.png';
+import arrowIconDark from '../assets/images/home-5/ArrowUpRight-dark.svg';
+import serviceImg1 from '../assets/images/services/photography-services.png';
+import serviceImg2 from '../assets/images/services/photography-services-02.png';
+import serviceImg3 from '../assets/images/services/photography-services-03.png';
+import serviceImg4 from '../assets/images/services/photography-services-04.png';
+import logoInvert from '../assets/images/marquee-img/invert.svg';
+import logoInvertDark from '../assets/images/marquee-img/invert-dark.svg';
+import logoGreenish from '../assets/images/marquee-img/greenish.svg';
+import logoGreenishDark from '../assets/images/marquee-img/greenish-dark.svg';
+import avatar1 from '../assets/images/avatar/review-12.png';
+import avatar2 from '../assets/images/avatar/review-13.png';
+import avatar3 from '../assets/images/avatar/review-14.png';
+import agent1 from '../assets/images/agent/07.png';
+import agent2 from '../assets/images/agent/02.jpg';
+import agent3 from '../assets/images/agent/06.png';
+
+
+// --- Page Data ---
+const pageTitle = "JAM Group - Homepage v6";
+const pageDescription = "A creative agency homepage.";
+
+const marqueeItems1 = ["Creative Development", "Visual Design"];
+const marqueeItems2 = ["Since 1993", "Based in New York", "Award-Winning Agency"];
+
+const worksData: Work[] = [
+    { image: workImg1, altText: "Epicurean Elegance", category: "Case study", year: "2020", title: "Epicurean Elegance", url: "#", arrowIcon: arrowIconDark },
+    { image: workImg2, altText: "Artistry in Motion", category: "Projects", year: "2021", title: "Artistry in Motion", url: "#", arrowIcon: arrowIconDark },
+    { image: workImg3, altText: "Digital Canvas", category: "Case study", year: "2020", title: "Digital Canvas", url: "#", arrowIcon: arrowIconDark },
+    { image: workImg4, altText: "Fashion Forward", category: "Case study", year: "2020", title: "Fashion Forward", url: "#", arrowIcon: arrowIconDark }
+];
+
+const servicesData: Service[] = [
+    { title: "Portrait Shoots", description: "Delivering a stellar experience for every user.", image: serviceImg1, altText: "A portrait photo", url: "#" },
+    { title: "Location shoots", description: "Delivering a stellar experience for every user.", image: serviceImg2, altText: "A photo from a location shoot", url: "#" },
+    { title: "Product Shoots", description: "Delivering a stellar experience for every user.", image: serviceImg3, altText: "A product photo", url: "#" },
+    { title: "VideoGraphy", description: "Delivering a stellar experience for every user.", image: serviceImg4, altText: "A videography still", url: "#" },
+];
+const logosData: LogoPair[] = [
+    { light: logoInvert, dark: logoInvertDark, alt: "Invert Logo" },
+    { light: logoGreenish, dark: logoGreenishDark, alt: "Greenish Logo" },
+    { light: logoInvert, dark: logoInvertDark, alt: "Invert Logo" },
+    { light: logoGreenish, dark: logoGreenishDark, alt: "Greenish Logo" },
+    { light: logoInvert, dark: logoInvertDark, alt: "Invert Logo" },
+    { light: logoGreenish, dark: logoGreenishDark, alt: "Greenish Logo" },
+    { light: logoInvert, dark: logoInvertDark, alt: "Invert Logo" },
+    { light: logoGreenish, dark: logoGreenishDark, alt: "Greenish Logo" },
+];
+const processSteps: Step[] = [
+    { title: "Keyword Research", description: "Dive deep into your market, understand your" },
+    { title: "Link Building", description: "Dive deep into your market, understand your" },
+    { title: "Ranking", description: "Dive deep into your market, understand your" },
+];
+const testimonialsData: Testimonial[] = [
+    {
+        quote: "Rivor completely transformed our brand identity. Their creativity and attention to detail exceeded our expectations!",
+        date: "03 Feb, 2024",
+        author: { name: "Leslie Alexander", title: "Product Designer", avatar: avatar1 }
+    },
+    {
+        quote: "An amazing experience working with Rivor. The team is professional, efficient, and creative!",
+        date: "15 Mar, 2024",
+        author: { name: "Jane Cooper", title: "Marketing Specialist", avatar: avatar2 }
+    },
+    {
+        quote: "Rivor provided top-notch service. Their expertise helped us scale our business!",
+        date: "28 Apr, 2024",
+        author: { name: "Robert Fox", title: "Business Owner", avatar: avatar3 }
+    }
+];
+const ctaSliderImages = [agent1, agent2, agent3];
+---
+
+<BaseLayout title={pageTitle} description={pageDescription}>
+
+  <HeroV6
+    gradientImage={gradientBg}
+    italicHeading="Rivor"
+    mainHeading="Creative Design Agency"
+    button={{ text: "Let's Talk", url: "/contact" }}
+    bannerImage={heroBanner}
+  />
+
+  <AboutV6
+    badge="Who We Are"
+    heading="We Are the Architects of Creative <br class='hidden md:block' /> Innovation"
+    subheading="At Rivor, we believe design goes beyond aesthetics..."
+    button={{ text: "Meet the Team", url: "/team" }}
+  />
+
+  <section class="pt-14 md:pt-16 lg:pt-[88px] xl:pt-[100px] pb-14 md:pb-16 lg:pb-[88px] xl:pb-[100px] relative overflow-hidden">
+    <Marquee items={marqueeItems1} />
+    <div class="border-t dark:border-dark">
+      <Marquee items={marqueeItems2} direction="reverse" />
+    </div>
+  </section>
+
+  <FeaturedWorkV6
+    heading=`Featured <span class="font-instrument italic">work</span>`
+    description="Our user-centered design encourages productivity and boosts revenue."
+    button={{ text: "See More Case Studies", url: "#" }}
+    works={worksData}
+  />
+
+  <ServicesV6
+    heading=`Designing Experiences That <span class="font-instrument italic font-medium"> Drive Growth</span>`
+    description="We offer a full suite of creative solutions tailored to your brand’s success."
+    button={{ text: "See More Services", url: "#" }}
+    services={servicesData}
+  />
+
+   <LogoGrid logos={logosData} />
+
+    <ProcessV6
+    badge="Open for new work"
+    heading=`Bringing ideas to life, <i class="font-instrument">Seamlessly</i>`
+    steps={processSteps}
+    button={{ text: "Let’s Start Your Project", url: "#" }}
+  />
+
+  <TestimonialsV6
+    heading=`What our clients in <span class="font-instrument italic font-medium"> say</span>`
+    description="We offer a full suite of creative solutions tailored to your brand’s success."
+    button={{ text: "Read More Testimonials", url: "#" }}
+    testimonials={testimonialsData}
+  />
+
+   <CtaFormV6
+    headingStart="Let’s"
+    headingEnd="Create"
+    iconicText="Something Iconic"
+    sliderImages={ctaSliderImages}
+  />
+
+</BaseLayout>

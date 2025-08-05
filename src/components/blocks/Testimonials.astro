@@ -1,0 +1,37 @@
+---
+// src/components/blocks/Testimonials.astro
+import TestimonialCard from './TestimonialCard.astro';
+import type { Props as TestimonialCardProps } from './TestimonialCard.astro';
+
+export interface Props {
+  heading: string;
+  italicizedWord: string;
+  subheading: string;
+  testimonials: TestimonialCardProps[];
+}
+
+const { heading, italicizedWord, subheading, testimonials } = Astro.props;
+const headingParts = heading.split(italicizedWord);
+---
+<section class="pt-14 md:pt-16 lg:pt-[88px] xl:pt-[100px] pb-14 md:pb-16 lg:pb-[88px] xl:pb-[100px]">
+  <div class="container">
+    <div class="mb-10 md:mb-20">
+      <h2 class="text-center text-appear">
+        {headingParts[0]}<span class="font-instrument italic">{italicizedWord}</span>{headingParts[1]}
+      </h2>
+      <p class="text-center mt-1.5 md:mt-6 max-w-xl lg:max-w-3xl mx-auto text-appear">
+        {subheading}
+      </p>
+    </div>
+    <div class="columns-[300px] gap-6 [&>*:not(:last-child)]:mb-6">
+      {testimonials.map(testimonial => (
+        <TestimonialCard
+          quote={testimonial.quote}
+          authorName={testimonial.authorName}
+          authorTitle={testimonial.authorTitle}
+          authorImage={testimonial.authorImage}
+        />
+      ))}
+    </div>
+  </div>
+</section>

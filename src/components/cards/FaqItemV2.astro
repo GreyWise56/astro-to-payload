@@ -1,0 +1,42 @@
+---
+// src/components/cards/FaqItemV2.astro
+
+/*
+================================================================================
+Component: FaqItemV2
+Description: A card for a single FAQ item, designed to be used in an
+             accordion-style layout. Interactivity is handled by global scripts.
+================================================================================
+*/
+
+// Define the properties for a single FAQ
+export interface Props {
+  question: string;
+  answer: string;
+}
+
+const { question, answer } = Astro.props;
+---
+
+<!--
+Renders a single FAQ item. The necessary classes and data attributes for
+styling and global JavaScript hooks (accordion-itemV4, accordion-headerV4, etc.)
+are preserved.
+-->
+<div class="reveal-me">
+  <div
+    class="accordion-itemV4 overflow-hidden relative w-full lg:max-w-[370px] bg-backgroundBody dark:bg-dark border data-[active=true]:border-black data-[active=false]:border-black/10 dark:data-[active=false]:border-white/10 dark:data-[active=true]:border-white/10 duration-300 px-4 md:px-[30px] pt-4 md:pt-[30px] pb-8 md:pb-[60px] space-y-6"
+  >
+    <div class="accordion-headerV4 cursor-pointer">
+      <h3
+        class="text-[23px] md:text-[25px] tracking-normal font-normal md:leading-[25.2px]"
+      >
+        {question}
+      </h3>
+      <div class="accordion-header-iconV4 dark:border-dark"></div>
+    </div>
+    <p class="accordion-bodyV4 duration-300 h-0 overflow-hidden">
+      {answer}
+    </p>
+  </div>
+</div>

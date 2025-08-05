@@ -1,0 +1,57 @@
+---
+// src/components/blocks/FaqItem.astro
+export interface Props {
+  question: string;
+  answer: string;
+}
+const { question, answer } = Astro.props;
+---
+<div class="accordion-item overflow-hidden bg-backgroundBody dark:bg-dark border border-transparent dark:border-transparent duration-300">
+  <div class="accordion-header relative cursor-pointer py-5 md:py-[35px] max-md:px-5 md:px-10">
+    <h3 class="text-lg sm:text-xl md:text-[25px] font-normal sm:font-medium md:leading-[25.2px] md:tracking-normal max-md:inline-block max-lg:pr-10">
+      {question}
+    </h3>
+    <div class="accordion-header-icon dark:border-dark"></div>
+  </div>
+  <p class="accordion-body max-md:text-sm max-md:px-5 md:px-10 duration-300 h-0">
+    {answer}
+  </p>
+</div>
+
+<script>
+  // This script runs for each FAQ item on the page
+  document.addEventListener('DOMContentLoaded', () => {
+    const accordionItems = document.querySelectorAll('.accordion-item');
+
+    accordionItems.forEach(item => {
+      const header = item.querySelector('.accordion-header') as HTMLElement;
+      const body = item.querySelector('.accordion-body') as HTMLElement;
+
+      if (header && body) {
+        // Prevent adding the same listener multiple times
+        if (header.dataset.listenerAttached) return;
+        header.dataset.listenerAttached = 'true';
+        
+        header.addEventListener('click', () => {
+          // Check if this item is already active
+          const isActive = item.classList.contains('active');
+
+          // Optional: Close all other items
+          // accordionItems.forEach(otherItem => {
+          //   otherItem.classList.remove('active');
+          //   (otherItem.querySelector('.accordion-body') as HTMLElement).style.height = '0px';
+          // });
+          
+          if (!isActive) {
+            item.classList.add('active');
+            // Set height to the scroll height to animate open
+            body.style.height = body.scrollHeight + 'px';
+          } else {
+            item.classList.remove('active');
+            body.style.height = '0px';
+          }
+        });
+      }
+    });
+  });
+</script>

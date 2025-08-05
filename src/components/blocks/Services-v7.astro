@@ -1,0 +1,52 @@
+---
+// src/components/blocks/Services-v7.astro
+import { Image } from 'astro:assets';
+import SectionHeaderCentered from './SectionHeaderCentered.astro';
+import ServiceAccordionItem from './ServiceAccordionItem.astro';
+import type { Props as ServiceAccordionItemProps } from './ServiceAccordionItem.astro';
+
+export interface Props {
+  badgeText: string;
+  heading: string;
+  services: ServiceAccordionItemProps[];
+  backgroundImage: ImageMetadata;
+  button: {
+    text: string;
+    url: string;
+  };
+}
+
+const { badgeText, heading, services, backgroundImage, button } = Astro.props;
+---
+<section class="mt-14 md:mt-16 lg:mt-[88px] xl:mt-[100px] mb-14 md:mb-16 lg:mb-[88px] xl:mb-[100px] relative overflow-hidden">
+  <div class="absolute scale-y-[3.8] sm:scale-y-[3.3] md:scale-y-[2.8] lg:scale-y-[2.4] xl:scale-y-[1.1] scale-x-[2.7] xl:scale-x-[2.4] left-1/2 top-[47%] -translate-y-[45%] -translate-x-1/2">
+    <Image src={backgroundImage} alt="services gradient background" />
+  </div>
+  <div class="container">
+    <SectionHeaderCentered
+      badgeText={badgeText}
+      heading={heading}
+      italicizedWord=""
+      description=""
+    />
+
+    <div class="max-w-[1170px] w-full mx-auto [&>*:not(:last-child)]:mb-6 reveal-me">
+      {services.map(service => (
+        <ServiceAccordionItem 
+          title={service.title}
+          subtitle={service.subtitle}
+          itemColumns={service.itemColumns}
+        />
+      ))}
+    </div>
+
+    <ul class="mt-14 flex justify-center reveal-me">
+      <li class="max-md:w-full">
+        <a href={button.url} class="rv-button rv-button-white block md:inline-block w-full md:w-auto text-center">
+          <div class="rv-button-top"><span>{button.text}</span></div>
+          <div class="rv-button-bottom"><span>{button.text}</span></div>
+        </a>
+      </li>
+    </ul>
+  </div>
+</section>

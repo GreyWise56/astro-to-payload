@@ -1,0 +1,43 @@
+---
+// src/components/blocks/Faq.astro
+import { Image } from 'astro:assets';
+import FaqItem from './FaqItem.astro';
+import type { Props as FaqItemProps } from './FaqItem.astro';
+
+export interface Props {
+  heading: string;
+  italicizedWord: string;
+  faqItems: FaqItemProps[];
+  buttonText: string;
+  buttonUrl: string;
+  backgroundImageSrc: ImageMetadata;
+}
+
+const { heading, italicizedWord, faqItems, buttonText, buttonUrl, backgroundImageSrc } = Astro.props;
+const headingParts = heading.split(italicizedWord);
+---
+<section class="pt-14 md:pt-16 lg:pt-[88px] xl:pt-[100px] pb-14 md:pb-16 lg:pb-[88px] xl:pb-[100px] relative overflow-hidden">
+  <div class="absolute scale-y-[3.4] sm:scale-y-[1.6] md:scale-y-[1.5] lg:scale-y-[1.5] xl:scale-y-[1.4] 2xl:scale-y-[1] scale-x-[2.8] md:scale-x-[1.9] lg:scale-x-[1.7] left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2 -z-30">
+    <Image src={backgroundImageSrc} alt="gradient-bg" />
+  </div>
+  <div class="container">
+    <h2 class="mb-10 md:mb-20 text-center text-appear">
+      {headingParts[0]}<span class="font-instrument italic">{italicizedWord}</span>{headingParts[1]}
+    </h2>
+
+    <div class="max-w-[900px] w-full mx-auto [&>*:not(:last-child)]:mb-6 reveal-me">
+      {faqItems.map(item => (
+        <FaqItem question={item.question} answer={item.answer} />
+      ))}
+    </div>
+
+    <ul class="flex justify-center mt-[56px] mx-auto list-none reveal-me">
+      <li class="block md:inline-block w-[90%] mx-auto md:w-auto text-center">
+        <a href={buttonUrl} class="rv-button rv-button-white block md:inline-block">
+          <div class="rv-button-top"><span>{buttonText}</span></div>
+          <div class="rv-button-bottom"><span>{buttonText}</span></div>
+        </a>
+      </li>
+    </ul>
+  </div>
+</section>

@@ -1,0 +1,195 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import HeroSkewedMarquee from '../components/blocks/HeroSkewedMarquee.astro';
+import SectionHeaderCentered from '../components/blocks/SectionHeaderCentered.astro';
+import ImageMarquee from '../components/blocks/ImageMarquee.astro';
+import ServicesV7 from '../components/blocks/Services-v7.astro';
+import TestimonialsV7 from '../components/blocks/Testimonials-v7.astro';
+import TimelineV7 from '../components/blocks/Timeline-v7.astro';
+import PricingV7 from '../components/blocks/Pricing-v7.astro';
+import ContactFormV7 from '../components/blocks/ContactForm-v7.astro';
+
+// --- Asset Imports ---
+import gradientBg from '../assets/images/hero-gradient-background.png';
+import agent1 from '../assets/images/agent/01.jpg';
+import agent2 from '../assets/images/agent/02.jpg';
+import agent3 from '../assets/images/agent/03.jpg';
+import marqueeImg1 from '../assets/images/marquee-img/hero-marquee-01.png';
+import marqueeImg2 from '../assets/images/marquee-img/hero-marquee-02.png';
+import marqueeImg3 from '../assets/images/marquee-img/hero-marquee-03.png';
+import marqueeImg4 from '../assets/images/marquee-img/hero-marquee-04.png';
+import marqueeImg5 from '../assets/images/marquee-img/hero-marquee-05.png';
+import workImg1 from '../assets/images/marquee-img/our-work-01.png';
+import workImg2 from '../assets/images/marquee-img/our-work-02.png';
+import workImg3 from '../assets/images/marquee-img/our-work-03.png';
+import workImg4 from '../assets/images/marquee-img/our-work-04.png';
+import workImg5 from '../assets/images/marquee-img/our-work-05.png';
+import workImg6 from '../assets/images/marquee-img/our-work-06.png';
+import workImg7 from '../assets/images/marquee-img/our-work-07.png';
+import workImg8 from '../assets/images/marquee-img/our-work-08.png';
+import workImg9 from '../assets/images/marquee-img/our-work-09.png';
+import servicesBg from '../assets/images/services-gradient-bg-2.png';
+import review1 from '../assets/images/avatar/review-1.png';
+import review2 from '../assets/images/avatar/review-2.png';
+import testimonialLogoLight from '../assets/images/icons/testimonial-logo.png';
+import testimonialLogoDark from '../assets/images/icons/testimonial-dark-logo.png';
+import processImage from '../assets/images/process-img-01.png';
+import pricingBg1 from '../assets/images/pricing-gradient-bg-1.png';
+import pricingBg2 from '../assets/images/pricing-gradient-bg-2.png';
+
+// --- Page-level variables and data ---
+const pageTitle = "JAM Group - Skewed Marquee";
+const pageDescription = "A homepage variant with a skewed marquee.";
+
+const inlineSliderData = [agent1, agent2, agent3];
+const skewedMarqueeData = [marqueeImg1, marqueeImg2, marqueeImg3, marqueeImg4, marqueeImg5];
+const marqueeImages1 = [workImg1, workImg2, workImg3, workImg4];
+const marqueeImages2 = [workImg5, workImg6, workImg7, workImg8, workImg9];
+const serviceItemsColumn = [
+  "User Research & Market Analysis",
+  "Prototyping",
+  "Concept Ideation",
+  "Sketching & Wireframing"
+];
+const servicesDataV7 = [
+  {
+    title: "UX & Research",
+    subtitle: "Creating a remarkable experience for every individual",
+    itemColumns: [serviceItemsColumn, serviceItemsColumn]
+  },
+  {
+    title: "Product design",
+    subtitle: "Highly skilled product designers whose focus goes beyond UI & UX",
+    itemColumns: [serviceItemsColumn, serviceItemsColumn]
+  },
+  {
+    title: "Visual Design",
+    subtitle: "Delivering excellence in every user experience",
+    itemColumns: [serviceItemsColumn, serviceItemsColumn]
+  },
+  {
+    title: "Motion/3D",
+    subtitle: "Creating a remarkable experience for every individual",
+    itemColumns: [serviceItemsColumn, serviceItemsColumn]
+  },
+];
+const testimonialsDataV7 = [
+  {
+    authorName: 'Wade Warren', authorTitle: 'Product Designer', authorAvatar: review1,
+    quote: '“Sed rem perspiciatis unde omnis iste natus quae ab illo inventore veritatis et quasi.”',
+    companyLogoLight: testimonialLogoLight, companyLogoDark: testimonialLogoDark, date: 'Feb 03, 2024'
+  },
+  {
+    authorName: 'Marvin McKinney', authorTitle: 'Manager at Lattice', authorAvatar: review2,
+    quote: '“Sed rem perspiciatis unde omnis iste natus quae ab illo inventore veritatis et quasi.”',
+    companyLogoLight: testimonialLogoLight, companyLogoDark: testimonialLogoDark, date: 'Feb 03, 2024'
+  },
+];
+
+const testimonialsRow1 = testimonialsDataV7.slice(0, 2);
+const testimonialsRow2 = testimonialsDataV7.slice(0, 2);
+const timelineData = [
+  {
+    stepNumber: '01',
+    title: 'Book a Call',
+    description: 'Choose a date and time to book a discovery session, during which we’ll define the project objectives, timeline, and budget.',
+  },
+  {
+    stepNumber: '02',
+    title: 'Receive an Offer',
+    description: 'We’ll send you a bespoke project proposal including deliverables, project roadmap, and a quote in 1-2 business days.',
+  },
+  {
+    stepNumber: '03',
+    title: 'Kickoff the Project',
+    description: 'Sign the contract, send the deposit, lean back, and let us do our thing. We’ll invite you to a design review meeting in 5-7 business days.',
+  },
+];
+const featuresList = [
+    "Basic Components & variants",
+    "Lifetime updates",
+    "Single user",
+    "Ready-to-use dashboard",
+    "Delivered in milestones",
+    "Premium support",
+    "Invite your team to collaborate",
+    "Managed via Slack and Trello"
+];
+
+const pricingDataV7 = [
+    {
+        title: "Design Project",
+        description: "Ideal for entrepreneurs seeking a cohesive approach for branding, web design, app, 3D, and motion projects.",
+        isSubscription: false,
+        customPriceText: "Custom",
+        paymentDetails: "Flexible payment schedule, <br/> 50% down payment",
+        button: { text: "BOOK INTRO CALL", url: "#" },
+        features: featuresList.slice(0,4),
+        gradientImage: pricingBg1,
+    },
+    {
+        title: "Design Subscription",
+        description: "A no-brainer solution for growing companies looking for ongoing design support and seamless integration.",
+        isSubscription: true,
+        monthlyPrice: "$10k /m",
+        yearlyPrice: "$100k /y",
+        paymentDetails: "Paid Monthly <br/> Pause or cancel anytime.",
+        button: { text: "On request", url: "#" },
+        features: featuresList,
+        gradientImage: pricingBg2,
+    }
+];
+---
+<BaseLayout title={pageTitle} description={pageDescription}>
+
+  <HeroSkewedMarquee
+    headingPart1="Design Studio"
+    headingPart2="Shaping Web3, Tech & AI Horizons"
+    inlineSliderImages={inlineSliderData}
+    description="As a agency we are working on client projects, official Webflow Templates and cloneables for the Webflow community."
+    skewedMarqueeImages={skewedMarqueeData}
+    subheading="We specialize in designing cutting-edge web experiences that flawlessly blend creativity with innovative technology."
+    gradientImage={gradientBg}
+  />
+  <section class="pt-14 md:pt-16 lg:pt-[88px] xl:pt-[100px] pb-14 md:pb-16 lg:pb-[88px] xl:pb-[100px] relative overflow-hidden">
+    <div class="container">
+      <SectionHeaderCentered
+        badgeText="Our work"
+        heading="We craft emotionally <br /> engaging stories."
+        italicizedWord="stories."
+        description=""
+      />
+    </div>
+    <ImageMarquee images={marqueeImages1} />
+    <ImageMarquee images={marqueeImages2} direction="reverse" />
+  </section>
+  <ServicesV7
+    badgeText="Services"
+    heading="There is a lot we can do. <br/> Here is a few."
+    services={servicesDataV7}
+    backgroundImage={servicesBg}
+    button={{ text: "Explore Services", url: "/services" }}
+  />
+   <TestimonialsV7
+    badgeText="User Review"
+    heading="Simple pricing to boost your brand."
+    testimonialsRow1={testimonialsRow1}
+    testimonialsRow2={testimonialsRow2}
+  />
+   <TimelineV7
+    badgeText="Our Process"
+    heading="Our Creative Journey"
+    stickyImage={processImage}
+    timelineItems={timelineData}
+  />
+   <PricingV7
+    badgeText="Pricing"
+    heading="Simple pricing to boost your brand."
+    toggleDiscountText="Save up to 30%"
+    plans={pricingDataV7}
+  />
+  <ContactFormV7
+    sliderImages={inlineSliderData}
+  />
+
+</BaseLayout>

@@ -1,0 +1,90 @@
+---
+// src/components/blocks/ClientsV2.astro
+
+/*
+================================================================================
+Component: ClientsV2
+Description: A block that displays a header, two scrolling logo marquees, and
+             a Swiper.js slider for testimonials.
+================================================================================
+*/
+
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import TestimonialSlideV2 from '../cards/TestimonialSlideV2.astro';
+import type { Props as Testimonial } from '../cards/TestimonialSlideV2.astro';
+
+// Define the properties for a single client logo
+interface ClientLogo {
+  src: ImageMetadata;
+  alt: string;
+}
+
+// Define the properties for the entire block
+export interface Props {
+  heading: string;
+  subheading: string;
+  logoMarquee: ClientLogo[];
+  logoMarqueeReverse: ClientLogo[];
+  testimonials: Testimonial[];
+}
+
+const { heading, subheading, logoMarquee, logoMarqueeReverse, testimonials } = Astro.props;
+---
+
+<section
+  class="bg-dark py-20 lg:py-[120px] dark:py-0 dark:lg:py-0 mt-14 md:mt-16 lg:mt-[88px] xl:mt-[100px] mb-14 md:mb-16 lg:mb-[88px] xl:mb-[100px] relative overflow-hidden"
+>
+  <div class="container">
+    <!-- Section Header -->
+    <div
+      class="flex flex-col md:flex-row gap-x-10 gap-y-3 justify-center md:justify-between items-start md:items-end mb-10 md:mb-20"
+    >
+      <h2 class="text-appear text-backgroundBody block md:hidden flex-1" set:html={heading}></h2>
+      <h2 class="text-appear text-backgroundBody hidden md:block flex-1" set:html={heading}></h2>
+
+      <div class="md:self-end md:justify-self-end flex-1">
+        <p class="text-appear max-w-lg text-backgroundBody/70 md:place-self-end md:text-right">
+          {subheading}
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Clients Logo Marquee -->
+  <div class="marquee-container reveal-me">
+    <div class="flex items-center gap-10 md:gap-32 justify-between py-8">
+      {logoMarquee.map(logo => (
+        <div class="min-w-[190px] flex justify-center ml-10 md:ml-32">
+          <Image src={logo.src} alt={logo.alt} />
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <!-- Reverse Marquee -->
+  <div class="marquee-reverse-container reveal-me">
+    <div class="flex items-center gap-10 md:gap-32 justify-between py-8">
+      {logoMarqueeReverse.map(logo => (
+        <div class="min-w-[190px] flex justify-center ml-10 md:ml-32">
+          <Image src={logo.src} alt={logo.alt} />
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <!-- Testimonials Slider -->
+  <div class="container pt-16 lg:pt-20 reveal-me">
+    <div class="user-swiper swiper">
+      <div class="swiper-wrapper">
+        <!-- Loop through testimonials and render a slide for each -->
+        {testimonials.map(testimonial => (
+          <div class="swiper-slide">
+            <TestimonialSlideV2 {...testimonial} />
+          </div>
+        ))}
+      </div>
+      <div class="swiper-pagination"></div>
+    </div>
+  </div>
+</section>

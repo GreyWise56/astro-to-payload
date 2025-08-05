@@ -1,0 +1,121 @@
+---
+// src/components/blocks/AboutV10.astro
+import { Image } from 'astro:assets';
+
+export interface Stat {
+  value: number;
+  label: string;
+  suffix?: string;
+}
+
+export interface Props {
+  logoLight: ImageMetadata;
+  logoDark: ImageMetadata;
+  spinningText: string;
+  heading: string;
+  paragraph: string;
+  stats: Stat[];
+}
+
+const { logoLight, logoDark, spinningText, heading, paragraph, stats } = Astro.props;
+---
+
+<style>
+  /* Basic styles for the spinning logo text */
+  .text {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    border-radius: 50%;
+    animation: rotateText 10s linear infinite;
+  }
+  .text p {
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 1;
+    text-transform: uppercase;
+    position: absolute;
+    left: 50%;
+    transform-origin: 0 84px; /* Half of the container's width */
+  }
+  @keyframes rotateText {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+</style>
+
+<section class="about pb-14 md:pb-16 lg:pb-[88px] xl:pb-[100px] relative overflow-hidden">
+  <div class="container">
+    <div class="flex flex-col items-center justify-center reveal-me">
+      <div class="relative w-[168px] h-[168px] bg-secondary dark:bg-backgroundBody rounded-[50%] flex items-center justify-center mx-auto">
+        <figure>
+          <Image src={logoLight} alt="text-circle-logo" class="inline dark:hidden" />
+          <Image src={logoDark} alt="text-circle-logo" class="hidden dark:inline" />
+        </figure>
+        <div class="text">
+          <p set:html={
+            spinningText.split("").map((char, i) => `<span style="transform: rotate(${i * 8.5}deg)">${char}</span>`).join("")
+          }></p>
+        </div>
+      </div>
+
+      <h4 class="mt-8 md:mt-[60px] mb-6 md:mb-10 mx-auto reveal-text max-w-3xl text-center" set:html={heading}></h4>
+      <p class="max-w-3xl mx-auto text-center reveal-me" set:html={paragraph}></p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 justify-items-center mt-20">
+      {stats.map(stat => (
+        <div class="border-t dark:border-dark py-7 flex flex-col sm:flex-row justify-center sm:justify-between items-center sm:items-start min-w-[355px] lg:min-w-[300px] xl:min-w-[355px] reveal-me">
+          <h2 class="sm:min-w-[170px]">
+            <span class="counter" data-value={stat.value}>0</span>{stat.suffix}
+          </h2>
+          <p class="text-lg">{stat.label}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<script>
+  function animateCounters() {
+    const counters = document.querySelectorAll('.counter');
+    const animationDuration = 2000; // 2 seconds
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const counter = entry.target as HTMLElement;
+          // FIX 1: Provide a fallback of '0' to prevent null
+          const targetValue = parseInt(counter.getAttribute('data-value') || '0', 10);
+          
+          // FIX 2: Explicitly type startTime as a number or null
+          let startTime: number | null = null;
+
+          // FIX 3: Explicitly type timestamp as a number
+          const step = (timestamp: number) => {
+            if (!startTime) startTime = timestamp;
+            const progress = Math.min((timestamp - startTime) / animationDuration, 1);
+            counter.textContent = Math.floor(progress * targetValue).toString();
+            if (progress < 1) {
+              window.requestAnimationFrame(step);
+            }
+          };
+          window.requestAnimationFrame(step);
+          observer.unobserve(counter); // Animate only once
+        }
+      });
+    }, {
+      threshold: 0.5 // Start animation when 50% of the element is visible
+    });
+
+    counters.forEach(counter => {
+      observer.observe(counter);
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', animateCounters);
+</script>

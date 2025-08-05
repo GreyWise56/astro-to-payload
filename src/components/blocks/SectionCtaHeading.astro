@@ -1,0 +1,31 @@
+---
+// src/components/blocks/SectionCtaHeading.astro
+import { Image } from 'astro:assets';
+
+export interface Props {
+    sliderImages: ImageMetadata[];
+    headingStart: string;
+    headingEnd: string;
+    iconicText: string;
+}
+
+const { sliderImages, headingStart, headingEnd, iconicText } = Astro.props;
+---
+<div class="reveal-me">
+  <h2 class="text-center xl:text-[96px] font-normal xl:leading-[1.1] xl:tracking-[-2.88px]">
+    {headingStart}
+    <div
+          class="cta-slider-container max-sm:block sm:inline-block max-sm:mb-7 translate-y-2 sm:translate-y-[20px]"
+        >
+      <div class="cta-inline-slider">
+        {sliderImages.length > 0 && (
+          <div class="slide">
+            <Image src={sliderImages[0]} alt="Agent Image" />
+          </div>
+        )}
+      </div>
+    </div>
+    {headingEnd}
+    <span class="font-instrument sm:mt-10 italic block max-md:inline-block">{iconicText}</span>
+  </h2>
+</div>

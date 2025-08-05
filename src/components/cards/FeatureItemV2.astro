@@ -1,0 +1,30 @@
+---
+// src/components/cards/FeatureItemV2.astro
+
+/*
+================================================================================
+Component: FeatureItemV2
+Description: A card component that displays a title and description for a
+             feature, typically used in a list.
+================================================================================
+*/
+
+// Define the properties for a single feature item
+export interface Props {
+  title: string;
+  description: string;
+}
+
+const { title, description } = Astro.props;
+---
+
+<!--
+Renders a single feature item. The `reveal-me` class is for global
+animation scripts.
+-->
+<div class="reveal-me py-3.5 lg:py-[30px] pr-[30px]">
+  <h5>{title}</h5>
+  <p class="top-3 tracking-[0.32px] leading-[1.6] text-base">
+    {description}
+  </p>
+</div>

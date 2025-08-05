@@ -1,0 +1,68 @@
+---
+// src/components/blocks/HeroWithSliders.astro
+import { Image } from 'astro:assets';
+import Marquee from './Marquee.astro';
+
+export interface Props {
+  heading: string;
+  italicizedWord: string;
+  description: string;
+  button: {
+    text: string;
+    url: string;
+  };
+  backgroundImage: ImageMetadata;
+  imageSliderItems: ImageMetadata[];
+  textSliderItems: string[];
+}
+
+const { 
+  heading, 
+  italicizedWord, 
+  description, 
+  button, 
+  backgroundImage, 
+  imageSliderItems, 
+  textSliderItems 
+} = Astro.props;
+
+const formattedHeading = heading.replace(
+  italicizedWord,
+  `<span class="font-instrument italic">${italicizedWord}</span>`
+);
+---
+<section class="relative">
+  <div class="absolute inset-0 -z-10">
+    <Image 
+      src={backgroundImage} 
+      alt="Hero background" 
+      class="w-full h-full object-cover" 
+    />
+  </div>
+
+  <div class="container pt-40 md:pt-48 lg:pt-56 xl:pt-64 pb-20">
+    <div class="max-w-xl lg:max-w-3xl mx-auto text-center reveal-me">
+      <h1 class="mb-8" set:html={formattedHeading}></h1>
+      <p class="mb-10">{description}</p>
+      <a href={button.url} class="rv-button rv-button-primary inline-block">
+        <div class="rv-button-top"><span>{button.text}</span></div>
+        <div class="rv-button-bottom"><span>{button.text}</span></div>
+      </a>
+    </div>
+  </div>
+
+  <div class="space-y-6">
+    <div class="marquee-container">
+      <div class="flex items-center justify-between py-2.5 pb-5">
+        {[...imageSliderItems, ...imageSliderItems].map(item => (
+          <figure class="w-20 h-20 rounded-full overflow-hidden mx-3">
+            <Image src={item} alt="client logo" class="w-full h-full object-cover"/>
+          </figure>
+        ))}
+      </div>
+    </div>
+    <div class="border-t border-b dark:border-dark py-2">
+       <Marquee items={textSliderItems} direction="reverse" />
+    </div>
+  </div>
+</section>

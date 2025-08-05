@@ -1,0 +1,125 @@
+---
+// src/components/blocks/TeamMemberDetail.astro
+
+/*
+================================================================================
+Component: TeamMemberDetail
+Description: A detailed block to showcase a single team member, including their
+             image, bio, skills, portfolio, and social links.
+================================================================================
+*/
+
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+// Define the shape for social media links
+interface SocialLink {
+  name: string;
+  url: string;
+  iconLight: ImageMetadata;
+  iconDark: ImageMetadata;
+}
+
+// Define the shape for portfolio links (badges)
+interface PortfolioLink {
+    name: string;
+    url: string;
+}
+
+// Define the properties for the entire component
+export interface Props {
+  name: string;
+  role: string;
+  image: ImageMetadata;
+  bio: string;
+  skills: string[];
+  portfolio: PortfolioLink[];
+  socials: SocialLink[];
+}
+
+const { name, role, image, bio, skills, portfolio, socials } = Astro.props;
+---
+
+<section
+  class="pt-32 md:pt-36 lg:pt-[200px] pb-14 md:pb-16 lg:pb-[88px] xl:pb-[100px]"
+>
+  <div class="container">
+    <!-- Profile Card Container -->
+    <div
+      class="p-6 md:p-7 lg:p-10 border dark:border-dark flex flex-col lg:flex-row justify-center lg:justify-normal max-lg:items-center gap-x-8 gap-y-6 reveal-me"
+    >
+      <!-- Profile Image -->
+      <figure class="w-full lg:w-[428px] md:h-[682px]">
+        <Image
+          src={image}
+          alt={`Profile photo of ${name}`}
+          class="w-full h-full object-cover"
+        />
+      </figure>
+
+      <!-- Profile Information -->
+      <div class="flex-1">
+        <!-- Name and Role -->
+        <h2
+          class="text-3xl md:text-4xl md:leading-[1.2] md:tracking-[-1.08px] mb-3 md:mb-5"
+        >
+          {name}
+        </h2>
+        <span
+          class="text-lg font-light leading-[20px] text-colorText inline-block mb-4 md:mb-10"
+          >{role}</span
+        >
+
+        <!-- Biography -->
+        <p class="py-4 md:py-10 border-t dark:border-dark">
+          {bio}
+        </p>
+
+        <!-- Skills Section -->
+        <h3
+          class="text-2xl md:text-4xl md:leading-[1.2] md:tracking-[-1.08px] mb-3.5 md:mb-5"
+        >
+          Skill
+        </h3>
+        <ul class="mb-5 md:mb-10">
+          {skills.map((skill, index) => (
+            <li class="inline text-colorText">{skill}{index < skills.length - 1 ? ', ' : ''}</li>
+          ))}
+        </ul>
+
+        <!-- Portfolio Links -->
+        <h3
+          class="text-2xl md:text-4xl md:leading-[1.2] md:tracking-[-1.08px] mb-3.5 md:mb-5"
+        >
+          Portfolio
+        </h3>
+        <ul>
+            {portfolio.map(item => (
+                 <li class="rv-badge mb-10">
+                    <a href={item.url} target="_blank" rel="noopener noreferrer">
+                        <span class="rv-badge-text">{item.name}</span>
+                    </a>
+                </li>
+            ))}
+        </ul>
+
+        <!-- Social Media Links -->
+        <h3
+          class="text-2xl md:text-4xl md:leading-[1.2] md:tracking-[-1.08px] mb-3.5 md:mb-5"
+        >
+          Contact
+        </h3>
+        <ul class="flex gap-x-10 gap-y-5 md:self-end">
+          {socials.map(social => (
+            <li>
+                <a target="_blank" href={social.url} rel="noopener noreferrer" aria-label={social.name}>
+                    <Image src={social.iconLight} alt={social.name} class="inline dark:hidden" />
+                    <Image src={social.iconDark} alt={social.name} class="hidden dark:inline" />
+                </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>

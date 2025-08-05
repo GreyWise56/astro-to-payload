@@ -1,0 +1,55 @@
+---
+// src/pages/homepage-v8.astro
+import BaseLayout from '../layouts/BaseLayout.astro';
+import HeroV8 from '../components/blocks/HeroV8.astro';
+import AboutWithStatsV8 from '../components/blocks/AboutWithStatsV8.astro';
+import type { Props as HeroV8Props } from '../components/blocks/HeroV8.astro';
+import type { Props as AboutWithStatsV8Props } from '../components/blocks/AboutWithStatsV8.astro';
+
+// --- Asset Imports ---
+import heroBg1 from '../assets/images/home-3/hero-v8-img-1.png';
+import heroBg2 from '../assets/images/home-3/hero-v8-img-2.png';
+import heroBg3 from '../assets/images/home-3/hero-v8-img-3.png';
+import heroBg4 from '../assets/images/home-3/hero-v8-img-4.png';
+import gradientBg from '../assets/images/hero-gradient-background.png';
+import aboutBanner from '../assets/images/home-3/about-banner.png';
+
+
+// --- Page Data ---
+const heroData: HeroV8Props = {
+    mainTitle: "RIVOR",
+    subtitle: "Powering <br /> businesses with <br /> modern tech",
+    button: {
+        text: "Get Consultation",
+        url: "/contact"
+    },
+    bgImage1: heroBg1,
+    bgImage2: heroBg2,
+    bgImage3: heroBg3,
+    bgImage4: heroBg4,
+    gradientBg: gradientBg,
+};
+
+const aboutWithStatsData: AboutWithStatsV8Props = {
+    heading: "Trusted by Industry Leaders",
+    image: aboutBanner,
+    imageAlt: "A collage of business-related images and graphics.",
+    description: "With years of experience and a track record of success, we’ve helped businesses across multiple industries. Industry certifications and recognitions back our expertise.",
+    button: {
+        text: "View Case Studies",
+        url: "/project"
+    },
+    stats: [
+        { value: 25, description: "Years of Experience" },
+        { value: 300, suffix: " +", description: "Clients Globally" },
+        { value: 90, suffix: " %", description: "Business Growth Rate" }
+    ]
+};
+---
+
+<BaseLayout title="Homepage v8 | JAM Group" description="A homepage for business solutions.">
+    <HeroV8 {...heroData} />
+    <AboutWithStatsV8 {...aboutWithStatsData} />
+    
+    {/* Other components for this page will go here */}
+</BaseLayout>

@@ -1,0 +1,50 @@
+---
+// src/components/blocks/BlogCard.astro
+import { Image } from 'astro:assets';
+
+export interface Props {
+  postUrl: string;
+  featuredImage: ImageMetadata;
+  category: string;
+  title: string;
+  excerpt: string;
+  authorName: string;
+  authorAvatar: ImageMetadata;
+}
+
+const {
+  postUrl,
+  featuredImage,
+  category,
+  title,
+  excerpt,
+  authorName,
+  authorAvatar
+} = Astro.props;
+---
+<div class="relative group cursor-pointer reveal-me">
+  <a href={postUrl} class="w-full">
+    <figure class="overflow-hidden">
+      <Image 
+        src={featuredImage} 
+        alt={title}
+        class="w-full h-full block transition-all duration-500 group-hover:scale-125 group-hover:rotate-3" 
+      />
+    </figure>
+    <div class="py-[30px] px-[30px] border dark:border-dark flex flex-col gap-6">
+      <span class="text-primary text-sm tracking-widest">{category}</span>
+      <h3 class="text-[28px] leading-9 tracking-[-0.56px]">
+        {title}
+      </h3>
+      <p class="text-base tracking-[0.32px]">{excerpt}</p>
+      <div class="flex items-center gap-[15px] mt-2.5">
+        <figure>
+          <Image src={authorAvatar} alt={authorName} class="w-[50px] h-[50px] rounded-full" />
+        </figure>
+        <div>
+          <h4 class="text-xl leading-[1.2]">{authorName}</h4>
+        </div>
+      </div>
+    </div>
+  </a>
+</div>

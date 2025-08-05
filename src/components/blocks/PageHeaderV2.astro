@@ -1,0 +1,56 @@
+---
+// src/components/blocks/PageHeaderV2.astro
+
+/*
+================================================================================
+Component: PageHeaderV2
+Description: A reusable block for displaying a page header with a title, a
+             description, and a large secondary title.
+================================================================================
+*/
+
+// Step 3: Define a Data Contract with TypeScript Props
+export interface Props {
+  title: string;
+  description: string;
+  largeTitle: string;
+}
+
+// Destructure the props from Astro.props
+const { title, description, largeTitle } = Astro.props;
+---
+
+<!--
+================================================================================
+Step 4: Build the Component
+- The static HTML is copied and hardcoded content is replaced with props.
+- All styling is handled by global Tailwind CSS classes.
+================================================================================
+-->
+<section class="pt-28 md:pt-48 lg:pt-[200px] pb-14 md:pb-20 lg:pb-[100px]">
+  <div class="container reveal-me">
+    <!-- Top Content Row -->
+    <div
+      class="flex flex-col sm:flex-row gap-x-20 gap-y-5 md:gap-y-10 items-center justify-end"
+    >
+      <!-- "About" Title -->
+      <h1
+        class="text-5xl md:text-6xl lg:text-9xl xl:text-[156px] font-instrument italic font-normal xl:leading-[1.1]"
+      >
+        {title}
+      </h1>
+
+      <!-- Description Text -->
+      <p class="max-w-[470px]">
+        {description}
+      </p>
+    </div>
+
+    <!-- Large "Company" Text -->
+    <h2
+      class="text-6xl sm:text-7xl md:text-8xl lg:text-[156px] xl:text-[236px] xl:leading-[1.1] mb-5"
+    >
+      {largeTitle}
+    </h2>
+  </div>
+</section>
