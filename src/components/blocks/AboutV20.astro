@@ -1,0 +1,60 @@
+---
+// src/components/blocks/AboutV20.astro
+
+/*
+================================================================================
+Component: AboutV20
+Description: A centered "About Us" section with a badge, heading, description,
+             and a call-to-action button.
+================================================================================
+*/
+
+export interface Props {
+  badge: string;
+  heading: string;
+  description: string;
+  button: {
+    text: string;
+    url: string;
+  };
+}
+
+const { badge, heading, description, button } = Astro.props;
+---
+
+<section
+  class="pb-14 md:pb-16 lg:pb-[150px] xl:pb-[200px]"
+  aria-labelledby="about-heading"
+>
+  <!-- Content -->
+  <div class="container">
+    <div class="text-center">
+      <div class="rv-badge reveal-me mb-3">
+        <span class="rv-badge-text">{badge}</span>
+      </div>
+
+      <h2 id="about-heading" class="text-appear mb-6">
+        {heading}
+      </h2>
+
+      <p class="max-w-3xl mx-auto reveal-me">
+        {description}
+      </p>
+
+      <div class="justify-self-center max-md:w-full mt-7 md:mt-14 reveal-me">
+        <a
+          href={button.url}
+          class="rv-button rv-button-white block md:inline-block w-full mx-auto md:w-auto text-center"
+          aria-label="Learn more about our team members"
+        >
+          <div class="rv-button-top">
+            <span>{button.text}</span>
+          </div>
+          <div class="rv-button-bottom">
+            <span>{button.text}</span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>

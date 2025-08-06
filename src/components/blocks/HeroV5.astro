@@ -1,0 +1,169 @@
+---
+// src/components/blocks/HeroV5.astro
+
+/*
+================================================================================
+Component: HeroV5
+Description: A hero section for an SEO agency, featuring a two-column layout
+             with a title, review statistics, and a main image.
+================================================================================
+*/
+
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+// --- Asset Imports ---
+import arrowIconLight from '../../assets/images/home-5/ArrowUpRight.svg';
+import arrowIconDark from '../../assets/images/home-5/ArrowUpRight-dark.svg';
+
+export interface Props {
+  eyebrow: string;
+  heading: string;
+  rating: {
+    score: string;
+    label: string;
+  };
+  reviewAvatars: ImageMetadata[];
+  trustedByText: string;
+  button: {
+    text: string;
+    url: string;
+  };
+  mainImage: ImageMetadata;
+}
+
+const {
+  eyebrow,
+  heading,
+  rating,
+  reviewAvatars,
+  trustedByText,
+  button,
+  mainImage,
+} = Astro.props;
+---
+
+<section
+  class="pt-32 lg:pt-[140px] xl:pt-[180px] pb-7 md:pb-16 lg:pb-[88px] xl:pb-[100px] relative overflow-hidden"
+>
+  <!-- Hero Content Wrapper -->
+  <div
+    class="flex flex-col gap-y-8 xl:flex-row justify-center md:justify-between items-center pl-10 reveal-me"
+  >
+    <!-- Text Content Container -->
+    <div class="container max-sm:!-ml-[5%] lg:!ml-[10%] xl:!ml-[7%]">
+      <p
+        class="flex gap-5 items-center max-md:justify-center font-poppins text-sm font-normal leading-6 tracking-[3px] uppercase"
+      >
+        {eyebrow}
+      </p>
+
+      <h1 class="mt-2 sm:mt-6 md:hidden block" set:html={heading}></h1>
+      <h1
+        class="mt-6 text-5xl font-semibold lg:text-6xl xl:text-7xl hidden md:block"
+        set:html={heading}
+      >
+      </h1>
+
+      <div class="mt-6">
+        <figure class="flex items-center gap-2">
+          <span>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="36"
+              height="37"
+              viewBox="0 0 36 37"
+              fill="none"
+            >
+              <circle
+                cx="18"
+                cy="18.457"
+                r="18"
+                class="fill-backgroundBody dark:fill-secondary"></circle>
+              <circle
+                cx="18"
+                cy="18.457"
+                r="17.5"
+                class="stroke-[#181818] dark:stroke-[#EDF0F5]"
+                stroke-opacity="0.1"></circle>
+              <path
+                d="M25.5754 16.1759L20.6567 15.4234L18.4521 10.7204C18.2874 10.3692 17.7121 10.3692 17.5474 10.7204L15.3434 15.4234L10.4248 16.1759C10.0208 16.238 9.85943 16.73 10.1428 17.0205L13.7161 20.6886L12.8714 25.8743C12.8041 26.2863 13.2434 26.5954 13.6068 26.3931L18.0001 23.9615L22.3934 26.3938C22.7534 26.5941 23.1967 26.2909 23.1287 25.875L22.2841 20.6893L25.8574 17.0211C26.1407 16.73 25.9787 16.238 25.5754 16.1759Z"
+                fill="#12D8CC"></path>
+            </svg>
+          </span>
+          <figcaption>
+            <p
+              class="text-base font-semibold leading-[1.1] text-secondary dark:text-backgroundBody"
+            >
+              {rating.score}
+            </p>
+            <p
+              class="text-sm leading-[1.1] mt-1 text-secondary dark:text-backgroundBody"
+            >
+              {rating.label}
+            </p>
+          </figcaption>
+        </figure>
+
+        <div class="flex [&>*:not(:first-child)]:-ml-4 my-3">
+          {reviewAvatars.map((avatar, index) => (
+            <Image src={avatar} alt={`User Review Image ${index + 1}`} class="size-[52px]" />
+          ))}
+          <a
+            href="#"
+            class="bg-secondary relative group dark:bg-backgroundBody border-[1.9px] border-backgroundBody p-4 size-[52px] rounded-full cursor-pointer"
+          >
+            <figure>
+              <Image
+                src={arrowIconLight}
+                alt="Arrow Icon"
+                class="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 group-hover:-translate-y-12 group-hover:translate-x-8 transition-all duration-500 opacity-100 group-hover:opacity-0 inline dark:hidden"
+              />
+              <Image
+                src={arrowIconLight}
+                alt="Arrow Icon"
+                class="absolute translate-y-6 -translate-x-5 transition-all duration-500 group-hover:-translate-x-[2px] group-hover:translate-y-[1%] opacity-0 group-hover:opacity-100 inline dark:hidden"
+              />
+              <Image
+                src={arrowIconDark}
+                alt="Arrow Icon"
+                class="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 group-hover:-translate-y-12 group-hover:translate-x-8 transition-all duration-500 opacity-100 group-hover:opacity-0 dark:inline hidden"
+              />
+              <Image
+                src={arrowIconDark}
+                alt="Arrow Icon"
+                class="absolute translate-y-6 -translate-x-5 transition-all duration-500 group-hover:-translate-x-[2px] group-hover:translate-y-[1%] opacity-0 group-hover:opacity-100 dark:inline hidden"
+              />
+            </figure>
+          </a>
+        </div>
+
+        <p
+          class="text-base leading-[1.2] text-secondary dark:text-backgroundBody"
+          set:html={trustedByText}
+        >
+        </p>
+      </div>
+
+      <ul class="flex justify-start list-none mt-14">
+        <li class="block md:inline-block w-full text-center md:w-auto">
+          <a
+            href={button.url}
+            class="rv-button rv-button-primary block md:inline-block"
+          >
+            <div class="rv-button-top">
+              <span>{button.text}</span>
+            </div>
+            <div class="rv-button-bottom">
+              <span class="text-nowrap">{button.text}</span>
+            </div>
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <figure>
+      <Image src={mainImage} alt="SEO Agency hero image" />
+    </figure>
+  </div>
+</section>

@@ -1,0 +1,88 @@
+---
+// src/pages/component-tester.astro
+import BaseLayout from '../layouts/BaseLayout.astro';
+import HeroV20 from '../components/blocks/HeroV20.astro';
+import AboutV20 from '../components/blocks/AboutV20.astro';
+import SocialMediaSolutionsV20 from '../components/blocks/SocialMediaSolutionsV20.astro';
+import CtaV20 from '../components/blocks/CtaV20.astro';
+import type { Props as HeroV20Props } from '../components/blocks/HeroV20.astro';
+import type { Props as AboutV20Props } from '../components/blocks/AboutV20.astro';
+import type { Props as SocialMediaSolutionsV20Props } from '../components/blocks/SocialMediaSolutionsV20.astro';
+import type { Props as CtaV20Props } from '../components/blocks/CtaV20.astro';
+
+// --- Asset Imports ---
+import gradientBg from '../assets/images/hero-gradient-background-02.png';
+import agent1 from '../assets/images/agent/15.png';
+import agent2 from '../assets/images/agent/12.png';
+import agent3 from '../assets/images/agent/13.png';
+import ctaAgent1 from '../assets/images/agent/15.png';
+import ctaAgent2 from '../assets/images/agent/02.jpg';
+import ctaAgent3 from '../assets/images/agent/03.jpg';
+
+// --- Page Data ---
+const heroData: HeroV20Props = {
+    badge: "Social Media",
+    headingPart1: "Your brand's growth engine",
+    italicHeading: "social media",
+    headingPart2: "that converts.",
+    sliderImages: [
+        { src: agent1, alt: "Social media strategy example" },
+        { src: agent2, alt: "Content creation example" },
+        { src: agent3, alt: "Engagement analytics example" }
+    ],
+    description: "We help brands dominate social media with viral content, high-converting ads, and data-driven strategies.",
+    button: {
+        text: "Get a Free Call",
+        url: "/contact"
+    },
+    gradientBackground: gradientBg
+};
+
+const aboutData: AboutV20Props = {
+    badge: "About Us",
+    heading: "Your social media growth partners.",
+    description: "Social media success requires more than just posts—it needs strategy, creativity, and execution. We bring all three.",
+    button: {
+        text: "Meet the Team",
+        url: "/team"
+    }
+};
+
+const solutionsData: SocialMediaSolutionsV20Props = {
+    heading: `Social media <span class="font-instrument italic">solutions for</span> <span class="font-instrument italic">every brand.</span>`,
+    subheading: "Our agency has been the trusted partner for businesses looking to maximize their social media presence. Our comprehensive suite of solutions includes:",
+    button: { text: "Explore Our Services", url: "/services" },
+    solutions: [
+        { number: "01", title: "Content creation", description: "Engaging posts, reels, TikToks, and high-quality visuals." },
+        { number: "02", title: "Influencer marketing", description: "Collaborate with top influencers for brand awareness." },
+        { number: "03", title: "Paid social ads", description: "Facebook, Instagram, TikTok, and LinkedIn ads for maximum ROI." },
+        { number: "04", title: "Community management", description: "Engage with followers and build lasting relationships." },
+        { number: "05", title: "Analytics & Reporting", description: "Detailed insights to measure campaign success." },
+        { number: "06", title: "Strategy Development", description: "Tailored strategies for your brand's growth." },
+        { number: "07", title: "Crisis Management", description: "Protect your brand during challenging times." },
+        { number: "08", title: "Training & Workshops", description: "Empower your team with social media skills." }
+    ]
+};
+
+const ctaData: CtaV20Props = {
+    headingPart1: "Let’s Scale",
+    headingPart2: "Brand",
+    subheading: "on Social Media!",
+    sliderImages: [
+        { src: ctaAgent1, alt: "Slide 1" },
+        { src: ctaAgent2, alt: "Slide 2" },
+        { src: ctaAgent3, alt: "Slide 3" }
+    ],
+    button: {
+        text: "Get a Free Strategy Call",
+        url: "/contact"
+    }
+};
+---
+
+<BaseLayout title="Component Tester" description="A page for testing new components.">
+    <HeroV20 {...heroData} />
+    <AboutV20 {...aboutData} />
+    <SocialMediaSolutionsV20 {...solutionsData} />
+    <CtaV20 {...ctaData} />
+</BaseLayout>

@@ -1,0 +1,58 @@
+---
+// src/components/blocks/SeoExpertiseV5.astro
+
+/*
+================================================================================
+Component: SeoExpertiseV5
+Description: A block that displays a header and a horizontally scrolling list
+             of SEO services.
+================================================================================
+*/
+
+import SeoServiceCardV5 from '../cards/SeoServiceCardV5.astro';
+import type { Props as Service } from '../cards/SeoServiceCardV5.astro';
+
+export interface Props {
+  heading: string;
+  staticCardText: string;
+  services: Service[];
+}
+
+const { heading, staticCardText, services } = Astro.props;
+---
+
+<section
+  class="pb-14 pt-14 md:pb-16 md:pt-16 lg:pb-[88px] lg:pt-[88px] xl:pb-[100px] xl:pt-[100px] service-section relative overflow-hidden"
+>
+  <div class="container">
+    <h2>{heading}</h2>
+  </div>
+  <article
+    class="mt-16 flex flex-col md:flex-row md:flex-nowrap md:w-fit gap-6 md:pl-[20%] max-md:px-5 md:pr-10 service-wrapper overflow-x-hidden reveal-me"
+  >
+    <div class="w-[332px] grid content-between max-h-[404px]">
+      <p
+        class="text-secondary dark:text-backgroundBody text-sm leading-[1.1] tracking-[3px] uppercase"
+      >
+        {staticCardText}
+      </p>
+      <div>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="97"
+          height="96"
+          viewBox="0 0 97 96"
+          fill="none"
+        >
+          <path
+            d="M60.5 48L78.5 66M78.5 66L60.5 84M78.5 66H24.5V12"
+            class="stroke-secondary dark:stroke-backgroundBody"
+            stroke-linecap="round"
+            stroke-linejoin="round"></path>
+        </svg>
+      </div>
+    </div>
+    <!-- Loop through services and render a card for each -->
+    {services.map((service) => <SeoServiceCardV5 {...service} />)}
+  </article>
+</section>

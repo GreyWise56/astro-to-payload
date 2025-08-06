@@ -1,0 +1,43 @@
+---
+// src/components/cards/SolutionCardV20.astro
+
+/*
+================================================================================
+Component: SolutionCardV20
+Description: A card for a single social media solution, displaying a number,
+             title, and description.
+================================================================================
+*/
+
+export interface Props {
+  number: string;
+  title: string;
+  description: string;
+}
+
+const { number, title, description } = Astro.props;
+---
+
+<div
+  class="md:px-[25px] px-5 py-14 md:py-[70px] border-t border-t-secondary dark:border-t-primary rounded-none flex-1 bg-backgroundBody md:w-[370px] w-full flex md:flex-row flex-col md:gap-[22px] gap-4 dark:bg-black"
+>
+  <div aria-hidden="true">
+    <p
+      class="text-5xl font-normal font-instrument text-black leading-[64px] dark:text-white max-md:text-3xl"
+    >
+      {number}
+    </p>
+  </div>
+  <div class="md:space-y-8 space-y-4">
+    <h3
+      class="md:text-4xl font-normal tracking-[-1.08px] leading-[110%] text-black md:max-w-[200px] dark:text-white max-md:text-2xl"
+    >
+      {title}
+    </h3>
+    <p
+      class="text-base leading-6 tracking-[0.32px] text-colorText font-normal dark:text-backgroundBody/70"
+    >
+      {description}
+    </p>
+  </div>
+</div>

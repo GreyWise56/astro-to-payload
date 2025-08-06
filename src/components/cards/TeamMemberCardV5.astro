@@ -1,0 +1,42 @@
+---
+// src/components/cards/TeamMemberCardV5.astro
+
+/*
+================================================================================
+Component: TeamMemberCardV5
+Description: A card for a single team member, displaying their image, name,
+             and title with a hover effect.
+================================================================================
+*/
+
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+export interface Props {
+  image: ImageMetadata;
+  altText: string;
+  name: string;
+  title: string;
+  url: string;
+}
+
+const { image, altText, name, title, url } = Astro.props;
+---
+
+<div class="group reveal-me">
+  <a href={url}>
+    <figure class="overflow-hidden">
+      <Image
+        src={image}
+        alt={altText}
+        class="w-full h-auto transition-all duration-500 group-hover:scale-125 group-hover:rotate-3"
+      />
+    </figure>
+    <figcaption class="mt-6">
+      <h6 class="text-[25px] leading-[1.2] tracking-[-0.72px]">
+        {name}
+      </h6>
+      <p class="text-base leading-[1.4]">{title}</p>
+    </figcaption>
+  </a>
+</div>

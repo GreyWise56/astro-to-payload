@@ -1,0 +1,109 @@
+---
+// src/components/blocks/HeroV20.astro
+
+/*
+================================================================================
+Component: HeroV20
+Description: A hero section for a social media agency, featuring a large
+             centered heading with an inline image slider.
+================================================================================
+*/
+
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+export interface Props {
+  badge: string;
+  headingPart1: string;
+  italicHeading: string;
+  headingPart2: string;
+  sliderImages: {
+    src: ImageMetadata;
+    alt: string;
+  }[];
+  description: string;
+  button: {
+    text: string;
+    url: string;
+  };
+  gradientBackground: ImageMetadata;
+}
+
+const {
+  badge,
+  headingPart1,
+  italicHeading,
+  headingPart2,
+  sliderImages,
+  description,
+  button,
+  gradientBackground,
+} = Astro.props;
+---
+
+<section
+  class="pt-28 md:pt-[180px] lg:pt-[200px] pb-14 md:pb-[90px] lg:pb-[112px] relative overflow-hidden"
+  aria-labelledby="hero-heading"
+>
+  <!-- Gradient Background Effect -->
+  <div
+    id="hero-gradient-wrapper"
+    class="absolute w-full h-fw-full top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 -z-10 blur-[60px] scale-90"
+    aria-hidden="true"
+  >
+    <Image
+      src={gradientBackground}
+      alt="gradient background"
+      id="hero-gradient"
+      class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
+      width="1200"
+      height="800"
+    />
+  </div>
+
+  <!-- Hero Content -->
+  <div class="container reveal-me text-center">
+    <!-- Hero Badge -->
+    <div class="rv-badge mb-3 reveal-me">
+      <span class="rv-badge-text">{badge}</span>
+    </div>
+
+    <!-- Hero Heading -->
+    <h1 id="hero-heading" class="xl:leading-[1.1]">
+      {headingPart1} <i class="font-instrument">{italicHeading}</i>
+      <span
+        class="cta-slider-container max-sm:block sm:inline-block max-sm:mb-5 translate-y-2 sm:translate-y-[20px] max-sm:mt-2.5"
+        aria-label="Carousel of social media examples"
+      >
+        <div class="cta-inline-slider">
+          {sliderImages.map(image => (
+            <div class="slide">
+                <Image src={image.src} alt={image.alt} width="120" height="80" />
+            </div>
+          ))}
+        </div>
+      </span>
+      {headingPart2}
+    </h1>
+
+    <p class="md:max-w-[670px] mt-3 mx-auto text-center">
+      {description}
+    </p>
+
+    <!-- CTA Buttons -->
+    <div class="flex justify-center mt-8 md:mt-14">
+      <a
+        href={button.url}
+        class="rv-button rv-button-sm rv-button-primary block md:inline-block w-full text-center md:w-auto"
+        aria-label="Schedule your free consultation call"
+      >
+        <div class="rv-button-top">
+          <span>{button.text}</span>
+        </div>
+        <div class="rv-button-bottom">
+          <span class="text-nowrap">{button.text}</span>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>

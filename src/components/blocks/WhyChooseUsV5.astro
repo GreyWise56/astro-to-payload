@@ -1,0 +1,57 @@
+---
+// src/components/blocks/WhyChooseUsV5.astro
+
+/*
+================================================================================
+Component: WhyChooseUsV5
+Description: A block that displays a header, a list of features, and an image
+             in a two-column layout.
+================================================================================
+*/
+
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import FeatureListItemV5 from '../cards/FeatureListItemV5.astro';
+
+export interface Props {
+  eyebrow: string;
+  heading: string;
+  features: string[];
+  image: ImageMetadata;
+  altText: string;
+}
+
+const { eyebrow, heading, features, image, altText } = Astro.props;
+---
+
+<section
+  class="pb-14 pt-14 md:pb-16 md:pt-16 lg:pb-[88px] lg:pt-[88px] xl:pb-[100px] xl:pt-[100px]"
+>
+  <div class="container">
+    <!-- Section Header -->
+    <div class="mb-10 lg:mb-20">
+      <p
+        class="font-satoshi text-center text-sm font-normal leading-6 tracking-[3px] uppercase reveal-me"
+      >
+        {eyebrow}
+      </p>
+      <h2 class="mt-3 lg:mt-5 text-center text-appear">
+        {heading}
+      </h2>
+    </div>
+
+    <div class="flex flex-col md:flex-row gap-[29px]">
+      <div class="md:w-1/2 [&>*]:border-b dark:[&>*]:border-dark">
+        <!-- Loop through features and render a card for each -->
+        {features.map((feature) => <FeatureListItemV5 text={feature} />)}
+      </div>
+      <figure class="md:w-1/2 reveal-me">
+        <Image
+          src={image}
+          alt={altText}
+          class="w-full h-full"
+        />
+      </figure>
+    </div>
+  </div>
+</section>

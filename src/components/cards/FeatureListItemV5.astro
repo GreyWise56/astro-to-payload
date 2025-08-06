@@ -1,0 +1,21 @@
+---
+// src/components/cards/FeatureListItemV5.astro
+
+/*
+================================================================================
+Component: FeatureListItemV5
+Description: A simple card that displays a single line of text for a feature
+             list.
+================================================================================
+*/
+
+export interface Props {
+  text: string;
+}
+
+const { text } = Astro.props;
+---
+
+<div class="reveal-me">
+  <h5 class="py-[30px] pr-[30px]">{text}</h5>
+</div>

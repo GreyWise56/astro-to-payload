@@ -1,0 +1,73 @@
+---
+// src/components/blocks/SocialMediaSolutionsV20.astro
+
+/*
+================================================================================
+Component: SocialMediaSolutionsV20
+Description: A block that displays a header and a horizontally scrolling list
+             of social media solutions.
+================================================================================
+*/
+
+import SolutionCardV20 from '../cards/SolutionCardV20.astro';
+import type { Props as Solution } from '../cards/SolutionCardV20.astro';
+
+export interface Props {
+  heading: string;
+  subheading: string;
+  button: {
+    text: string;
+    url: string;
+  };
+  solutions: Solution[];
+}
+
+const { heading, subheading, button, solutions } = Astro.props;
+---
+
+<section
+  class="pb-14 pt-14 md:pb-16 md:pt-16 lg:pb-[88px] lg:pt-[88px] xl:pb-[100px] xl:pt-[100px] overflow-hidden bg-[#CBE8DF] service-section"
+  aria-labelledby="solutions-heading"
+>
+  <!--  Section Header -->
+  <div class="container">
+    <div class="grid grid-cols-12 gap-y-3 md:gap-x-10 items-start">
+      <div class="col-span-12 lg:col-span-7">
+        <h2
+          id="solutions-heading"
+          class="text-appear-2 text-secondary dark:text-secondary text-left max-md:text-3xl max-sm:text-3xl"
+          set:html={heading}
+        >
+        </h2>
+      </div>
+      <div class="col-span-12 lg:col-span-5 lg:text-right">
+        <p class="text-appear text-secondary/70 dark:text-secondary/70">
+          {subheading}
+        </p>
+        <div class="mt-7 md:mt-14 reveal-me">
+          <a
+            href={button.url}
+            class="rv-button rv-button-white block md:inline-block w-full mx-auto md:w-auto text-center"
+            aria-label="View our detailed service offerings"
+          >
+            <div class="rv-button-top">
+              <span>{button.text}</span>
+            </div>
+            <div class="rv-button-bottom">
+              <span>{button.text}</span>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Solutions Content Cards -->
+  <div
+    class="mt-16 flex flex-col md:flex-row md:flex-nowrap md:w-fit gap-6 md:pl-[20%] max-md:px-5 md:pr-10 service-wrapper overflow-x-hidden reveal-me"
+    aria-label="Our service offerings"
+  >
+    <!-- Loop through solutions and render a card for each -->
+    {solutions.map((solution) => <SolutionCardV20 {...solution} />)}
+  </div>
+</section>

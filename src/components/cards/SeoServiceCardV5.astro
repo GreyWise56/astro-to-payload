@@ -1,0 +1,87 @@
+---
+// src/components/cards/SeoServiceCardV5.astro
+
+/*
+================================================================================
+Component: SeoServiceCardV5
+Description: A card for a single SEO service, designed for a horizontal
+             scrolling layout.
+================================================================================
+*/
+
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+// --- Asset Imports ---
+import arrowIconLight from '../../assets/images/icons/arrow-Icon.svg';
+import arrowIconDark from '../../assets/images/home-5/arrow-Icon.svg'; // Note: different dark icon path
+
+export interface Props {
+  image: ImageMetadata;
+  altText: string;
+  description: string;
+  title: string;
+  number: string;
+  url: string;
+}
+
+const { image, altText, description, title, number, url } = Astro.props;
+---
+
+<div
+  class="border dark:border-dark group p-5 md:p-[30px] md:w-[740px] lg:w-[890px]"
+>
+  <a href={url}>
+    <div class="flex flex-col md:flex-row gap-y-7 md:gap-x-12 items-start">
+      <!-- Image -->
+      <figure class="max-md:w-full">
+        <Image src={image} alt={altText} class="w-full h-auto" />
+      </figure>
+
+      <!-- Icon and Description -->
+      <div class="flex flex-col justify-between">
+        <!-- Icon Figure -->
+        <figure
+          class="bg-backgroundBody dark:bg-dark border dark:border-dark group-hover:border-none transition-all group-hover:bg-primary duration-500 p-7 lg:p-8 cursor-pointer relative size-20 overflow-hidden self-end mt-2 mb-[50px] hidden md:block"
+        >
+          <Image
+            src={arrowIconLight}
+            alt="Arrow Icon"
+            class="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 group-hover:-translate-y-12 group-hover:translate-x-8 transition-all duration-500 opacity-100 group-hover:opacity-0 block dark:hidden"
+          />
+
+          <Image
+            src={arrowIconDark}
+            alt="Arrow Icon"
+            class="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 group-hover:-translate-y-12 group-hover:translate-x-8 transition-all duration-500 opacity-100 group-hover:opacity-0 dark:block hidden"
+          />
+
+          <Image
+            src={arrowIconLight}
+            alt="Arrow Icon"
+            class="absolute translate-y-16 -translate-x-[47px] transition-all duration-500 group-hover:translate-x-0 group-hover:-translate-y-[3px] opacity-0 group-hover:opacity-100"
+          />
+        </figure>
+
+        <!-- Description -->
+        <p class="text-base lg:text-lg">
+          {description}
+        </p>
+      </div>
+    </div>
+
+    <!-- Title and Number -->
+    <div class="sm:mt-2 flex justify-between items-end">
+      <h4
+        class="text-[25px] lg:text-[46px] lg:leading-[1.1] lg:tracking-[-1.44px]"
+      >
+        {title}
+      </h4>
+      <span
+        class="text-black/10 dark:text-backgroundBody/10 text-5xl sm:text-[55px] md:text-[67px] lg:text-[84px] xl:text-8xl font-normal leading-[1.1] tracking-[-2px] xl:tracking-[-2.88px]"
+      >
+        {number}
+      </span>
+    </div>
+  </a>
+</div>

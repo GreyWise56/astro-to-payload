@@ -1,0 +1,80 @@
+---
+// src/components/blocks/CtaV20.astro
+
+/*
+================================================================================
+Component: CtaV20
+Description: A call-to-action block for a social media page, featuring a large
+             heading with an inline image slider.
+================================================================================
+*/
+
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+export interface Props {
+  headingPart1: string;
+  headingPart2: string;
+  subheading: string;
+  sliderImages: {
+    src: ImageMetadata;
+    alt: string;
+  }[];
+  button: {
+    text: string;
+    url: string;
+  };
+}
+
+const {
+  headingPart1,
+  headingPart2,
+  subheading,
+  sliderImages,
+  button,
+} = Astro.props;
+---
+
+<section class="pt-14 md:pt-16 lg:pt-[88px] xl:pt-[100px] relative">
+  <div class="container">
+    <!-- CTA Heading -->
+    <h2
+      class="text-center xl:text-[96px] font-normal xl:leading-[1.1] xl:tracking-[-2.88px]"
+    >
+      {headingPart1}
+      <div
+        class="cta-slider-container max-sm:block sm:inline-block max-sm:mb-5 translate-y-2 sm:translate-y-[20px] max-sm:mt-2.5"
+      >
+        <div class="cta-inline-slider">
+          {sliderImages.map(image => (
+            <div class="slide">
+                <Image src={image.src} alt={image.alt} />
+            </div>
+          ))}
+        </div>
+      </div>
+      {headingPart2}
+      <span class="font-instrument sm:mt-10 italic block max-md:inline-block"
+        >{subheading}</span
+      >
+    </h2>
+
+    <!-- CTA Buttons -->
+    <ul class="flex justify-center items-center mt-14 list-none">
+      <!-- Primary CTA Button -->
+      <li class="block md:inline-block w-full mx-auto md:w-auto text-center">
+        <a
+          href={button.url}
+          class="rv-button rv-button-primary block md:inline-block"
+        >
+          <div class="rv-button-top">
+            <span>{button.text}</span>
+          </div>
+          <div class="rv-button-bottom">
+            <span class="text-nowrap">{button.text}</span>
+          </div>
+        </a>
+      </li>
+    </ul>
+  </div>
+</section>

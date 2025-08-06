@@ -1,0 +1,67 @@
+---
+// src/components/blocks/PortfolioV5.astro
+
+/*
+================================================================================
+Component: PortfolioV5
+Description: A block that displays a header and a list of portfolio case
+             studies.
+================================================================================
+*/
+
+import CaseStudyCardV5 from '../cards/CaseStudyCardV5.astro';
+import type { Props as CaseStudy } from '../cards/CaseStudyCardV5.astro';
+
+export interface Props {
+  eyebrow: string;
+  heading: string;
+  caseStudies: CaseStudy[];
+  button: {
+    text: string;
+    url: string;
+  };
+}
+
+const { eyebrow, heading, caseStudies, button } = Astro.props;
+---
+
+<section
+  class="pt-14 md:pt-16 lg:pt-[88px] xl:pt-[100px] pb-14 md:pb-16 lg:pb-[88px] xl:pb-[100px]"
+>
+  <div class="container">
+    <!-- Section Header -->
+    <div>
+      <p
+        class="font-satoshi text-center text-sm font-normal leading-6 tracking-[3px] uppercase reveal-me"
+      >
+        {eyebrow}
+      </p>
+      <h2 class="mt-3 lg:mt-5 mb-10 lg:mb-20 text-center text-appear">
+        {heading}
+      </h2>
+    </div>
+
+    <!-- Case Studies Container -->
+    <div class="mb-[60px] space-y-[30px]">
+      <!-- Loop through case studies and render a card for each -->
+      {caseStudies.map((study) => <CaseStudyCardV5 {...study} />)}
+    </div>
+
+    <!-- View All Projects Button -->
+    <ul class="flex justify-center reveal-me">
+      <li class="block md:inline-block w-[90%] mx-auto md:w-auto">
+        <a
+          href={button.url}
+          class="rv-button rv-button-white block md:inline-block text-center"
+        >
+          <div class="rv-button-top">
+            <span>{button.text}</span>
+          </div>
+          <div class="rv-button-bottom">
+            <span>{button.text}</span>
+          </div>
+        </a>
+      </li>
+    </ul>
+  </div>
+</section>

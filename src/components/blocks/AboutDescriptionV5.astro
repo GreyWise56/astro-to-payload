@@ -1,0 +1,29 @@
+---
+// src/components/blocks/AboutDescriptionV5.astro
+
+/*
+================================================================================
+Component: AboutDescriptionV5
+Description: A simple block that displays a single, prominent paragraph of
+             descriptive text.
+================================================================================
+*/
+
+export interface Props {
+  description: string;
+}
+
+const { description } = Astro.props;
+---
+
+<section
+  class="pt-14 md:pt-16 lg:pt-[88px] xl:pt-[100px] md:pb-16 lg:pb-[88px] xl:pb-[100px] relative overflow-hidden"
+>
+  <div class="container reveal-me">
+    <h3
+      class="reveal-text-2 text-2xl text-secondary/90 dark:text-backgroundBody/70 text-left lg:text-3xl xl:text-4xl font-normal lg:leading-[1.2] lg:tracking-[0.72px]"
+      set:html={description}
+    >
+    </h3>
+  </div>
+</section>
