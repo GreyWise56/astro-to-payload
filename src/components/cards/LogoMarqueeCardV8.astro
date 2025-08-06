@@ -1,0 +1,37 @@
+---
+// src/components/cards/LogoMarqueeCardV8.astro
+
+/*
+================================================================================
+Component: LogoMarqueeCardV8
+Description: A card for a single company logo, with light and dark mode
+             variants, for use in a scrolling marquee.
+================================================================================
+*/
+
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+export interface Props {
+  logoLight: ImageMetadata;
+  logoDark: ImageMetadata;
+  altText: string;
+}
+
+const { logoLight, logoDark, altText } = Astro.props;
+---
+
+<div
+  class="bg-backgroundBody dark:bg-dark border-r border-y border-secondary/10 dark:border-backgroundBody/10 w-48 h-24 flex items-center justify-center z-50 flex-shrink-0 marquee-part"
+>
+  <Image
+    src={logoLight}
+    alt={altText}
+    class="inline-block dark:hidden"
+  />
+  <Image
+    src={logoDark}
+    alt={altText}
+    class="dark:inline-block hidden"
+  />
+</div>

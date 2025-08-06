@@ -3,8 +3,16 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import HeroV8 from '../components/blocks/HeroV8.astro';
 import AboutWithStatsV8 from '../components/blocks/AboutWithStatsV8.astro';
+import HowWeSolveV8 from '../components/blocks/HowWeSolveV8.astro';
+import ServicesAccordionV8 from '../components/blocks/ServicesAccordionV8.astro';
+import TestimonialsV7 from '../components/blocks/Testimonials-v7.astro';
+import LogoMarqueeV8 from '../components/blocks/LogoMarqueeV8.astro';
 import type { Props as HeroV8Props } from '../components/blocks/HeroV8.astro';
 import type { Props as AboutWithStatsV8Props } from '../components/blocks/AboutWithStatsV8.astro';
+import type { Props as HowWeSolveV8Props } from '../components/blocks/HowWeSolveV8.astro';
+import type { Props as ServicesAccordionV8Props } from '../components/blocks/ServicesAccordionV8.astro';
+import type { Props as TestimonialsV7Props } from '../components/blocks/Testimonials-v7.astro';
+import type { Props as LogoMarqueeV8Props } from '../components/blocks/LogoMarqueeV8.astro';
 
 // --- Asset Imports ---
 import heroBg1 from '../assets/images/home-3/hero-v8-img-1.png';
@@ -13,21 +21,29 @@ import heroBg3 from '../assets/images/home-3/hero-v8-img-3.png';
 import heroBg4 from '../assets/images/home-3/hero-v8-img-4.png';
 import gradientBg from '../assets/images/hero-gradient-background.png';
 import aboutBanner from '../assets/images/home-3/about-banner.png';
+import solutionImg1 from '../assets/images/blog-img/blogV3-img-1.png';
+import solutionImg2 from '../assets/images/blog-img/blogV3-img-2.png';
+import solutionImg3 from '../assets/images/blog-img/blogV3-img-3.png';
+import serviceBg1 from '../assets/images/services/services-background.png';
+import serviceBg2 from '../assets/images/services/services-background-02.png';
+import serviceBg3 from '../assets/images/services/services-background-03.png';
+import serviceBg4 from '../assets/images/services/services-background-04.png';
+import avatar1 from '../assets/images/avatar/review-1.png';
+import avatar2 from '../assets/images/avatar/review-2.png';
+import companyLogoLight from '../assets/images/icons/testimonial-logo.png';
+import companyLogoDark from '../assets/images/icons/testimonial-dark-logo.png';
+import marqueeLogo1Light from '../assets/images/marquee-img/invert.svg';
+import marqueeLogo1Dark from '../assets/images/marquee-img/invert-dark.svg';
+import marqueeLogo2Light from '../assets/images/marquee-img/greenish.svg';
+import marqueeLogo2Dark from '../assets/images/marquee-img/greenish-dark.svg';
 
 
 // --- Page Data ---
 const heroData: HeroV8Props = {
     mainTitle: "RIVOR",
     subtitle: "Powering <br /> businesses with <br /> modern tech",
-    button: {
-        text: "Get Consultation",
-        url: "/contact"
-    },
-    bgImage1: heroBg1,
-    bgImage2: heroBg2,
-    bgImage3: heroBg3,
-    bgImage4: heroBg4,
-    gradientBg: gradientBg,
+    button: { text: "Get Consultation", url: "/contact" },
+    bgImage1: heroBg1, bgImage2: heroBg2, bgImage3: heroBg3, bgImage4: heroBg4, gradientBg: gradientBg,
 };
 
 const aboutWithStatsData: AboutWithStatsV8Props = {
@@ -35,21 +51,72 @@ const aboutWithStatsData: AboutWithStatsV8Props = {
     image: aboutBanner,
     imageAlt: "A collage of business-related images and graphics.",
     description: "With years of experience and a track record of success, we’ve helped businesses across multiple industries. Industry certifications and recognitions back our expertise.",
-    button: {
-        text: "View Case Studies",
-        url: "/project"
-    },
+    button: { text: "View Case Studies", url: "/project" },
     stats: [
         { value: 25, description: "Years of Experience" },
         { value: 300, suffix: " +", description: "Clients Globally" },
         { value: 90, suffix: " %", description: "Business Growth Rate" }
     ]
 };
+
+const howWeSolveData: HowWeSolveV8Props = {
+    badge: "How We Solve",
+    heading: "Creative solutions for your business <br /> challenges.",
+    solutions: [
+        { title: "Understanding Your Business Goals", description: "We start by gaining a deep understanding of your business goals.", image: solutionImg1, altText: "Team discussing business goals", url: "/blog-details" },
+        { title: "Developing Tailored Solutions", description: "Next, our team of experts develops tailored solutions.", image: solutionImg2, altText: "Designer sketching solutions", url: "/blog-details" },
+        { title: "Implementing Technology", description: "We leverage cutting-edge technology to implement seamlessly", image: solutionImg3, altText: "Developer coding a solution", url: "/blog-details" }
+    ],
+    button: { text: "Start Your Growth Journey", url: "/blog-02" }
+};
+
+const servicesAccordionData: ServicesAccordionV8Props = {
+    badge: "Services",
+    heading: "Creative solutions for your business <br /> challenges.",
+    services: [
+        { title: "Software Solution", description: "Delivering a stellar experience for every user.", url: "/services-details", backgroundImage: serviceBg1 },
+        { title: "Hardware Solution", description: "Delivering a stellar experience for every user.", url: "/services-details", backgroundImage: serviceBg2 },
+        { title: "Artificial Intelligence", description: "Delivering a stellar experience for every user.", url: "/services-details", backgroundImage: serviceBg3 },
+        { title: "Innovative Solutions", description: "Attract, retain, and nurture top talent.", url: "/services-details", backgroundImage: serviceBg4 },
+        { title: "Risk Management", description: "Identifying and mitigating potential business risks.", url: "/services-details", backgroundImage: serviceBg2 }
+    ]
+};
+
+const testimonialsDataV7 = [
+    { authorName: 'Wade Warren', authorTitle: 'Product Designer', authorAvatar: avatar1, quote: '“Sed rem perspiciatis unde omnis iste natus quae ab illo inventore veritatis et quasi.”', companyLogoLight: companyLogoLight, companyLogoDark: companyLogoDark, date: 'Feb 03, 2024' },
+    { authorName: 'Marvin McKinney', authorTitle: 'Manager at Lattice', authorAvatar: avatar2, quote: '“Sed rem perspiciatis unde omnis iste natus quae ab illo inventore veritatis et quasi.”', companyLogoLight: companyLogoLight, companyLogoDark: companyLogoDark, date: 'Feb 03, 2024' },
+];
+const testimonialsRow1 = testimonialsDataV7.slice(0, 2);
+const testimonialsRow2 = testimonialsDataV7.slice(0, 2);
+
+const logoMarqueeData: LogoMarqueeV8Props = {
+    heading: "Trusted by over 100+ fast-growing companies all around the world",
+    logos: [
+        { logoLight: marqueeLogo1Light, logoDark: marqueeLogo1Dark, altText: "Invert Logo" },
+        { logoLight: marqueeLogo2Light, logoDark: marqueeLogo2Dark, altText: "Greenish Logo" },
+        { logoLight: marqueeLogo1Light, logoDark: marqueeLogo1Dark, altText: "Invert Logo" },
+        { logoLight: marqueeLogo2Light, logoDark: marqueeLogo2Dark, altText: "Greenish Logo" },
+        { logoLight: marqueeLogo1Light, logoDark: marqueeLogo1Dark, altText: "Invert Logo" },
+        { logoLight: marqueeLogo2Light, logoDark: marqueeLogo2Dark, altText: "Greenish Logo" },
+        { logoLight: marqueeLogo1Light, logoDark: marqueeLogo1Dark, altText: "Invert Logo" },
+        { logoLight: marqueeLogo2Light, logoDark: marqueeLogo2Dark, altText: "Greenish Logo" },
+    ],
+    button: { text: "View Our Network", url: "/contact" }
+};
 ---
 
 <BaseLayout title="Homepage v8 | JAM Group" description="A homepage for business solutions.">
     <HeroV8 {...heroData} />
     <AboutWithStatsV8 {...aboutWithStatsData} />
+    <HowWeSolveV8 {...howWeSolveData} />
+    <ServicesAccordionV8 {...servicesAccordionData} />
+    <TestimonialsV7
+        badgeText="User Review"
+        heading="Simple pricing to boost your brand."
+        testimonialsRow1={testimonialsRow1}
+        testimonialsRow2={testimonialsRow2}
+    />
+    <LogoMarqueeV8 {...logoMarqueeData} />
     
     {/* Other components for this page will go here */}
 </BaseLayout>

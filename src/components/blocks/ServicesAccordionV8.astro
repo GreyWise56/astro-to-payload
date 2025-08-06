@@ -1,0 +1,44 @@
+---
+// src/components/blocks/ServicesAccordionV8.astro
+
+/*
+================================================================================
+Component: ServicesAccordionV8
+Description: A block that displays a header and a list of interactive service
+             rows, each with a unique background hover effect.
+================================================================================
+*/
+
+import ServiceAccordionItemV8 from '../cards/ServiceAccordionItemV8.astro';
+import type { Props as Service } from '../cards/ServiceAccordionItemV8.astro';
+
+// Define the properties for the entire block
+export interface Props {
+  badge: string;
+  heading: string;
+  services: Service[];
+}
+
+const { badge, heading, services } = Astro.props;
+---
+
+<section
+  class="pt-14 md:pt-16 lg:pt-[88px] xl:pt-[100px] pb-14 md:pb-16 lg:pb-[88px] xl:pb-[100px]"
+>
+  <div class="container">
+    <div class="text-center mb-10 md:mb-20">
+      <div class="rv-badge mb-3 md:mb-8 reveal-me">
+        <span class="rv-badge-text">{badge}</span>
+      </div>
+      <h2 class="text-appear" set:html={heading}></h2>
+    </div>
+
+    <!-- Services Container -->
+    <div
+      class="max-w-[1170px] w-full mx-auto [&>*:not(:last-child)]:mb-6 reveal-me"
+    >
+      <!-- Loop through services and render a card for each -->
+      {services.map((service) => <ServiceAccordionItemV8 {...service} />)}
+    </div>
+  </div>
+</section>

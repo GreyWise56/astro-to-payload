@@ -1,0 +1,59 @@
+---
+// src/components/blocks/HowWeSolveV8.astro
+
+/*
+================================================================================
+Component: HowWeSolveV8
+Description: A block that displays a header and a list of solutions or methods.
+================================================================================
+*/
+
+import SolutionCardV8 from '../cards/SolutionCardV8.astro';
+import type { Props as Solution } from '../cards/SolutionCardV8.astro';
+
+// Define the properties for the entire block
+export interface Props {
+  badge: string;
+  heading: string;
+  solutions: Solution[];
+  button: {
+    text: string;
+    url: string;
+  };
+}
+
+const { badge, heading, solutions, button } = Astro.props;
+---
+
+<section
+  class="pt-14 md:pt-16 lg:pt-[88px] xl:pt-[100px] pb-14 md:pb-16 lg:pb-[88px] xl:pb-[100px]"
+>
+  <div class="container">
+    <div class="text-center">
+      <div class="rv-badge mb-3 md:mb-8 reveal-me">
+        <span class="rv-badge-text">{badge}</span>
+      </div>
+      <h2 class="mx-auto mb-10 md:mb-20 text-appear" set:html={heading}></h2>
+    </div>
+    <div class="[&>*:not(:last-child)]:mb-4">
+      <!-- Loop through solutions and render a card for each -->
+      {solutions.map((solution) => <SolutionCardV8 {...solution} />)}
+    </div>
+
+    <ul class="justify-self-center max-md:w-full mt-7 md:mt-14 reveal-me">
+      <li class="block md:inline-block w-full mx-auto md:w-auto text-center">
+        <a
+          href={button.url}
+          class="rv-button rv-button-white block md:inline-block"
+        >
+          <div class="rv-button-top">
+            <span>{button.text}</span>
+          </div>
+          <div class="rv-button-bottom">
+            <span>{button.text}</span>
+          </div>
+        </a>
+      </li>
+    </ul>
+  </div>
+</section>

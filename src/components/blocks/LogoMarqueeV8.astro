@@ -1,0 +1,64 @@
+---
+// src/components/blocks/LogoMarqueeV8.astro
+
+/*
+================================================================================
+Component: LogoMarqueeV8
+Description: A block that displays a header and a horizontally scrolling
+             marquee of company logos.
+================================================================================
+*/
+
+import LogoMarqueeCardV8 from '../cards/LogoMarqueeCardV8.astro';
+import type { Props as Logo } from '../cards/LogoMarqueeCardV8.astro';
+
+export interface Props {
+  heading: string;
+  logos: Logo[];
+  button: {
+    text: string;
+    url: string;
+  };
+}
+
+const { heading, logos, button } = Astro.props;
+---
+
+<section
+  class="pt-14 md:pt-16 lg:pt-[88px] xl:pt-[100px] pb-14 md:pb-16 lg:pb-[88px] xl:pb-[100px]"
+>
+  <div>
+    <!-- Section Header -->
+    <p class="container text-center mb-10 lg:mb-20 reveal-me">{heading}</p>
+
+    <!-- Marquee Container -->
+    <div class="relative overflow-hidden">
+      <!-- Infinite Scroll Container -->
+      <div
+        class="z-50 flex gap-px w-fit flex-nowrap whitespace-nowrap will-change-transform marquee-inner reveal-me"
+      >
+        <!-- Loop through logos and render a card for each -->
+        {logos.map((logo) => <LogoMarqueeCardV8 {...logo} />)}
+      </div>
+    </div>
+
+    <!-- Button -->
+    <div
+      class="justify-self-center grid max-md:w-full mt-7 md:mt-14 reveal-me container"
+    >
+      <div class="block md:inline-block w-full mx-auto md:w-auto text-center">
+        <a
+          href={button.url}
+          class="rv-button rv-button-white block md:inline-block"
+        >
+          <div class="rv-button-top text-center">
+            <span>{button.text}</span>
+          </div>
+          <div class="rv-button-bottom text-center">
+            <span class="text-nowrap">{button.text}</span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
