@@ -1,0 +1,128 @@
+---
+// src/components/blocks/HeroV15.astro
+
+/*
+================================================================================
+Component: HeroV15
+Description: A hero section for a branding agency, featuring a two-column
+             layout with text, images, and a text marquee.
+================================================================================
+*/
+
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+// Define the properties for the component
+export interface Props {
+  heading: string;
+  description: string;
+  button: {
+    text: string;
+    url: string;
+  };
+  marqueeText: string;
+  image1: ImageMetadata;
+  image2: ImageMetadata;
+  gradientBackground: ImageMetadata;
+}
+
+const {
+  heading,
+  description,
+  button,
+  marqueeText,
+  image1,
+  image2,
+  gradientBackground,
+} = Astro.props;
+---
+
+<section
+  class="pt-32 md:pt-36 lg:pt-[110px] xl:pt-[120px] pb-4 relative after:content-[''] after:absolute after:w-full after:h-[1px] after:bottom-0 after:bg-secondary/20 dark:after:bg-backgroundBody/20 overflow-hidden reveal-me"
+>
+  <div
+    class="relative before:content-none lg:before:content-[''] lg:before:absolute lg:before:w-[1px] lg:before:h-[136.4%] xl:before:h-[119.7%] lg:before:left-[51.5%] xl:before:left-[49%] 2xl:before:left-[54.7%] lg:before:-top-40 xl:before:-top-40 lg:before:z-[999999999999] lg:before:bg-secondary/20 lg:dark:before:bg-backgroundBody/20 lg:after:content-[''] lg:after:absolute lg:after:w-[50vw] xl:after:w-[49vw] 2xl:after:w-[54.3vw] lg:after:h-[1px] lg:after:bottom-[120px] 2xl:after:bottom-[180px] lg:after:bg-secondary/20 lg:dark:after:bg-backgroundBody/20"
+  >
+    <div
+      class="flex flex-col lg:flex-row items-start justify-between gap-y-10 max-w-[1600px] mx-auto px-4 md:px-[30px]"
+    >
+      <!-- Hero Content -->
+      <div class="max-w-full lg:max-w-[610px]">
+        <div class="relative mb-3">
+          <!-- Gradient Background Wrapper -->
+          <div
+            id="hero-gradient-wrapper"
+            class="absolute w-full h-full top-0 left-0 -z-10 blur-[35px] md:blur-[80px]"
+          >
+            <Image
+              src={gradientBackground}
+              alt="hero-gradient-background"
+              id="hero-gradient"
+              class="absolute left-1/2 top-1/2 -translate-x-1/2 max-md:-translate-y-1/2 md:-translate-y-1/2"
+            />
+          </div>
+          <h1
+            class="xl:mt-14 text-5xl sm:text-[55px] md:text-[67px] lg:text-[74px] xl:text-8xl font-normal leading-[1.18] xl:leading-[1.20] tracking-[-2px] xl:tracking-[-2.88px] text-appear"
+            set:html={heading}
+          >
+          </h1>
+        </div>
+
+        <p class="reveal-me">
+          {description}
+        </p>
+
+        <!-- Primary CTA Button -->
+        <div class="list-none mt-7 md:mt-14 lg:mt-7 xl:mt-14 reveal-me">
+          <div class="block lg:inline-block w-full text-center lg:w-auto">
+            <a
+              href={button.url}
+              class="rv-button rv-button-primary block md:inline-block"
+            >
+              <div class="rv-button-top">
+                <span>{button.text}</span>
+              </div>
+              <div class="rv-button-bottom">
+                <span class="text-nowrap">{button.text}</span>
+              </div>
+            </a>
+          </div>
+        </div>
+
+        <!-- text Marquee  -->
+        <div
+          class="max-md:mt-7 lg:w-[48%] xl:w-[45%] lg:absolute lg:bottom-0 relative"
+        >
+          <div
+            class="absolute left-0 top-0 h-full w-[5%] bg-gradient-to-r from-backgroundBody to-transparent dark:from-[#191915] z-40"
+          >
+          </div>
+          <div class="marquee-container -z-10">
+            <h1
+              class="text-nowrap py-7 font-instrument text-stroke italic lg:py-1 2xl:py-7 pr-3 reveal-me"
+            >
+              {marqueeText}
+            </h1>
+          </div>
+        </div>
+      </div>
+      <!-- images Mockup -->
+      <div class="flex flex-col max-lg:w-full gap-y-4 gap-x-2.5">
+        <figure class="w-full reveal-me">
+          <Image
+            src={image1}
+            alt="Branding mockup image 1"
+            class="max-lg:w-full"
+          />
+        </figure>
+        <figure class="w-full reveal-me">
+          <Image
+            src={image2}
+            alt="Branding mockup image 2"
+            class="max-lg:w-full"
+          />
+        </figure>
+      </div>
+    </div>
+  </div>
+</section>

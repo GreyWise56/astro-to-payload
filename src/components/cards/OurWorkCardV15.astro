@@ -1,0 +1,48 @@
+---
+// src/components/cards/OurWorkCardV15.astro
+
+/*
+================================================================================
+Component: OurWorkCardV15
+Description: A card for showcasing a single project in a grid, featuring an
+             image, title, and description with a hover effect.
+================================================================================
+*/
+
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+export interface Props {
+  image: ImageMetadata;
+  altText: string;
+  title: string;
+  description: string;
+  url: string;
+}
+
+const { image, altText, title, description, url } = Astro.props;
+---
+
+<div class="reveal-me underline-hover-effect group w-full">
+  <a href={url} class="block">
+    <figure class="overflow-hidden w-full">
+      <Image
+        src={image}
+        alt={altText}
+        class="w-full h-full transition-all duration-500 group-hover:scale-125 group-hover:rotate-3"
+      />
+    </figure>
+  </a>
+
+  <a href={url} class="mt-[30px] block">
+    <div class="blog-title">
+      <h3>{title}</h3>
+    </div>
+
+    <p
+      class="text-xs text-secondary/70 dark:text-backgroundBody/70 leading-[1.2] tracking-[0.96px] uppercase mt-3.5"
+    >
+      {description}
+    </p>
+  </a>
+</div>

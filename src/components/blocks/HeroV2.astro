@@ -1,0 +1,82 @@
+---
+// src/components/blocks/HeroV2.astro
+
+/*
+================================================================================
+Component: HeroV2
+Description: A hero section with a top label, a main heading with italicized 
+             parts, a CTA button, and a gradient background effect.
+================================================================================
+*/
+
+import type { ImageMetadata } from "astro";
+import { Image } from "astro:assets";
+
+// --- Define the data contract for the component ---
+export interface Props {
+  topLabel: {
+    part1: string;
+    part2: string;
+  };
+  heading: string;
+  italicHeading1: string;
+  italicHeading2: string;
+  button: {
+    text: string;
+    url: string;
+  };
+  gradientBackground: ImageMetadata;
+}
+
+const { topLabel, heading, italicHeading1, italicHeading2, button, gradientBackground } = Astro.props;
+---
+
+<section
+  class="pt-[137px] md:pt-[180px] lg:pt-[150px] pb-14 md:pb-[90px] lg:pb-[110px] relative overflow-hidden"
+>
+  <div
+    id="hero-gradient-wrapper"
+    class="absolute w-full h-fw-full top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 -z-10 blur-[60px] scale-90"
+  >
+    <Image
+      src={gradientBackground}
+      alt="hero gradient background"
+      id="hero-gradient"
+      class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
+    />
+  </div>
+
+  <div class="container reveal-me">
+    <p
+      class="flex text-secondary dark:text-backgroundBody justify-center lg:justify-start items-center gap-5 text-sm font-normal leading-6 tracking-[3px] uppercase"
+    >
+      <span>{topLabel.part1}</span>
+      <span
+        class="inline-block w-[150px] h-[1px] bg-secondary dark:bg-backgroundBody/70"
+      ></span>
+      <span>{topLabel.part2}</span>
+    </p>
+
+    <h1 class="mt-5 sm:mt-10">
+      {heading}
+      <i class="font-instrument">{italicHeading1}</i> that Drive
+      <i class="font-instrument">{italicHeading2}</i>
+    </h1>
+
+    <ul class="flex justify-start list-none mt-14">
+      <li class="block md:inline-block w-full text-center md:w-auto">
+        <a
+          href={button.url}
+          class="rv-button rv-button-primary block md:inline-block"
+        >
+          <div class="rv-button-top">
+            <span>{button.text}</span>
+          </div>
+          <div class="rv-button-bottom">
+            <span class="text-nowrap">{button.text}</span>
+          </div>
+        </a>
+      </li>
+    </ul>
+  </div>
+</section>

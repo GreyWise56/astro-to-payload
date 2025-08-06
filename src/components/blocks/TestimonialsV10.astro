@@ -1,0 +1,103 @@
+---
+// src/components/blocks/TestimonialsV10.astro
+
+/*
+================================================================================
+Component: TestimonialsV10
+Description: A block that displays a header and a Swiper.js slider of
+             testimonial cards.
+================================================================================
+*/
+
+import TestimonialCardV10 from '../cards/TestimonialCardV10.astro';
+import type { Props as Testimonial } from '../cards/TestimonialCardV10.astro';
+
+export interface Props {
+  heading: string;
+  subheading: string;
+  testimonials: Testimonial[];
+}
+
+const { heading, subheading, testimonials } = Astro.props;
+---
+
+<section
+  class="pb-14 pt-14 md:pb-16 md:pt-16 lg:pb-[88px] lg:pt-[88px] xl:pb-[100px] xl:pt-[100px] overflow-hidden"
+>
+  <!--  section header -->
+  <div class="container">
+    <div
+      class="flex flex-col md:flex-row gap-y-3 gap-x-10 justify-center lg:justify-start items-start md:items-center mb-16 md:mb-20"
+    >
+      <div class="flex-1">
+        <h2 class="text-appear-2" set:html={heading}></h2>
+      </div>
+      <div class="max-md:w-full md:max-w-[470px]">
+        <p
+          class="text-appear max-md:text-justify max-w-lg md:place-self-end md:text-right text-appear-2"
+        >
+          {subheading}
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- testimonial content -->
+  <div class="swiper cardSwiper reveal-me max-md:px-4 md:pl-[19%]">
+    <div class="swiper-wrapper">
+      <!-- Loop through testimonials and render a card for each -->
+      {testimonials.map(testimonial => (
+        <div class="swiper-slide">
+            <TestimonialCardV10 {...testimonial} />
+        </div>
+      ))}
+    </div>
+
+    <div class="flex items-center space-x-2 mt-8">
+      <button
+        class="swiper-button-prev size-[72px] p-5 bg-backgroundBody dark:bg-secondary border dark:border-dark active:bg-primary hover:bg-primary dark:hover:bg-primary duration-300"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="32"
+          height="33"
+          viewBox="0 0 32 33"
+          fill="none"
+        >
+          <path
+            d="M27 16.25H5"
+            class="stroke-secondary dark:stroke-backgroundBody"
+            stroke-linecap="round"
+            stroke-linejoin="round"></path>
+          <path
+            d="M14 7.25L5 16.25L14 25.25"
+            class="stroke-secondary dark:stroke-backgroundBody"
+            stroke-linecap="round"
+            stroke-linejoin="round"></path>
+        </svg>
+      </button>
+      <button
+        class="swiper-button-next size-[72px] p-5 bg-backgroundBody dark:bg-secondary border dark:border-dark active:bg-primary hover:bg-primary dark:hover:bg-primary duration-300 group"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="32"
+          height="33"
+          viewBox="0 0 32 33"
+          fill="none"
+        >
+          <path
+            d="M5 16.25H27"
+            class="stroke-secondary dark:stroke-backgroundBody"
+            stroke-linecap="round"
+            stroke-linejoin="round"></path>
+          <path
+            d="M18 7.25L27 16.25L18 25.25"
+            class="stroke-secondary dark:stroke-backgroundBody"
+            stroke-linecap="round"
+            stroke-linejoin="round"></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+</section>

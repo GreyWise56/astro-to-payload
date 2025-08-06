@@ -1,0 +1,65 @@
+---
+// src/components/blocks/OurWorkV15.astro
+
+/*
+================================================================================
+Component: OurWorkV15
+Description: A block that displays a header and a 2x2 grid of "Our Work"
+             project cards.
+================================================================================
+*/
+
+import OurWorkCardV15 from '../cards/OurWorkCardV15.astro';
+import type { Props as Project } from '../cards/OurWorkCardV15.astro';
+
+export interface Props {
+  badge: string;
+  heading: string;
+  subheading: string;
+  projects: Project[];
+  button: {
+    text: string;
+    url: string;
+  };
+}
+
+const { badge, heading, subheading, projects, button } = Astro.props;
+---
+
+<section
+  class="pb-14 pt-14 md:pb-16 md:pt-16 lg:pb-[88px] lg:pt-[88px] xl:pb-[100px] xl:pt-[100px] overflow-hidden"
+>
+  <!-- section header -->
+  <div class="text-center mb-8 md:mb-16">
+    <div class="rv-badge reveal-me mb-3">
+      <span class="rv-badge-text">{badge}</span>
+    </div>
+    <h2 class="text-appear mb-3" set:html={heading}></h2>
+    <p class="text-appear">{subheading}</p>
+  </div>
+
+  <!-- Our Project container -->
+  <div
+    class="grid grid-cols-1 md:grid-cols-2 justify-items-center items-center md:items-start gap-[30px] gap-y-10 mb-[60px] max-w-[1500px] px-5 mx-auto relative md:before:content-[''] md:before:absolute md:before:w-[1px] md:before:h-full md:before:bg-secondary/10 md:dark:before:bg-backgroundBody/10 after:content-[''] after:absolute after:w-full after:h-[1px] after:top-1/2 after:bg-secondary/10 dark:after:bg-backgroundBody/10"
+  >
+    <!-- Loop through projects and render a card for each -->
+    {projects.map((project) => <OurWorkCardV15 {...project} />)}
+  </div>
+  <ul class="flex justify-center reveal-me px-5">
+    <li
+      class="block md:inline-block max-md:w-full mx-auto md:ml-auto md:w-auto"
+    >
+      <a
+        href={button.url}
+        class="rv-button rv-button-secondary block md:inline-block text-center"
+      >
+        <div class="rv-button-top">
+          <span>{button.text}</span>
+        </div>
+        <div class="rv-button-bottom">
+          <span>{button.text}</span>
+        </div>
+      </a>
+    </li>
+  </ul>
+</section>

@@ -1,0 +1,66 @@
+---
+// src/components/blocks/AboutV12.astro
+
+/*
+================================================================================
+Component: AboutV12
+Description: A two-column "About Us" section with a heading on the left and
+             descriptive text and a button on the right.
+================================================================================
+*/
+
+export interface Props {
+  badge: string;
+  heading: string;
+  subheading: string;
+  button: {
+    text: string;
+    url: string;
+  };
+}
+
+const { badge, heading, subheading, button } = Astro.props;
+---
+
+<section
+  class="pt-28 md:pt-32 lg:pt-44 xl:pt-[200px] pb-14 md:pb-16 lg:pb-[88px] xl:pb-[100px] max-w-[1600px] mx-auto px-4 md:px-[30px]"
+>
+  <!-- Content -->
+  <div
+    class="flex flex-col md:flex-row gap-y-9 gap-3 justify-center md:justify-between"
+  >
+    <div class="md:max-w-[570px] flex-1">
+      <div class="rv-badge reveal-me mb-3">
+        <span class="rv-badge-text">{badge}</span>
+      </div>
+      <h2
+        class="text-appear text-[38px] md:text-[47px] lg:text-[54px] xl:text-[64px] font-normal leading-[1.3] md:leading-[1.2] lg:leading-[1.17] lg:tracking-[-2.16px]"
+        set:html={heading}
+      >
+      </h2>
+    </div>
+
+    <div class="max-w-full md:max-w-sm lg:max-w-md xl:max-w-3xl reveal-me">
+      <h5
+        class="md:text-right text-secondary/70 dark:text-backgroundBody/70 reveal-text"
+      >
+        {subheading}
+      </h5>
+      <ul class="justify-self-end max-md:w-full mt-7 md:mt-10 reveal-me">
+        <li class="block md:inline-block w-full mx-auto md:w-auto text-center">
+          <a
+            href={button.url}
+            class="rv-button rv-button-white block md:inline-block"
+          >
+            <div class="rv-button-top">
+              <span>{button.text}</span>
+            </div>
+            <div class="rv-button-bottom">
+              <span>{button.text}</span>
+            </div>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>

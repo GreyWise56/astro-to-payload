@@ -1,0 +1,35 @@
+---
+// src/components/cards/ProcessStepCardV15.astro
+
+/*
+================================================================================
+Component: ProcessStepCardV15
+Description: A card for a single step in the branding process, displaying a
+             large number, title, and description.
+================================================================================
+*/
+
+export interface Props {
+  stepNumber: string;
+  title: string;
+  description: string;
+  isBordered?: boolean; // To handle the right border
+}
+
+const { stepNumber, title, description, isBordered = false } = Astro.props;
+---
+
+<div
+  class:list={[
+    "reveal-me px-[30px] py-[50px]",
+    { "border-r dark:border-dark": isBordered }
+  ]}
+>
+  <h2
+    class="text-5xl sm:text-[55px] md:text-[67px] lg:text-[84px] xl:text-8xl font-normal leading-tight xl:leading-[1.15] tracking-[-2px] xl:tracking-[-2.88px] font-instrument italic"
+  >
+    {stepNumber}
+  </h2>
+  <h5 class="mt-4 mb-6">{title}</h5>
+  <p class="text-base">{description}</p>
+</div>

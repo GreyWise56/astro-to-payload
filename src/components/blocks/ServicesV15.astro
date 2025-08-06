@@ -1,0 +1,73 @@
+---
+// src/components/blocks/ServicesV15.astro
+
+/*
+================================================================================
+Component: ServicesV15
+Description: A block that displays a header and a list of services for a
+             branding agency page.
+================================================================================
+*/
+
+import ServiceRowV15 from '../cards/ServiceRowV15.astro';
+import type { Props as Service } from '../cards/ServiceRowV15.astro';
+
+// Define the properties for the entire block
+export interface Props {
+  heading: string;
+  subheading: string;
+  button: {
+    text: string;
+    url: string;
+  };
+  services: Service[];
+}
+
+const { heading, subheading, button, services } = Astro.props;
+---
+
+<section
+  class="pb-14 pt-14 md:pb-16 md:pt-16 lg:pb-[88px] lg:pt-[88px] xl:pb-[100px] xl:pt-[100px]"
+>
+  <div class="container">
+    <!-- section header -->
+    <div
+      class="flex flex-col md:flex-row gap-y-3 gap-x-10 justify-center lg:justify-start items-start md:items-center mb-16 md:mb-20"
+    >
+      <div class="flex-1">
+        <h2 class="text-appear-2" set:html={heading}></h2>
+      </div>
+      <div class="w-full md:w-80 lg:w-96">
+        <p
+          class="text-appear max-md:text-justify max-w-lg md:place-self-end md:text-right text-appear-2"
+        >
+          {subheading}
+        </p>
+
+        <ul class="justify-self-end max-md:w-full mt-5 md:mt-10 reveal-me">
+          <li
+            class="block md:inline-block w-full mx-auto md:w-auto text-center"
+          >
+            <a
+              href={button.url}
+              class="rv-button rv-button-white block md:inline-block"
+            >
+              <div class="rv-button-top">
+                <span>{button.text}</span>
+              </div>
+              <div class="rv-button-bottom">
+                <span>{button.text}</span>
+              </div>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Services container -->
+    <div class="[&>*:not(:last-child)]:border-b dark:[&>*:not(:last-child)]:border-dark">
+      <!-- Loop through services and render a card for each -->
+      {services.map((service) => <ServiceRowV15 {...service} />)}
+    </div>
+  </div>
+</section>
