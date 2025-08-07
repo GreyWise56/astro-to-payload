@@ -1,0 +1,64 @@
+---
+// src/components/blocks/ProjectHero.astro
+
+/*
+================================================================================
+Component: ProjectHero
+Description: A hero section for a project details page, including social
+             links, a main image, and title/description.
+================================================================================
+*/
+
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+// --- Type Definitions ---
+export interface SocialLink {
+  url: string;
+  lightIcon: string;
+  darkIcon: string;
+  ariaLabel: string;
+}
+
+export interface Props {
+  socials: SocialLink[];
+  image: ImageMetadata;
+  imageAlt: string;
+  category: string;
+  title: string;
+  description: string;
+}
+
+const { socials, image, imageAlt, category, title, description } = Astro.props;
+---
+
+<section class="pt-32 sm:pt-40 md:pt-[180px] pb-14 md:pb-16 lg:pb-[88px] xl:pb-[100px]">
+  <div class="container">
+    <div class="grid grid-cols-1 lg:grid-cols-12 lg:justify-items-center items-center gap-8 pb-6 md:pb-10 lg:pb-20 xl:-ml-36 reveal-me">
+      <aside class="md:col-span-1 flex max-lg:flex-row lg:flex-col items-center gap-[30px]">
+        {
+          socials.map((social) => (
+            <a href={social.url} target="_blank" aria-label={social.ariaLabel}>
+              <div>
+                <span class="inline dark:hidden" set:html={social.lightIcon} />
+                <span class="hidden dark:inline" set:html={social.darkIcon} />
+              </div>
+            </a>
+          ))
+        }
+      </aside>
+      <figure class="lg:col-span-6 max-lg:w-full">
+        <Image src={image} alt={imageAlt} class="w-full" />
+      </figure>
+      <div class="lg:col-span-5">
+        <p class="font-poppins text-sm font-normal leading-6 text-secondary dark:text-backgroundBody tracking-[8px] uppercase text-left">
+          {category}
+        </p>
+        <h3 class="mt-1.5 sm:mt-4 xl:mt-5 mb-3.5 md:mb-4 text-4xl sm:text-[54px] sm:leading-[1.2] tracking-[-1.68px] text-left">
+          {title}
+        </h3>
+        <p class="max-lg:text-justify" set:html={description} />
+      </div>
+    </div>
+  </div>
+</section>

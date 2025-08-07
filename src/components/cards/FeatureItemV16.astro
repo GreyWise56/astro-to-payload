@@ -1,0 +1,25 @@
+---
+// src/components/cards/FeatureItemV16.astro
+
+/*
+================================================================================
+Component: FeatureItemV16
+Description: A card for a single feature item, displaying a title and
+             description.
+================================================================================
+*/
+
+export interface Props {
+  title: string;
+  description: string;
+}
+
+const { title, description } = Astro.props;
+---
+
+<div class="reveal-me py-2.5">
+  <h6>{title}</h6>
+  <p class="mt-1.5 tracking-[0.32px] leading-[1.6] text-base">
+    {description}
+  </p>
+</div>

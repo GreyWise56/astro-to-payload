@@ -1,0 +1,62 @@
+---
+// src/components/blocks/ProcessV8.astro
+
+/*
+================================================================================
+Component: ProcessV8
+Description: A block that displays a header and a grid of process steps.
+================================================================================
+*/
+
+import ProcessStepCardV8 from '../cards/ProcessStepCardV8.astro';
+import type { Props as ProcessStep } from '../cards/ProcessStepCardV8.astro';
+
+export interface Props {
+  badge: string;
+  heading: string;
+  subheading: string;
+  steps: ProcessStep[];
+  button: {
+    text: string;
+    url: string;
+  };
+}
+
+const { badge, heading, subheading, steps, button } = Astro.props;
+---
+
+<section
+  class="pb-14 pt-14 md:pb-16 md:pt-16 lg:pb-[88px] lg:pt-[88px] xl:pb-[100px] xl:pt-[100px]"
+>
+  <div class="container">
+    <!-- Header -->
+    <div class="text-center mb-10 md:mb-20">
+      <div class="rv-badge mb-3 reveal-me">
+        <span class="rv-badge-text">{badge}</span>
+      </div>
+      <h2 class="text-appear mb-3" set:html={heading}></h2>
+      <p class="text-appear">{subheading}</p>
+    </div>
+    <!-- Grid Cards -->
+    <div class="flex max-xl:flex-wrap gap-[30px] justify-center">
+      <!-- Loop through steps and render a card for each -->
+      {steps.map((step) => <ProcessStepCardV8 {...step} />)}
+    </div>
+    
+    <!-- CTA Button -->
+    <div class="text-center mt-7 md:mt-14 reveal-me">
+      <a
+        href={button.url}
+        class="rv-button rv-button-primary block md:inline-block w-full mx-auto md:w-auto"
+        aria-label="Start your social media growth journey with us"
+      >
+        <div class="rv-button-top">
+          <span>{button.text}</span>
+        </div>
+        <div class="rv-button-bottom text-nowrap">
+          <span>{button.text}</span>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>

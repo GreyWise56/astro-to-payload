@@ -1,0 +1,73 @@
+---
+// src/components/blocks/CaseStudiesV16.astro
+
+/*
+================================================================================
+Component: CaseStudiesV16
+Description: A block that displays a header and a staggered grid of case
+             studies.
+================================================================================
+*/
+
+import CaseStudyCardV16 from '../cards/CaseStudyCardV16.astro';
+import type { Props as CaseStudy } from '../cards/CaseStudyCardV16.astro';
+
+export interface Props {
+  heading: string;
+  subheading: string;
+  caseStudies: CaseStudy[];
+  button: {
+    text: string;
+    url: string;
+  };
+}
+
+const { heading, subheading, caseStudies, button } = Astro.props;
+---
+
+<section
+  class="pt-28 sm:pt-36 md:pt-[157px] pb-14 md:pb-16 lg:pb-[88px] xl:pb-[100px]"
+>
+  <div class="container">
+    <!-- Section Header -->
+    <div
+      class="flex flex-col md:flex-row gap-y-6 gap-x-10 justify-center lg:justify-start items-start md:items-end mb-10 md:mb-20"
+    >
+      <div class="w-full md:w-[55%] lg:w-[60%]">
+        <h2 class="text-appear mt-3 md:mt-4" set:html={heading}></h2>
+      </div>
+      <div class="w-full md:w-[45%] lg:w-[40%]">
+        <p class="text-appear md:text-right">
+          {subheading}
+        </p>
+
+        <ul class="justify-self-end max-md:w-full mt-5 md:mt-10 reveal-me">
+          <li
+            class="block md:inline-block w-full mx-auto md:w-auto text-center"
+          >
+            <a
+              href={button.url}
+              class="rv-button rv-button-white block md:inline-block"
+            >
+              <div class="rv-button-top">
+                <span>{button.text}</span>
+              </div>
+              <div class="rv-button-bottom">
+                <span>{button.text}</span>
+              </div>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <!-- Case Studies Grid -->
+  <div
+    class="grid grid-cols-1 max-w-[1430px] mx-auto px-4 md:px-[30px] md:grid-cols-2 gap-x-6 gap-y-14"
+  >
+    <!-- Loop through case studies and render a card for each -->
+    {caseStudies.map((study, index) => (
+        <CaseStudyCardV16 {...study} isStaggered={index % 2 !== 0} />
+    ))}
+  </div>
+</section>

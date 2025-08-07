@@ -1,0 +1,66 @@
+---
+// src/components/cards/BlogCardV16.astro
+
+/*
+================================================================================
+Component: BlogCardV16
+Description: A card for a single blog post, featuring an image with an
+             overlapping content box.
+================================================================================
+*/
+
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+export interface Props {
+  image: ImageMetadata;
+  altText: string;
+  category: string;
+  title: string;
+  url: string;
+}
+
+const { image, altText, category, title, url } = Astro.props;
+---
+
+<div class="relative group">
+  <div>
+    <figure class="w-full reveal-me overflow-hidden">
+      <Image
+        src={image}
+        alt={altText}
+        class="w-full h-auto object-cover transition-all duration-500 group-hover:scale-125 group-hover:rotate-3"
+      />
+    </figure>
+
+    <div
+      class="absolute top-[22%] sm:top-[38%] md:top-1/2 lg:top-3/4 inset-x-[5px] mx-auto bg-backgroundBody dark:bg-dark px-6 pt-6 pb-8 max-w-[calc(100%-10px)] reveal-me"
+    >
+      <div class="rv-badge mb-3">
+        <span class="rv-badge-text">{category}</span>
+      </div>
+
+      <div class="blog-title mb-7">
+        <a href={url}>
+          <h3 class="text-[34px] lg:leading-[1.05] font-normal">
+            {title}
+          </h3>
+        </a>
+      </div>
+
+      <div class="w-[90%] mx-auto md:w-auto md:mx-0">
+        <a
+          href={url}
+          class="rv-button rv-button-white rv-button-sm-v2 block md:inline-block text-center"
+        >
+          <div class="rv-button-top">
+            <span>Read More</span>
+          </div>
+          <div class="rv-button-bottom">
+            <span>Read More</span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>

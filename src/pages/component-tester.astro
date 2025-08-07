@@ -1,88 +1,93 @@
 ---
 // src/pages/component-tester.astro
+
+/*
+================================================================================
+Page: Component Tester
+Description: A page for testing components for project-details-02.
+             Current Test: All page blocks.
+================================================================================
+*/
+
 import BaseLayout from '../layouts/BaseLayout.astro';
-import HeroV20 from '../components/blocks/HeroV20.astro';
-import AboutV20 from '../components/blocks/AboutV20.astro';
-import SocialMediaSolutionsV20 from '../components/blocks/SocialMediaSolutionsV20.astro';
-import CtaV20 from '../components/blocks/CtaV20.astro';
-import type { Props as HeroV20Props } from '../components/blocks/HeroV20.astro';
-import type { Props as AboutV20Props } from '../components/blocks/AboutV20.astro';
-import type { Props as SocialMediaSolutionsV20Props } from '../components/blocks/SocialMediaSolutionsV20.astro';
-import type { Props as CtaV20Props } from '../components/blocks/CtaV20.astro';
+import ProjectHero from '../components/blocks/ProjectHero.astro';
+import ProjectContent from '../components/blocks/ProjectContent.astro';
+import NextProject from '../components/blocks/NextProject.astro';
+import { Image } from 'astro:assets';
 
-// --- Asset Imports ---
-import gradientBg from '../assets/images/hero-gradient-background-02.png';
-import agent1 from '../assets/images/agent/15.png';
-import agent2 from '../assets/images/agent/12.png';
-import agent3 from '../assets/images/agent/13.png';
-import ctaAgent1 from '../assets/images/agent/15.png';
-import ctaAgent2 from '../assets/images/agent/02.jpg';
-import ctaAgent3 from '../assets/images/agent/03.jpg';
+// Import assets
+import heroImage from '../assets/images/services-2/services-1.png';
+import contentImage from '../assets/images/project-details/project-details-2-banner.png';
+import nextProjectImage from '../assets/images/services/services-2.png';
+import gradientBg from '../assets/images/gradient-bg.png';
 
-// --- Page Data ---
-const heroData: HeroV20Props = {
-    badge: "Social Media",
-    headingPart1: "Your brand's growth engine",
-    italicHeading: "social media",
-    headingPart2: "that converts.",
-    sliderImages: [
-        { src: agent1, alt: "Social media strategy example" },
-        { src: agent2, alt: "Content creation example" },
-        { src: agent3, alt: "Engagement analytics example" }
-    ],
-    description: "We help brands dominate social media with viral content, high-converting ads, and data-driven strategies.",
-    button: {
-        text: "Get a Free Call",
-        url: "/contact"
+
+// --- Data for ProjectHero ---
+const projectHeroData = {
+  socials: [
+    {
+      url: 'https://www.facebook.com/staticmania',
+      lightIcon: '<svg xmlns="http://www.w3.org/2000/svg" width="28" height="29" viewBox="0 0 28 29" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M2.80078 14.3055C2.80078 19.8738 6.84492 24.504 12.1341 25.443V17.3538H9.33412V14.243H12.1341V11.7538C12.1341 8.95377 13.9382 7.39883 16.49 7.39883C17.2982 7.39883 18.17 7.52297 18.9782 7.64711V10.5096H17.5474C16.1782 10.5096 15.8674 11.1938 15.8674 12.0655V14.243H18.8542L18.3566 17.3538H15.8674V25.443C21.1566 24.504 25.2008 19.8748 25.2008 14.3055C25.2008 8.11097 20.1608 3.04297 14.0008 3.04297C7.84078 3.04297 2.80078 8.11097 2.80078 14.3055Z" fill="black"/></svg>',
+      darkIcon: '<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 28 28" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M2.80078 14.0634C2.80078 19.6316 6.84492 24.2618 12.1341 25.2008V17.1116H9.33412V14.0008H12.1341V11.5116C12.1341 8.71158 13.9382 7.15664 16.49 7.15664C17.2982 7.15664 18.17 7.28078 18.9782 7.40492V10.2674H17.5474C16.1782 10.2674 15.8674 10.9516 15.8674 11.8233V14.0008H18.8542L18.3566 17.1116H15.8674V25.2008C21.1566 24.2618 25.2008 19.6326 25.2008 14.0634C25.2008 7.86878 20.1608 2.80078 14.0008 2.80078C7.84078 2.80078 2.80078 7.86878 2.80078 14.0634Z" fill="white"/></svg>',
+      ariaLabel: 'Facebook',
     },
-    gradientBackground: gradientBg
+  ],
+  image: heroImage,
+  imageAlt: 'Epicurean Elegance project image',
+  category: 'Category',
+  title: 'Epicurean Elegance',
+  description: "Many desktop publishing software and web design tools now use Lorem Ipsum as placeholder text by default, and a search for 'lorem ipsum' will reveal numerous websites still in development.",
 };
 
-const aboutData: AboutV20Props = {
-    badge: "About Us",
-    heading: "Your social media growth partners.",
-    description: "Social media success requires more than just posts—it needs strategy, creativity, and execution. We bring all three.",
-    button: {
-        text: "Meet the Team",
-        url: "/team"
-    }
-};
-
-const solutionsData: SocialMediaSolutionsV20Props = {
-    heading: `Social media <span class="font-instrument italic">solutions for</span> <span class="font-instrument italic">every brand.</span>`,
-    subheading: "Our agency has been the trusted partner for businesses looking to maximize their social media presence. Our comprehensive suite of solutions includes:",
-    button: { text: "Explore Our Services", url: "/services" },
-    solutions: [
-        { number: "01", title: "Content creation", description: "Engaging posts, reels, TikToks, and high-quality visuals." },
-        { number: "02", title: "Influencer marketing", description: "Collaborate with top influencers for brand awareness." },
-        { number: "03", title: "Paid social ads", description: "Facebook, Instagram, TikTok, and LinkedIn ads for maximum ROI." },
-        { number: "04", title: "Community management", description: "Engage with followers and build lasting relationships." },
-        { number: "05", title: "Analytics & Reporting", description: "Detailed insights to measure campaign success." },
-        { number: "06", title: "Strategy Development", description: "Tailored strategies for your brand's growth." },
-        { number: "07", title: "Crisis Management", description: "Protect your brand during challenging times." },
-        { number: "08", title: "Training & Workshops", description: "Empower your team with social media skills." }
-    ]
-};
-
-const ctaData: CtaV20Props = {
-    headingPart1: "Let’s Scale",
-    headingPart2: "Brand",
-    subheading: "on Social Media!",
-    sliderImages: [
-        { src: ctaAgent1, alt: "Slide 1" },
-        { src: ctaAgent2, alt: "Slide 2" },
-        { src: ctaAgent3, alt: "Slide 3" }
-    ],
-    button: {
-        text: "Get a Free Strategy Call",
-        url: "/contact"
-    }
-};
+// --- Data for NextProject ---
+const nextProjectData = {
+    backgroundImage: gradientBg,
+    heading: 'Next project',
+    projectUrl: '#',
+    image: nextProjectImage,
+    imageAlt: 'Fashion Forward project preview',
+    label: 'Project',
+    title: 'Fashion Forward',
+    year: '2024'
+}
 ---
 
-<BaseLayout title="Component Tester" description="A page for testing new components.">
-    <HeroV20 {...heroData} />
-    <AboutV20 {...aboutData} />
-    <SocialMediaSolutionsV20 {...solutionsData} />
-    <CtaV20 {...ctaData} />
+<BaseLayout
+  title="Component Tester | Project Details 02"
+  description="A test page for the Project Details 02 components."
+>
+  <ProjectHero {...projectHeroData} />
+
+  <ProjectContent>
+    <div class="container">
+      <p class="reveal-me">
+        The web is a dynamic and flexible platform that enables users to design,
+        build, and launch websites without requiring coding skills. Its
+        user-friendly interface, robust features, and adaptability have made it
+        popular among designers, developers, and businesses alike.
+      </p>
+      <article class="reveal-me">
+        <h3>Exploring Web: An Overview of Its Features</h3>
+        <p>
+          At its core, Web is a platform for web design and development that
+          merges the ease of a visual design tool with the functionality of a
+          content management system (CMS). It allows users to build responsive,
+          interactive websites without needing to write any code.
+        </p>
+      </article>
+      <figure class="reveal-me">
+        <Image src={contentImage} alt="Box Mockup" />
+      </figure>
+      <article class="reveal-me">
+        <h3>Who Is Website Designed For?</h3>
+        <p>
+          Website caters to a diverse audience, offering a range of features to
+          suit different users:
+        </p>
+      </article>
+    </div>
+  </ProjectContent>
+
+  <NextProject {...nextProjectData}/>
+
 </BaseLayout>

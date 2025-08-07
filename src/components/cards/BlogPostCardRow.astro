@@ -1,0 +1,79 @@
+---
+// src/components/cards/BlogPostCardRow.astro
+
+/*
+================================================================================
+Component: BlogPostCardRow
+Description: A card for a single blog post in a full-width row layout.
+================================================================================
+*/
+
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import arrowIconLight from '../../assets/images/icons/top-arrow.svg';
+import arrowIconDark from '../../assets/images/icons/top-arrow-dark.svg';
+
+export interface Props {
+  image: ImageMetadata;
+  altText: string;
+  date: string;
+  title: string;
+  readTime: string;
+  url: string;
+}
+
+const { image, altText, date, title, readTime, url } = Astro.props;
+---
+
+<article
+  class="border dark:border-dark p-7 lg:p-10 flex flex-col-reverse gap-y-12 lg:flex-row justify-center md:justify-normal items-center reveal-me underline-hover-effect group"
+>
+  <div class="max-lg:self-center">
+    <p
+      class="text-sm leading-[1.1] tracking-[1.12px] uppercase font-poppins font-normal"
+    >
+      {date}
+    </p>
+    <a href={url}>
+      <div class="blog-title mt-5 mb-6 lg:mb-10">
+        <h3
+          class="text[27px] md:text-4xl md:leading-[1.2] md:tracking-[-0.72px]"
+        >
+          {title}
+        </h3>
+      </div>
+    </a>
+
+    <a href={url} class="rv-button rv-button-primary2">
+      <div class="rv-button-top !text-center flex items-center">
+        <span class="pr-1">{readTime}</span>
+        <Image
+          class="inline dark:hidden"
+          src={arrowIconLight}
+          alt="Arrow Icon"
+        />
+        <Image
+          class="hidden dark:inline"
+          src={arrowIconDark}
+          alt="Arrow Icon"
+        />
+      </div>
+      <div class="rv-button-bottom !text-center flex items-center">
+        <span class="pr-1">{readTime}</span>
+        <Image
+          class="inline"
+          src={arrowIconLight}
+          alt="Arrow Icon"
+        />
+      </div>
+    </a>
+  </div>
+
+  <figure class="overflow-hidden w-full lg:min-w-[464px]">
+    <Image
+      src={image}
+      alt={altText}
+      class="w-full h-full transition-all duration-500 group-hover:scale-125 group-hover:rotate-3"
+    />
+  </figure>
+</article>

@@ -1,0 +1,70 @@
+---
+// src/components/blocks/WorkflowProcess.astro
+
+/*
+================================================================================
+Component: WorkflowProcess
+Description: A block that displays a header and a visual timeline of process
+             steps.
+================================================================================
+*/
+
+import ProcessStepCardTimeline from '../cards/ProcessStepCardTimeline.astro';
+import type { Props as ProcessStep } from '../cards/ProcessStepCardTimeline.astro';
+
+export interface Props {
+  heading: string;
+  steps: ProcessStep[];
+  button: {
+    text: string;
+    url: string;
+  };
+}
+
+const { heading, steps, button } = Astro.props;
+---
+
+<section
+  class="pt-14 md:pt-16 lg:pt-[88px] xl:pt-[100px] pb-14 md:pb-16 lg:pb-[88px] xl:pb-[100px]"
+>
+  <div class="container">
+    <!-- Section Title -->
+    <h3
+      class="max-md:text-3xl md:text-6xl lg:text[56px] lg:leading-[1.2] lg:tracking-[-1.68px] text-center mb-14 md:mb-20 text-appear"
+    >
+      {heading}
+    </h3>
+
+    <!-- Process Timeline Container -->
+    <div
+      class="relative after:content-[''] after:absolute max-md:after:top-16 md:after:top-[105px] after:bg-secondary/10 dark:after:bg-backgroundBody/10 after:block after:w-full after:h-[1px] after:-z-10 max-lg:before:content-[''] max-lg:before:absolute max-md:bottom-5 max-md:before:bottom-[137px] max-lg:before:bottom-[155px] max-lg:before:bg-secondary/10 dark:max-lg:before:bg-backgroundBody/10 max-lg:before:block max-lg:before:w-full max-lg:before:h-[1px] max-lg:before:-z-10 reveal-me"
+    >
+      <!-- Process Steps Grid -->
+      <div
+        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-[30px] justify-between items-center"
+      >
+        <!-- Loop through steps and render a card for each -->
+        {steps.map((step) => <ProcessStepCardTimeline {...step} />)}
+      </div>
+    </div>
+
+    <!-- Process Buttons -->
+    <div
+      class="flex justify-center items-center mt-7 md:mt-14 list-none reveal-me"
+    >
+      <div class="block md:inline-block w-full mx-auto md:w-auto text-center">
+        <a
+          href={button.url}
+          class="rv-button rv-button-sm rv-button-primary block md:inline-block"
+        >
+          <div class="rv-button-top">
+            <span>{button.text}</span>
+          </div>
+          <div class="rv-button-bottom">
+            <span class="text-nowrap">{button.text}</span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>

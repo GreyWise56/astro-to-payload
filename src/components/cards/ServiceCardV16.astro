@@ -1,0 +1,81 @@
+---
+// src/components/cards/ServiceCardV16.astro
+
+/*
+================================================================================
+Component: ServiceCardV16
+Description: A card for a single marketing service, displaying an icon, title,
+             description, and an animated arrow button.
+================================================================================
+*/
+
+export interface Props {
+  iconSvg: string;
+  title: string;
+  description: string;
+  url: string;
+}
+
+const { iconSvg, title, description, url } = Astro.props;
+---
+
+<div
+  class="px-6 lg:px-[30px] py-9 lg:py-[50px] border dark:border-dark group reveal-me"
+>
+  <a href={url}>
+    <span set:html={iconSvg} />
+    <h5 class="mt-4 lg:mt-6 mb-2 lg:mb-3">{title}</h5>
+    <p class="mb-20 lg:mb-[106px]">
+      {description}
+    </p>
+
+    <div
+      class="border dark:border-dark p-8 max-lg:size-16 lg:w-[92px] lg:h-24 flex items-center justify-center group-hover:bg-secondary dark:group-hover:bg-backgroundBody transition-colors duration-[400ms] ease-[cubic-bezier(0.4,0,0.2,1)] overflow-hidden"
+    >
+      <span
+        class="translate-x-4 group-hover:translate-x-20 transition-transform duration-[400ms]"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="33"
+          height="32"
+          viewBox="0 0 33 32"
+          fill="none"
+        >
+          <path
+            d="M5.11377 16H27.1138"
+            class="stroke-secondary dark:stroke-backgroundBody"
+            stroke-linecap="round"
+            stroke-linejoin="round"></path>
+          <path
+            d="M18.1138 7L27.1138 16L18.1138 25"
+            class="stroke-secondary dark:stroke-backgroundBody"
+            stroke-linecap="round"
+            stroke-linejoin="round"></path>
+        </svg>
+      </span>
+      <span
+        class="-translate-x-24 group-hover:-translate-x-[18px] transition-transform duration-[400ms]"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="33"
+          height="32"
+          viewBox="0 0 33 32"
+          fill="none"
+        >
+          <path
+            d="M5.11377 16H27.1138"
+            class="stroke-backgroundBody dark:stroke-secondary"
+            stroke-linecap="round"
+            stroke-linejoin="round"></path>
+          <path
+            d="M18.1138 7L27.1138 16L18.1138 25"
+            class="stroke-backgroundBody dark:stroke-secondary"
+            stroke-linecap="round"
+            stroke-linejoin="round"></path>
+        </svg>
+      </span>
+    </div>
+  </a>
+</div>

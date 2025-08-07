@@ -1,0 +1,27 @@
+---
+// src/components/cards/ServiceFeatureCard.astro
+
+/*
+================================================================================
+Component: ServiceFeatureCard
+Description: A card for a single feature of a service, displaying a title and a
+             list of points.
+================================================================================
+*/
+
+export interface Props {
+  title: string;
+  features: string[];
+}
+
+const { title, features } = Astro.props;
+---
+
+<div class="py-4 md:py-[30px] pr-4 md:pr-[30px] reveal-me">
+  <h5 class="mb-3">{title}</h5>
+  <ul>
+    {features.map(feature => (
+        <li class="text-secondary/70 dark:text-backgroundBody/70">{feature}</li>
+    ))}
+  </ul>
+</div>

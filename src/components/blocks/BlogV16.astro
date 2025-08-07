@@ -1,0 +1,76 @@
+---
+// src/components/blocks/BlogV16.astro
+
+/*
+================================================================================
+Component: BlogV16
+Description: A block that displays a header and a grid of the latest blog
+             posts.
+================================================================================
+*/
+
+import BlogCardV16 from '../cards/BlogCardV16.astro';
+import type { Props as BlogPost } from '../cards/BlogCardV16.astro';
+
+export interface Props {
+  heading: string;
+  subheading: string;
+  button: {
+    text: string;
+    url: string;
+  };
+  posts: BlogPost[];
+}
+
+const { heading, subheading, button, posts } = Astro.props;
+---
+
+<section
+  class="mt-14 md:mt-16 lg:mt-[88px] xl:mt-[100px] pt-14 md:pt-16 lg:pt-[88px] xl:pt-[100px] mb-14 md:mb-[272px] lg:mb-[260px] xl:mb-[250px] bg-[#DDF3EC] relative w-full"
+>
+  <div class="container">
+    <!-- Section Header -->
+    <div
+      class="flex flex-col md:flex-row gap-x-10 gap-y-4 justify-center lg:justify-between items-start mb-16 lg:mb-24"
+    >
+      <!-- Title Area -->
+      <div class="flex-1 md:self-start">
+        <h2 class="text-appear dark:text-secondary" set:html={heading}></h2>
+      </div>
+
+      <!-- Description -->
+      <div class="w-full md:max-w-[370px] lg:max-w-[470px] md:self-end">
+        <p
+          class="text-appear dark:text-colorText max-w-lg md:text-right md:place-self-end"
+        >
+          {subheading}
+        </p>
+        <ul class="justify-self-end max-md:w-full mt-5 md:mt-10 reveal-me">
+          <li
+            class="block md:inline-block w-full mx-auto md:w-auto text-center"
+          >
+            <a
+              href={button.url}
+              class="rv-button rv-button-white !bg-[#DDF3EC] block md:inline-block"
+            >
+              <div
+                class="rv-button-top dark:!border-secondary/30 !bg-[#DDF3EC]"
+              >
+                <span class="!text-secondary">{button.text}</span>
+              </div>
+              <div class="rv-button-bottom">
+                <span>{button.text}</span>
+              </div>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Cards Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 relative">
+      <!-- Loop through posts and render a card for each -->
+      {posts.map((post) => <BlogCardV16 {...post} />)}
+    </div>
+  </div>
+</section>

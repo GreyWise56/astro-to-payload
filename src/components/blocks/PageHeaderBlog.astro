@@ -1,0 +1,55 @@
+---
+// src/components/blocks/PageHeaderBlog.astro
+
+/*
+================================================================================
+Component: PageHeaderBlog
+Description: A header section for a blog page, featuring a badge, title, and
+             description.
+================================================================================
+*/
+
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+export interface Props {
+  badge: string;
+  title: string;
+  description: string;
+  gradientBackground: ImageMetadata;
+}
+
+const { badge, title, description, gradientBackground } = Astro.props;
+---
+
+<section
+  class="pt-28 sm:pb-28 max-md:pb-16 md:py-[155px] lg:py-[177px] relative z-50 overflow-hidden"
+>
+  <div
+    id="hero-gradient-wrapper"
+    class="absolute w-full h-full top-0 left-0 -z-10 blur-[35px] md:blur-[60px] scale-75"
+  >
+    <!-- Gradient Background Image: Positioned centrally with responsive sizing -->
+    <Image
+      src={gradientBackground}
+      alt="hero-gradient-background"
+      id="hero-gradient"
+      class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
+    />
+  </div>
+
+  <!-- Content Container -->
+  <div class="container">
+    <!-- Centered Content with Animation -->
+    <div class="text-center reveal-me">
+      <!-- Badge Component -->
+      <div class="rv-badge">
+        <span class="rv-badge-text">{badge}</span>
+      </div>
+
+      <!-- Title and Description -->
+      <h1 class="mt-3.5 sm:mt-5 lg:mt-9 mb-3 sm:mb-4 lg:mb-7">{title}</h1>
+      <p set:html={description}></p>
+    </div>
+  </div>
+</section>

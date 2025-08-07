@@ -1,0 +1,74 @@
+---
+// src/components/cards/BlogPostCardGrid.astro
+
+/*
+================================================================================
+Component: BlogPostCardGrid
+Description: A card for a single blog post in a grid layout.
+================================================================================
+*/
+
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import arrowIconLight from '../../assets/images/icons/top-arrow.svg';
+import arrowIconDark from '../../assets/images/icons/top-arrow-dark.svg';
+
+export interface Props {
+  image: ImageMetadata;
+  altText: string;
+  date: string;
+  title: string;
+  readTime: string;
+  url: string;
+}
+
+const { image, altText, date, title, readTime, url } = Astro.props;
+---
+
+<div class="max-w-[370px] reveal-me underline-hover-effect group">
+  <figure class="overflow-hidden">
+    <Image
+      src={image}
+      alt={altText}
+      class="w-full h-full transition-all duration-500 group-hover:scale-125 group-hover:rotate-3"
+    />
+  </figure>
+  <p
+    class="text-sm leading-[1.1] tracking-[1.12px] uppercase font-poppins font-normal mt-[30px] mb-5"
+  >
+    {date}
+  </p>
+  <a href={url}>
+    <div class="blog-title mb-9">
+      <h3
+        class="text[25px] md:text-3xl lg:text-4xl lg:leading-[1.2] lg:tracking-[-0.72px]"
+      >
+        {title}
+      </h3>
+    </div>
+  </a>
+
+  <a href={url} class="rv-button rv-button-primary2">
+    <div class="rv-button-top !text-center flex items-center">
+      <span class="pr-1">{readTime}</span>
+      <Image
+        class="inline dark:hidden"
+        src={arrowIconLight}
+        alt="Arrow Icon"
+      />
+      <Image
+        class="hidden dark:inline"
+        src={arrowIconDark}
+        alt="Arrow Icon"
+      />
+    </div>
+    <div class="rv-button-bottom !text-center flex items-center">
+      <span class="pr-1">{readTime}</span>
+      <Image
+        class="inline"
+        src={arrowIconLight}
+        alt="Arrow Icon"
+      />
+    </div>
+  </a>
+</div>

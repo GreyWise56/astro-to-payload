@@ -1,0 +1,67 @@
+---
+// src/components/blocks/ServicesV16.astro
+
+/*
+================================================================================
+Component: ServicesV16
+Description: A block that displays a header and a grid of marketing services.
+================================================================================
+*/
+
+import ServiceCardV16 from '../cards/ServiceCardV16.astro';
+import type { Props as Service } from '../cards/ServiceCardV16.astro';
+
+export interface Props {
+  badge: string;
+  heading: string;
+  description: string;
+  services: Service[];
+  button: {
+    text: string;
+    url: string;
+  };
+}
+
+const { badge, heading, description, services, button } = Astro.props;
+---
+
+<section
+  class="pb-14 pt-14 md:pb-16 md:pt-16 lg:pb-[88px] lg:pt-[88px] xl:pb-[100px] xl:pt-[100px] overflow-hidden"
+>
+  <!-- section header -->
+  <div class="text-center mb-8 md:mb-16">
+    <div class="rv-badge reveal-me mb-3">
+      <span class="rv-badge-text">{badge}</span>
+    </div>
+    <h2 class="text-appear mb-3" set:html={heading}></h2>
+    <p class="text-appear lg:max-w-[770px] mx-auto">
+      {description}
+    </p>
+  </div>
+  <!-- Main Section  -->
+
+  <div
+    class="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-[30px] max-w-[1600px] px-4 md:px-[30px] mx-auto"
+  >
+    <!-- Loop through services and render a card for each -->
+    {services.map((service) => <ServiceCardV16 {...service} />)}
+  </div>
+
+  <ul
+    class="flex justify-center max-md:w-full mt-7 md:mt-14 reveal-me max-md:px-4 mx-auto"
+  >
+    <li class="block md:inline-block w-full mx-auto md:w-auto text-center">
+      <a
+        href={button.url}
+        class="rv-button rv-button-white block md:inline-block"
+      >
+        <div class="rv-button-top">
+          <span>{button.text}</span>
+        </div>
+        <div class="rv-button-bottom">
+          <span>{button.text}</span>
+        </div>
+      </a>
+    </li>
+  </ul>
+</section>

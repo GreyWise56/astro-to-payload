@@ -1,0 +1,37 @@
+---
+// src/components/blocks/BlogDetailsContent.astro
+
+/*
+================================================================================
+Component: BlogDetailsContent
+Description: The main content wrapper for a blog post. It includes the featured
+             image and provides named slots for the sidebar and article body.
+================================================================================
+*/
+
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+export interface Props {
+  featuredImage: ImageMetadata;
+  featuredImageAlt: string;
+}
+
+const { featuredImage, featuredImageAlt } = Astro.props;
+---
+
+<section class="pb-14 md:pb-16 lg:pb-[88px] xl:pb-[100px]">
+  <div class="max-w-[1440px] mx-auto px-10 md:px-20">
+    <figure class="w-full reveal-me">
+      <Image src={featuredImage} alt={featuredImageAlt} class="w-full" />
+    </figure>
+
+    <div
+      class="flex flex-col gap-10 lg:flex-row justify-start mt-12 md:mt-[60px] pb-14 md:pb-16 lg:pb-[88px] xl:pb-[100px]"
+    >
+      <slot name="sidebar" />
+
+      <slot name="article" />
+    </div>
+  </div>
+</section>

@@ -1,0 +1,90 @@
+---
+// src/components/blocks/BlogSidebar.astro
+
+/*
+================================================================================
+Component: BlogSidebar
+Description: A sidebar for blog posts, containing a table of contents and
+             social sharing links.
+================================================================================
+*/
+
+export interface TocItem {
+  text: string;
+  url: string;
+}
+
+export interface SocialLink {
+  url: string;
+  lightIcon: string; // SVG path for light mode
+  darkIcon: string; // SVG path for dark mode
+  ariaLabel: string;
+}
+
+export interface Props {
+  tableOfContents: TocItem[];
+  socialLinks: SocialLink[];
+}
+
+const { tableOfContents, socialLinks } = Astro.props;
+---
+
+<aside class="min-w-[275px] flex-1">
+  <div class="sticky top-24 max-md:mb-7">
+    <div class="reveal-me">
+      <h3 class="max-sm:text-[35px] max-md:text-[40px] md:text-[32px] mt-2 mb-4 lg:mb-10">
+        Table of contents
+      </h3>
+      <ul class="[&>*:not(:last-child)]:mb-2 md:[&>*:not(:last-child)]:mb-4">
+        {
+          tableOfContents.map((item) => (
+            <li>
+              <a
+                href={item.url}
+                class="text-xl normal-case font-normal leading-7 dark:text-dark-100 hover:font-medium hover:text-secondary dark:hover:text-backgroundBody transition-all lenis-scroll-to"
+              >
+                {item.text}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+
+      <h3 class="max-sm:text-[35px] max-md:text-[40px] md:text-[32px] mt-5 sm:mt-7 md:mt-12 lg:mt-20 mb-7">
+        Share
+      </h3>
+      <ul class="flex gap-5 items-center max-lg:mb-7">
+        {
+          socialLinks.map((link) => (
+            <li class="border-2 border-secondary dark:border-dark inline-block rounded-full w-10 h-10 hover:bg-primary duration-300 relative">
+              <a href={link.url} target="_blank" aria-label={link.ariaLabel}>
+                <span class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 inline dark:hidden">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    fill="#000"
+                    viewBox="0 0 256 256"
+                  >
+                    <path d={link.lightIcon} />
+                  </svg>
+                </span>
+                <span class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 dark:inline hidden">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    fill="#fff"
+                    viewBox="0 0 256 256"
+                  >
+                    <path d={link.darkIcon} />
+                  </svg>
+                </span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+</aside>

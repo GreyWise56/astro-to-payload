@@ -1,0 +1,36 @@
+---
+// src/components/cards/ProcessStepCardTimeline.astro
+
+/*
+================================================================================
+Component: ProcessStepCardTimeline
+Description: A card for a single step in a visual timeline process, showing
+             a large number, title, and description.
+================================================================================
+*/
+
+export interface Props {
+  stepNumber: string;
+  title: string;
+  description: string;
+}
+
+const { stepNumber, title, description } = Astro.props;
+---
+
+<div class="text-center reveal-me">
+  <!-- Step Number with Dot -->
+  <span
+    class="max-md:text-3xl md:text-[64px] md:leading-[1.2] md:tracking-[-1.92px] relative after:content-[''] after:absolute after:w-5 after:h-5 after:rounded-full after:bg-secondary dark:after:bg-backgroundBody after:left-[50%] after:-translate-x-[50%] after:-bottom-[37px] after:z-50"
+  >
+    {stepNumber}
+  </span>
+  <h3
+    class="max-md:text-3xl md:text-[56PX] md:leading-[1.2] md:tracking-[-1.68px] mt-16 mb-5"
+  >
+    {title}
+  </h3>
+  <p class="text-base leading-[1.4] tracking-[0.32px] text-left">
+    {description}
+  </p>
+</div>

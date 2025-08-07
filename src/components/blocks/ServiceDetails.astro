@@ -1,0 +1,54 @@
+---
+// src/components/blocks/ServiceDetails.astro
+
+/*
+================================================================================
+Component: ServiceDetails
+Description: A block that provides detailed information about a service,
+             including a main image and a list of features.
+================================================================================
+*/
+
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import ServiceFeatureCard from '../cards/ServiceFeatureCard.astro';
+import type { Props as ServiceFeature } from '../cards/ServiceFeatureCard.astro';
+
+export interface Props {
+  mainImage: ImageMetadata;
+  altText: string;
+  heading: string;
+  featureGroups: ServiceFeature[];
+}
+
+const { mainImage, altText, heading, featureGroups } = Astro.props;
+---
+
+<section class="pb-14 md:pb-16 lg:pb-[88px] xl:pb-[100px]">
+  <div class="container">
+    <div class="flex flex-col gap-8 lg:flex-row">
+      <!-- Main Content -->
+      <article class="project-details-body w-full">
+        <figure
+          class="reveal-me flex justify-center items-center pb-14 md:pb-16 lg:pb-[88px] xl:pb-[100px]"
+        >
+          <Image
+            src={mainImage}
+            alt={altText}
+          />
+        </figure>
+        <div class="pt-14 md:pt-16 lg:pt-[88px] xl:pt-[100px]">
+          <h2 class="text-center mb-8 md:mb-16 reveal-me" set:html={heading}>
+          </h2>
+
+          <div
+            class="[&>*:not(:first-child)]:border-t dark:[&>*:not(:first-child)]:border-dark"
+          >
+            <!-- Loop through feature groups and render a card for each -->
+            {featureGroups.map((group) => <ServiceFeatureCard {...group} />)}
+          </div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
