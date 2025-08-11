@@ -1,0 +1,329 @@
+---
+// src/pages/builder.astro
+// 🎨 JAM VISUAL BUILDER
+---
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0" />
+    <title>JAM Builder Pro - Visual Page Builder</title>
+    <link rel="icon" type="image/svg+xml" href="/assets/images/favicon.svg" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link href="/assets/css/main.css" rel="stylesheet" />
+
+    <style>
+      * { box-sizing: border-box; }
+      body { margin: 0; padding: 0; font-family: 'Inter', system-ui, sans-serif; background: #f8fafc; overflow: hidden; }
+      .builder-container { display: grid; grid-template-columns: 340px 1fr 400px; height: 100vh; background: #f8fafc; }
+      .component-library { background: white; border-right: 1px solid #e2e8f0; overflow-y: auto; display: flex; flex-direction: column; box-shadow: 4px 0 12px rgba(0,0,0,0.05); }
+      .library-header { padding: 2rem 1.5rem 1.5rem; border-bottom: 1px solid #e2e8f0; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; text-align: center; }
+      .library-title { font-size: 1.5rem; font-weight: 800; margin-bottom: 0.5rem; text-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+      .library-subtitle { font-size: 0.9rem; opacity: 0.9; font-weight: 500; }
+      .library-content { flex: 1; padding: 1.5rem; }
+      .component-category { margin-bottom: 2.5rem; }
+      .category-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; cursor: pointer; user-select: none; padding: 0.5rem 0; }
+      .category-title { font-size: 0.9rem; font-weight: 700; color: #374151; text-transform: uppercase; letter-spacing: 0.05em; }
+      .category-count { font-size: 0.75rem; color: #6b7280; background: #f3f4f6; padding: 0.25rem 0.75rem; border-radius: 20px; font-weight: 600; }
+      .component-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+      .component-item { position: relative; aspect-ratio: 16/11; background: #f9fafb; border: 2px solid #e5e7eb; border-radius: 12px; cursor: grab; transition: all .3s cubic-bezier(.4,0,.2,1); overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,.06); }
+      .component-item:hover { border-color: #3b82f6; transform: translateY(-4px); box-shadow: 0 12px 30px rgba(59,130,246,.15); }
+      .component-item.dragging { opacity: .6; cursor: grabbing; transform: rotate(5deg) scale(.95); z-index: 1000; }
+      .component-thumbnail { width: 100%; height: 75%; position: relative; overflow: hidden; border-radius: 10px 10px 0 0; }
+      .component-thumbnail.hero { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+      .component-thumbnail.about { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+      .component-thumbnail.services { background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); }
+      .component-thumbnail.blog { background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); }
+      .component-thumbnail.cta { background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%); }
+      .component-name { position: absolute; bottom: 0; left: 0; right: 0; background: rgba(255,255,255,0.98); backdrop-filter: blur(12px); padding: .75rem; font-size: .8rem; font-weight: 600; color: #374151; text-align: center; border-radius: 0 0 10px 10px; }
+
+      .canvas-area { background: #f1f5f9; display: flex; flex-direction: column; }
+      .canvas-header { background: white; border-bottom: 1px solid #e2e8f0; padding: 1.5rem 2rem; display: flex; align-items: center; gap: 1.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+      .page-title-input { font-size: 1.5rem; font-weight: 700; border: none; background: transparent; color: #1e293b; flex: 1; min-width: 250px; outline: none; }
+      .page-title-input:focus { color: #3b82f6; }
+      .page-title-input::placeholder { color: #94a3b8; font-weight: 500; }
+      .canvas-toolbar { display: flex; align-items: center; gap: 1rem; }
+      .btn { padding: .75rem 1.5rem; border: none; border-radius: 10px; font-size: .9rem; font-weight: 600; cursor: pointer; transition: all .3s; display: inline-flex; align-items: center; gap: .5rem; box-shadow: 0 2px 8px rgba(0,0,0,.1); }
+      .btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,.15); }
+      .btn-secondary { background: #f8fafc; color: #475569; border: 1px solid #e2e8f0; }
+      .btn-secondary:hover { background: #e2e8f0; color: #334155; }
+      .btn-success { background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; }
+      .canvas-content { flex: 1; padding: 2rem; overflow-y: auto; position: relative; overscroll-behavior: contain; } /* 👈 keeps scrolling in middle column */
+      .page-preview { background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); overflow: hidden; max-width: 1400px; margin: 0 auto; min-height: 85vh; position: relative; }
+      .drop-zone { min-height: 400px; border: 3px dashed #cbd5e1; border-radius: 16px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #64748b; font-size: 1.1rem; margin: 3rem; transition: all .4s cubic-bezier(.4,0,.2,1); background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%); }
+      .drop-zone.drag-over { border-color: #3b82f6; background: linear-gradient(135deg, rgba(59,130,246,.05) 0%, rgba(59,130,246,.1) 100%); color: #3b82f6; transform: scale(1.02); box-shadow: 0 0 30px rgba(59,130,246,.2); }
+      .drop-zone-icon { font-size: 4rem; margin-bottom: 1.5rem; opacity: .6; animation: bounce 2s infinite; }
+      @keyframes bounce { 0%,20%,53%,80%,100%{transform:translate3d(0,0,0)} 40%,43%{transform:translate3d(0,-20px,0)} 70%{transform:translate3d(0,-10px,0)} 90%{transform:translate3d(0,-4px,0)} }
+      .drop-zone-text { font-weight: 700; margin-bottom: .5rem; font-size: 1.3rem; }
+      .drop-zone-subtext { font-size: 1rem; opacity: .8; text-align: center; max-width: 300px; line-height: 1.5; }
+      .placed-component { position: relative; border: 2px solid transparent; transition: all .3s; border-radius: 12px; overflow: hidden; margin-bottom: 1px; }
+      .placed-component:hover { border-color: #3b82f6; }
+      .placed-component.selected { border-color: #3b82f6; box-shadow: 0 0 0 4px rgba(59,130,246,.1); }
+      .component-controls { position: absolute; top: -60px; right: 1rem; background: #1e293b; border-radius: 12px; padding: .75rem; display: none; gap: .5rem; z-index: 100; box-shadow: 0 8px 25px rgba(0,0,0,.3); }
+      .placed-component:hover .component-controls { display: flex; }
+      .control-btn { width: 36px; height: 36px; background: rgba(255,255,255,.1); border: none; border-radius: 8px; color: white; cursor: pointer; font-size: 1rem; transition: all .2s; display: flex; align-items: center; justify-content: center; }
+      .control-btn:hover { background: rgba(255,255,255,.2); transform: scale(1.1); }
+      .control-btn:disabled { opacity: .4; cursor: not-allowed; }
+
+      .properties-panel { background: white; border-left: 1px solid #e2e8f0; display: flex; flex-direction: column; box-shadow: -4px 0 12px rgba(0,0,0,0.05); }
+      .panel-header { padding: 2rem 1.5rem 1.5rem; border-bottom: 1px solid #e2e8f0; background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%); }
+      .panel-title { font-size: 1.3rem; font-weight: 800; color: #1e293b; text-align: center; }
+      .panel-content { flex: 1; padding: 2rem 1.5rem; overflow-y: auto; }
+      .property-group { margin-bottom: 2rem; }
+      .property-label { font-size: .9rem; font-weight: 600; color: #374151; margin-bottom: .75rem; display: block; }
+      .property-input { width: 100%; padding: 1rem; border: 2px solid #e5e7eb; border-radius: 10px; font-size: .9rem; transition: all .3s; font-family: inherit; }
+      .property-input:focus { outline: none; border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59,130,246,.1); }
+      .save-section { border-top: 1px solid #e2e8f0; padding: 2rem 1.5rem; background: #f8fafc; }
+      .save-btn { width: 100%; margin-bottom: 1rem; padding: 1.25rem; font-size: 1rem; font-weight: 700; }
+      .save-help { font-size: .8rem; color: #64748b; text-align: center; line-height: 1.5; }
+      .success-message { background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%); color: #166534; padding: 1rem; border-radius: 12px; margin-bottom: 1.5rem; font-size: .9rem; display: none; border: 1px solid #86efac; font-weight: 500; }
+      .success-message.show { display: block; animation: slideIn .3s ease-out; }
+      @keyframes slideIn { from { transform: translateY(-20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+      @media (max-width: 1400px) { .builder-container { grid-template-columns: 300px 1fr 350px; } }
+      @media (max-width: 1200px) { .builder-container { grid-template-columns: 280px 1fr 320px; } .component-grid { grid-template-columns: 1fr; } }
+      .loading { opacity: .5; pointer-events: none; }
+      .btn:disabled { opacity: .6; cursor: not-allowed; transform: none !important; }
+    </style>
+
+    <!-- Sortable.js (global) -->
+    <script type="module">
+      import Sortable from 'https://cdn.jsdelivr.net/npm/sortablejs@1.15.2/modular/sortable.esm.js';
+      window.Sortable = Sortable;
+    </script>
+
+    <!-- Minimal globals (optional helpers) -->
+    <script is:inline>
+      window.savePage = () => window.builder?.savePage();
+      window.previewPage = () => window.builder?.togglePreview();
+    </script>
+
+    <!-- Load the external builder (place file in /public/assets/js/builder.js) -->
+    <script type="module" src="/assets/js/builder.js"></script>
+  </head>
+  <body>
+    <div class="builder-container">
+      <!-- Component Library -->
+      <div class="component-library">
+        <div class="library-header">
+          <div class="library-title">JAM Components</div>
+          <div class="library-subtitle">Professional blocks ready to use</div>
+        </div>
+
+        <div class="library-content">
+          <!-- Hero -->
+          <div class="component-category">
+            <div class="category-header">
+              <span class="category-title">Hero Sections</span>
+              <span class="category-count">4</span>
+            </div>
+            <div class="component-grid">
+              <div class="component-item" data-type="hero" data-variant="HeroV16">
+                <div class="component-thumbnail hero">
+                  <div style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); text-align:center; color:#fff; font-size:.7rem; font-weight:600;">
+                    <div style="margin-bottom:.25rem;">🚀</div><div>Modern Hero</div>
+                  </div>
+                </div>
+                <div class="component-name">Hero V16</div>
+              </div>
+              <div class="component-item" data-type="hero" data-variant="HeroV19">
+                <div class="component-thumbnail hero">
+                  <div style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); text-align:center; color:#fff; font-size:.7rem; font-weight:600;">
+                    <div style="margin-bottom:.25rem;">⚡</div><div>Dynamic Hero</div>
+                  </div>
+                </div>
+                <div class="component-name">Hero V19</div>
+              </div>
+              <div class="component-item" data-type="hero" data-variant="HeroV20">
+                <div class="component-thumbnail hero">
+                  <div style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); text-align:center; color:#fff; font-size:.7rem; font-weight:600;">
+                    <div style="margin-bottom:.25rem;">✨</div><div>Premium Hero</div>
+                  </div>
+                </div>
+                <div class="component-name">Hero V20</div>
+              </div>
+              <div class="component-item" data-type="hero" data-variant="HeroV5">
+                <div class="component-thumbnail hero">
+                  <div style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); text-align:center; color:#fff; font-size:.7rem; font-weight:600;">
+                    <div style="margin-bottom:.25rem;">🎯</div><div>Classic Hero</div>
+                  </div>
+                </div>
+                <div class="component-name">Hero V5</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- About -->
+          <div class="component-category">
+            <div class="category-header">
+              <span class="category-title">About Sections</span>
+              <span class="category-count">2</span>
+            </div>
+            <div class="component-grid">
+              <div class="component-item" data-type="about" data-variant="AboutV16">
+                <div class="component-thumbnail about">
+                  <div style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); text-align:center; color:#fff; font-size:.7rem; font-weight:600;">
+                    <div style="margin-bottom:.25rem;">👥</div><div>About Us</div>
+                  </div>
+                </div>
+                <div class="component-name">About V16</div>
+              </div>
+              <div class="component-item" data-type="about" data-variant="AboutV20">
+                <div class="component-thumbnail about">
+                  <div style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); text-align:center; color:#fff; font-size:.7rem; font-weight:600;">
+                    <div style="margin-bottom:.25rem;">🏢</div><div>Company</div>
+                  </div>
+                </div>
+                <div class="component-name">About V20</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Services -->
+          <div class="component-category">
+            <div class="category-header">
+              <span class="category-title">Services</span>
+              <span class="category-count">2</span>
+            </div>
+            <div class="component-grid">
+              <div class="component-item" data-type="services" data-variant="ServicesV16">
+                <div class="component-thumbnail services">
+                  <div style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); text-align:center; color:#fff; font-size:.7rem; font-weight:600;">
+                    <div style="margin-bottom:.25rem;">⚙️</div><div>Services Grid</div>
+                  </div>
+                </div>
+                <div class="component-name">Services V16</div>
+              </div>
+              <div class="component-item" data-type="services" data-variant="ServicesV15">
+                <div class="component-thumbnail services">
+                  <div style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); text-align:center; color:#fff; font-size:.7rem; font-weight:600;">
+                    <div style="margin-bottom:.25rem;">🛠️</div><div>Services List</div>
+                  </div>
+                </div>
+                <div class="component-name">Services V15</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Blog -->
+          <div class="component-category">
+            <div class="category-header">
+              <span class="category-title">Blog & Content</span>
+              <span class="category-count">2</span>
+            </div>
+            <div class="component-grid">
+              <div class="component-item" data-type="blog" data-variant="BlogV16">
+                <div class="component-thumbnail blog">
+                  <div style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); text-align:center; color:#fff; font-size:.7rem; font-weight:600;">
+                    <div style="margin-bottom:.25rem;">📝</div><div>Blog Grid</div>
+                  </div>
+                </div>
+                <div class="component-name">Blog V16</div>
+              </div>
+              <div class="component-item" data-type="blog" data-variant="BlogV19">
+                <div class="component-thumbnail blog">
+                  <div style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); text-align:center; color:#fff; font-size:.7rem; font-weight:600;">
+                    <div style="margin-bottom:.25rem;">📰</div><div>Blog List</div>
+                  </div>
+                </div>
+                <div class="component-name">Blog V19</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- CTA -->
+          <div class="component-category">
+            <div class="category-header">
+              <span class="category-title">Call to Action</span>
+              <span class="category-count">2</span>
+            </div>
+            <div class="component-grid">
+              <div class="component-item" data-type="cta" data-variant="CtaV20">
+                <div class="component-thumbnail cta">
+                  <div style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); text-align:center; color:#fff; font-size:.7rem; font-weight:600;">
+                    <div style="margin-bottom:.25rem;">🎯</div><div>Action CTA</div>
+                  </div>
+                </div>
+                <div class="component-name">CTA V20</div>
+              </div>
+              <div class="component-item" data-type="cta" data-variant="CtaV2">
+                <div class="component-thumbnail cta">
+                  <div style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); text-align:center; color:#fff; font-size:.7rem; font-weight:600;">
+                    <div style="margin-bottom:.25rem;">📞</div><div>Contact CTA</div>
+                  </div>
+                </div>
+                <div class="component-name">CTA V2</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Canvas Area -->
+      <div class="canvas-area">
+        <div class="canvas-header">
+          <input type="text" class="page-title-input" placeholder="Enter page name..." id="pageTitle" value="" />
+          <div class="canvas-toolbar">
+            <button class="btn btn-secondary" title="Responsive Preview">
+              <span>📱</span> Responsive
+            </button>
+            <button class="btn btn-secondary" id="previewToggle" title="Toggle Preview Mode (Ctrl+P)">
+              <span>👁️</span> Preview
+            </button>
+            <button class="btn btn-success" onclick="savePage()" title="Save to Payload CMS (Ctrl+S)">
+              <span>💾</span> Save Page
+            </button>
+          </div>
+        </div>
+
+        <div class="canvas-content">
+          <div class="page-preview">
+            <div class="drop-zone" id="mainDropZone">
+              <div class="drop-zone-icon">🎨</div>
+              <div class="drop-zone-text">Start Building Your Page</div>
+              <div class="drop-zone-subtext">Drag components from the left panel to begin creating your masterpiece</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Properties Panel -->
+      <div class="properties-panel">
+        <div class="panel-header">
+          <div class="panel-title">Page Settings</div>
+        </div>
+
+        <div class="panel-content">
+          <div class="success-message" id="successMessage">✅ Page saved successfully!</div>
+
+          <div class="property-group">
+            <label class="property-label">Page Name *</label>
+            <input type="text" class="property-input" id="pageName" placeholder="e.g., Homepage" />
+          </div>
+
+          <div class="property-group">
+            <label class="property-label">URL Slug *</label>
+            <input type="text" class="property-input" id="pageSlug" placeholder="e.g., home" />
+          </div>
+
+          <div class="property-group">
+            <label class="property-label">Meta Description</label>
+            <textarea class="property-input" id="pageDescription" rows="3" placeholder="Brief description for SEO..."></textarea>
+          </div>
+
+          <div class="property-group" id="componentSettings" style="display:none;">
+            <label class="property-label">Selected Component</label>
+            <div id="selectedComponentInfo">No component selected</div>
+          </div>
+        </div>
+
+        <div class="save-section">
+          <button class="btn btn-success save-btn" onclick="savePage()">💾 Save to Payload CMS</button>
+          <div class="save-help">Saves your page structure to Payload where you can polish content, optimize for SEO, and publish.</div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

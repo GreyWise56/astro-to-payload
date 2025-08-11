@@ -1,0 +1,233 @@
+---
+// src/pages/index.astro
+
+// --- Component Imports ---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/blocks/Hero.astro';
+import PromoVideo from '../components/blocks/PromoVideo.astro';
+import AboutWithLogo from '../components/blocks/AboutWithLogo.astro';
+import SectionHeader from '../components/blocks/SectionHeader.astro';
+import PortfolioGrid from '../components/blocks/PortfolioGrid.astro';
+import Marquee from '../components/blocks/Marquee.astro';
+import ServicesGrid from '../components/blocks/ServicesGrid.astro'; // 1. Import new component
+import CommunityCardLarge from '../components/blocks/CommunityCardLarge.astro';
+import CommunityCardSmall from '../components/blocks/CommunityCardSmall.astro';
+import Faq from '../components/blocks/Faq.astro'; // 1. Import new component
+import Testimonials from '../components/blocks/Testimonials.astro'; // 1. Import new component
+import Cta from '../components/blocks/Cta.astro'; // 1. Import new component
+
+
+
+
+
+// --- Asset Imports ---
+import heroGradient from '../assets/images/hero-gradient-background.png';
+import circleLogoLight from '../assets/images/icons/text-circle-logo.png';
+import circleLogoDark from '../assets/images/icons/text-circle-dark-logo.png';
+import portfolioImg1 from '../assets/images/services/services-1.png';
+import portfolioImg2 from '../assets/images/services/services-2.png';
+import portfolioImg3 from '../assets/images/services/services-3.png';
+import portfolioImg4 from '../assets/images/services/services-4.png';
+import communityImage from '../assets/images/community-image.jpg'; // Import new image
+import gradientBg from '../assets/images/gradient-bg.png'; // 2. Import bg image
+import review1 from '../assets/images/avatar/review-1.png'; // 2. Import avatar images
+import review2 from '../assets/images/avatar/review-2.png';
+import review3 from '../assets/images/avatar/review-3.png';
+import agent1 from '../assets/images/agent/01.jpg'; // 2. Import slider images
+import agent2 from '../assets/images/agent/02.jpg';
+import agent3 from '../assets/images/agent/03.jpg';
+
+
+
+// --- Page-level variables and data ---
+// --- Page-level variables and data ---
+const pageTitle = "JAM Group - Home";
+const pageDescription = "Empowering Brands with Cutting-Edge Design Solutions.";
+
+const aboutDescription = `
+  We specialize in designing cutting-edge web <br class="hidden sm:block" />
+  experiences that flawlessly blend creativity with <br class="hidden sm:block" />
+  innovative technology.
+  <br /><br />
+  We provide customized solutions for <br class="hidden sm:block" />
+  enhancing your existing site or building <br class="hidden sm:block" />
+  a brand-new digital platform from the ground up
+`;
+
+// --- THIS CONSTANT WAS MISSING ---
+// This simulates the data you would get from your CMS for the portfolio grid.
+const portfolioProjects = [
+  { title: 'Project Nexus', imageUrl: portfolioImg1, projectUrl: '/project-details' },
+  { title: 'E-commerce Evolution', imageUrl: portfolioImg2, projectUrl: '/project-details' },
+  { title: 'Brand Reimagined', imageUrl: portfolioImg3, projectUrl: '/project-details' },
+  { title: 'AppXperience', imageUrl: portfolioImg4, projectUrl: '/project-details' },
+];
+
+// Define the data for our marquees
+const marqueeItems1 = ["Creative Development", "Visual Design"];
+const marqueeItems2 = ["Since 1993", "Based in New York", "Award-Winning Agency"];
+
+// Define the data for our services grid
+const commonDescription = "What specific research are you interested in? Research can range across a variety of fields such as:";
+const commonListItems = [
+  "Scientific research (e.g., medical, environmental, technological studies)",
+  "Market research (consumer trends, competitor analysis)"
+];
+
+const servicesData = [
+  { title: 'Research', description: commonDescription, listItems: commonListItems, url: '/services-details' },
+  { title: 'Alchemy Studio', description: commonDescription, listItems: commonListItems, url: '/services-details' },
+  { title: 'Rhythms Media', description: commonDescription, listItems: commonListItems, url: '/services-details' },
+  { title: 'Sound Studios', description: commonDescription, listItems: commonListItems, url: '/services-details' }
+];
+// 3. Define the data for our FAQ section
+const faqData = [
+  {
+    question: "What services does Rivor offer?",
+    answer: "Rivor provides a range of digital services including web design, development, SEO, branding, mobile app development, and digital marketing. The email automation company also enhances the UX using a sidebar with a category overview and jump-to links, information about additional resources, and messages that encourage sales conversions."
+  },
+  {
+    question: "How long does a project typically take to complete?",
+    answer: "Project timelines vary depending on the scope and complexity. We work with you to set clear deadlines and ensure timely delivery."
+  },
+  {
+    question: "Can Rivor handle both small and large-scale projects?",
+    answer: "Yes, we are equipped to handle projects of any size, from small startups to large enterprises, tailoring our approach to meet your specific needs."
+  },
+  {
+    question: "How involved will I be in the project?",
+    answer: "We value collaboration and will keep you updated at every stage. Your input is crucial to ensure we align with your vision and goals."
+  },
+  {
+    question: "Do you provide post-launch support?",
+    answer: "Absolutely! We offer ongoing support and maintenance to ensure your project runs smoothly after launch."
+  },
+];
+// Define data for the testimonials section
+const testimonialsData = [
+  {
+    quote: `"Working with was an absolute game-changer for our business. From the very first meeting, their team took the time to understand our traffic and customer unique needs and vision.”`,
+    authorName: 'Cindy Ibanez',
+    authorTitle: 'Founder of Product Hunt',
+    authorImage: review1
+  },
+  {
+    quote: `"Working with was an absolute game-changer... <br/><br/> They were incredibly responsive, making us feel like a top priority throughout the entire process.”`,
+    authorName: 'Darrell Steward',
+    authorTitle: 'Founder of Product Hunt',
+    authorImage: review2
+  },
+  {
+    quote: `"Working with was an absolute game changer... <br/><br/> They were incredibly responsive, making us feel like a top priority throughout the entire process.”`,
+    authorName: 'Wade Warren',
+    authorTitle: 'General Manager at Lattice',
+    authorImage: review3
+  },
+  // ... add all other testimonials here
+];
+// Define data for the CTA slider
+const sliderImagesData = [agent1, agent2, agent3];
+---
+<BaseLayout title={pageTitle} description={pageDescription}>
+
+  <Hero
+    badgeText="Open for new work"
+    heading="Empowering Brand|with Cutting-Edge|Design Solutions"
+    italicizedWord="Design"
+    description="Turn your vision into reality with Rivor. We blend design, strategy, and technology to build powerful digital experiences that elevate your brand."
+    primaryButton={{ text: "Start a Project", url: "/contact" }}
+    secondaryButton={{ text: "Our Services", url: "/services" }}
+    backgroundImageSrc={heroGradient}
+  />
+
+   {/* Pass the URL as a direct string now */}
+  <PromoVideo videoSrc="/assets/videos/promo.mp4" />
+  <AboutWithLogo
+    logoLightSrc={circleLogoLight}
+    logoDarkSrc={circleLogoDark}
+    logoText="Building Brands, and Creating Impact"
+    description={aboutDescription}
+  />
+  <section class="pt-14 md:pt-16 lg:pt-[88px] xl:pt-[100px] pb-14 md:pb-16 lg:pb-[88px] xl:pb-[100px]">
+    <div class="container">
+      <SectionHeader 
+        badgeText="Our Portfolio"
+        heading="Success Stories in Digital Innovation"
+        italicizedWord="Digital"
+        description="Discover how Rivor brings brands to life with impactful digital solutions. Our portfolio showcases quality and creativity in every project."
+        button={{ text: "Explore Our Portfolio", url: "/portfolio" }}
+      />
+      <PortfolioGrid projects={portfolioProjects} />
+    </div>
+  </section>
+   <section class="pt-14 md:pt-16 lg:pt-[88px] xl:pt-[100px] pb-14 md:pb-16 lg:pb-[88px] xl:pb-[100px] relative overflow-hidden">
+    <Marquee items={marqueeItems1} />
+    <div class="border-t dark:border-dark">
+      <Marquee items={marqueeItems2} direction="reverse" />
+    </div>
+  </section>
+    <section class="pt-14 md:pt-16 lg:pt-[88px] xl:pt-[100px] pb-14 md:pb-16 lg:pb-[88px] xl:pb-[100px] relative overflow-hidden">
+    <div class="container">
+      <SectionHeader 
+        badgeText="Services"
+        heading="Elevating Your Digital Presence"
+        italicizedWord="Digital"
+        description="We offer expert digital solutions to boost your brand and online presence. Our services drive growth, engagement, and success in the digital world."
+        button={{ text: "Get Free Quotes", url: "/contact" }}
+      />
+    </div>
+    <ServicesGrid services={servicesData} />
+  </section>
+  <section class="pt-14 md:pt-16 lg:pt-[88px] xl:pt-[100px] pb-14 md:pb-16 lg:pb-[88px] xl:pb-[100px]">
+    <div class="container">
+      <div class="text-center">
+        <h2 class="mb-12 md:mb-20 text-appear">
+          Growing <span class="font-instrument italic">together.</span> <br />As a community.
+        </h2>
+      </div>
+
+      <div class="grid grid-cols-12 gap-6">
+        <CommunityCardLarge 
+          heading="Join Our Community of <br /> 500+ Designers"
+          buttonText="Join Discord"
+          buttonUrl="https://discord.com/invite/Y8n8ST6a"
+          imageSrc={communityImage}
+        />
+        <CommunityCardSmall 
+          badgeText="YouTube"
+          heading="Design Tips & <br /> Tutorial Videos"
+          buttonText="Subscribe Now"
+          buttonUrl="https://youtu.be/JGLfyTDgfDc?si=0-iUKu3hv8uewpxg"
+        />
+        <CommunityCardSmall 
+          badgeText="LinkedIn"
+          heading="Stay Updated On <br /> Latest Design Trends"
+          buttonText="Follow Now"
+          buttonUrl="https://www.linkedin.com/company/staticmania"
+        />
+      </div>
+    </div>
+  </section>
+   <Faq 
+    heading="Frequently Asked Questions"
+    italicizedWord="Questions"
+    faqItems={faqData}
+    buttonText="See All FAQ"
+    buttonUrl="/faq"
+    backgroundImageSrc={gradientBg}
+  />
+  <Testimonials 
+    heading="Client testimonials"
+    italicizedWord="testimonials"
+    subheading="I've been using this service for over a year, and it has significantly improved my workflow. Highly recommended for professionals looking for efficiency and reliability."
+    testimonials={testimonialsData}
+  />
+   <Cta 
+    headingPart1="Let's Talk!"
+    headingPart2="with us."
+    subheading="A virtual coffee?"
+    sliderImages={sliderImagesData}
+    button={{ text: "Contact Us", url: "/contact" }}
+  />
+
+  </BaseLayout>

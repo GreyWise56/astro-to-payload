@@ -1,0 +1,74 @@
+---
+// src/pages/test-payload.astro
+// 🧪 TEST PAGE - Verify Payload connection
+
+import { payloadAPI } from '../utils/payload'
+
+console.log('🔍 Testing Payload connection...')
+
+// Test the connection
+const connectionTest = await payloadAPI.testConnection()
+console.log('Connection result:', connectionTest)
+
+// Try to get homepage
+const homepage = await payloadAPI.getPageBySlug('home')
+console.log('Homepage result:', homepage?.title || 'No homepage found')
+
+// Get all pages
+const allPages = await payloadAPI.getAllPages()
+console.log('Total pages found:', allPages.length)
+
+// Get components
+const components = await payloadAPI.getAllComponents()
+console.log('Total components found:', components.length)
+---
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Payload Connection Test</title>
+</head>
+<body>
+  <h1>🧪 Payload CMS Connection Test</h1>
+  
+  <div style="font-family: monospace; padding: 20px; background: #f5f5f5;">
+    <h2>Connection Status</h2>
+    <p>✅ Connection: {connectionTest ? 'SUCCESS' : 'FAILED'}</p>
+    
+    <h2>Homepage Test</h2>
+    <p>📄 Homepage: {homepage?.title || 'Not found'}</p>
+    
+    <h2>Data Summary</h2>
+    <p>📊 Total Pages: {allPages.length}</p>
+    <p>🧱 Total Components: {components.length}</p>
+    
+    {allPages.length > 0 && (
+      <div>
+        <h3>Available Pages:</h3>
+        <ul>
+          {allPages.map(page => (
+            <li>
+              <strong>{page.title}</strong> (/{page.slug})
+              {page.pageBlocks && <span> - {page.pageBlocks.length} blocks</span>}
+            </li>
+          ))}
+        </ul>
+      </div>
+    )}
+    
+    {components.length > 0 && (
+      <div>
+        <h3>Available Components:</h3>
+        <ul>
+          {components.slice(0, 10).map((comp: any) => (
+            <li><strong>{comp.displayName || comp.name}</strong> ({comp.category})</li>
+          ))}
+          {components.length > 10 && <li>... and {components.length - 10} more</li>}
+        </ul>
+      </div>
+    )}
+  </div>
+  
+  <p><a href="/">← Back to Homepage</a></p>
+</body>
+</html>
