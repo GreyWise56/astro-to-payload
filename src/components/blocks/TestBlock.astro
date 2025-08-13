@@ -1,0 +1,17 @@
+---
+// src/components/blocks/TestBlock.astro - Ultra simple test
+
+export interface Props {
+  heading?: string;
+  subheading?: string;
+}
+
+const { heading = "Default Heading", subheading = "Default Subheading" } = Astro.props;
+---
+
+<div style="background: red; color: white; padding: 20px; margin: 20px;">
+  <h1>🚀 TEST BLOCK WORKING!</h1>
+  <h2>Heading: {heading}</h2>
+  <p>Subheading: {subheading}</p>
+  <p>If you can see this, the block system is working!</p>
+</div>

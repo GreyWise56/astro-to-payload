@@ -1,74 +1,154 @@
 ---
-// src/pages/test-payload.astro
-// 🧪 TEST PAGE - Verify Payload connection
+// src/pages/test-payload.astro - Test Payload CMS Connection
 
-import { payloadAPI } from '../utils/payload'
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { testConnection, getAllGlobals, getAllPages, getBlogPosts } from '../lib/payload-api';
 
-console.log('🔍 Testing Payload connection...')
+let connectionTest;
+let globalData;
+let pagesData;
+let blogData;
+let errors = [];
 
-// Test the connection
-const connectionTest = await payloadAPI.testConnection()
-console.log('Connection result:', connectionTest)
+// Test connection
+try {
+  connectionTest = await testConnection();
+} catch (error) {
+  const errorMessage = error instanceof Error ? error.message : 'Connection test failed';
+  errors.push(`Connection test failed: ${errorMessage}`);
+}
 
-// Try to get homepage
-const homepage = await payloadAPI.getPageBySlug('home')
-console.log('Homepage result:', homepage?.title || 'No homepage found')
+// Test globals
+try {
+  globalData = await getAllGlobals();
+} catch (error) {
+  const errorMessage = error instanceof Error ? error.message : 'Globals test failed';
+  errors.push(`Globals test failed: ${errorMessage}`);
+}
 
-// Get all pages
-const allPages = await payloadAPI.getAllPages()
-console.log('Total pages found:', allPages.length)
+// Test pages
+try {
+  pagesData = await getAllPages();
+} catch (error) {
+  const errorMessage = error instanceof Error ? error.message : 'Pages test failed';
+  errors.push(`Pages test failed: ${errorMessage}`);
+}
 
-// Get components
-const components = await payloadAPI.getAllComponents()
-console.log('Total components found:', components.length)
+// Test blog
+try {
+  blogData = await getBlogPosts(3);
+} catch (error) {
+  const errorMessage = error instanceof Error ? error.message : 'Blog test failed';
+  errors.push(`Blog test failed: ${errorMessage}`);
+}
 ---
 
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Payload Connection Test</title>
-</head>
-<body>
-  <h1>🧪 Payload CMS Connection Test</h1>
-  
-  <div style="font-family: monospace; padding: 20px; background: #f5f5f5;">
-    <h2>Connection Status</h2>
-    <p>✅ Connection: {connectionTest ? 'SUCCESS' : 'FAILED'}</p>
+<BaseLayout title="Payload CMS Connection Test" description="Testing Payload CMS API connection">
+  <div class="container mx-auto px-4 py-16">
+    <h1 class="text-4xl font-bold mb-8">Payload CMS Connection Test</h1>
     
-    <h2>Homepage Test</h2>
-    <p>📄 Homepage: {homepage?.title || 'Not found'}</p>
-    
-    <h2>Data Summary</h2>
-    <p>📊 Total Pages: {allPages.length}</p>
-    <p>🧱 Total Components: {components.length}</p>
-    
-    {allPages.length > 0 && (
-      <div>
-        <h3>Available Pages:</h3>
-        <ul>
-          {allPages.map(page => (
-            <li>
-              <strong>{page.title}</strong> (/{page.slug})
-              {page.pageBlocks && <span> - {page.pageBlocks.length} blocks</span>}
-            </li>
-          ))}
-        </ul>
+    <!-- Connection Status -->
+    <div class="mb-8">
+      <h2 class="text-2xl font-semibold mb-4">Connection Status</h2>
+      <div class={`p-4 rounded ${connectionTest?.success ? 'bg-green-100 border border-green-400 text-green-700' : 'bg-red-100 border border-red-400 text-red-700'}`}>
+        {connectionTest?.success ? '✅ Connected to Payload CMS' : '❌ Connection Failed'}
+      </div>
+    </div>
+
+    <!-- Errors -->
+    {errors.length > 0 && (
+      <div class="mb-8">
+        <h2 class="text-2xl font-semibold mb-4">Errors</h2>
+        <div class="bg-red-100 border border-red-400 text-red-700 p-4 rounded">
+          <ul class="list-disc list-inside">
+            {errors.map(error => <li>{error}</li>)}
+          </ul>
+        </div>
       </div>
     )}
-    
-    {components.length > 0 && (
-      <div>
-        <h3>Available Components:</h3>
-        <ul>
-          {components.slice(0, 10).map((comp: any) => (
-            <li><strong>{comp.displayName || comp.name}</strong> ({comp.category})</li>
-          ))}
-          {components.length > 10 && <li>... and {components.length - 10} more</li>}
-        </ul>
+
+    <!-- Global Data Test -->
+    {globalData && (
+      <div class="mb-8">
+        <h2 class="text-2xl font-semibold mb-4">Global Settings</h2>
+        <div class="bg-blue-100 border border-blue-400 text-blue-700 p-4 rounded">
+          <p><strong>Site Settings:</strong> {globalData.siteSettings ? '✅ Loaded' : '❌ Failed'}</p>
+          <p><strong>Company Info:</strong> {globalData.companyInfo ? '✅ Loaded' : '❌ Failed'}</p>
+          <p><strong>SEO Settings:</strong> {globalData.seoSettings ? '✅ Loaded' : '❌ Failed'}</p>
+        </div>
       </div>
     )}
+
+    <!-- Pages Data Test -->
+    {pagesData && (
+      <div class="mb-8">
+        <h2 class="text-2xl font-semibold mb-4">Pages Collection</h2>
+        <div class="bg-green-100 border border-green-400 text-green-700 p-4 rounded">
+          <p><strong>Total Pages:</strong> {pagesData.length}</p>
+          {pagesData.length > 0 && (
+            <div class="mt-2">
+              <strong>Sample Pages:</strong>
+              <ul class="list-disc list-inside ml-4">
+                {pagesData.slice(0, 5).map((page: any) => (
+                  <li>
+                    <a href={`/${page.slug}`} class="underline hover:no-underline">
+                      {page.title} (/{page.slug})
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
+      </div>
+    )}
+
+    <!-- Blog Data Test -->
+    {blogData && (
+      <div class="mb-8">
+        <h2 class="text-2xl font-semibold mb-4">Blog Collection</h2>
+        <div class="bg-purple-100 border border-purple-400 text-purple-700 p-4 rounded">
+          <p><strong>Total Blog Posts:</strong> {blogData.length}</p>
+          {blogData.length > 0 && (
+            <div class="mt-2">
+              <strong>Recent Posts:</strong>
+              <ul class="list-disc list-inside ml-4">
+                {blogData.map((post: any) => (
+                  <li>{post.title || 'Untitled Post'}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
+      </div>
+    )}
+
+    <!-- Raw Data (Development) -->
+    {import.meta.env.DEV && (
+      <div class="mb-8">
+        <h2 class="text-2xl font-semibold mb-4">Raw Data (Development Only)</h2>
+        <details class="bg-gray-100 border border-gray-300 p-4 rounded">
+          <summary class="cursor-pointer font-semibold">Click to view raw data</summary>
+          <pre class="mt-4 text-xs overflow-auto bg-white p-4 rounded border">
+{JSON.stringify({ 
+  connectionTest, 
+  globalData, 
+  pages: pagesData?.slice(0, 2), // Only show first 2 pages
+  blog: blogData?.slice(0, 2)    // Only show first 2 posts
+}, null, 2)}
+          </pre>
+        </details>
+      </div>
+    )}
+
+    <!-- Action Links -->
+    <div class="mt-8 space-x-4">
+      <a href="http://localhost:3000/admin" class="inline-block px-6 py-3 bg-blue-600 text-white rounded hover:bg-blue-700">
+        Open Payload Admin
+      </a>
+      <a href="/" class="inline-block px-6 py-3 bg-gray-600 text-white rounded hover:bg-gray-700">
+        Back to Home
+      </a>
+    </div>
   </div>
-  
-  <p><a href="/">← Back to Homepage</a></p>
-</body>
-</html>
+</BaseLayout>

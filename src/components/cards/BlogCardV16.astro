@@ -1,19 +1,16 @@
 ---
-// src/components/cards/BlogCardV16.astro
+// src/components/cards/BlogCardV16.astro - Updated for Payload CMS
 
 /*
 ================================================================================
-Component: BlogCardV16
+Component: BlogCardV16 (Payload Compatible)
 Description: A card for a single blog post, featuring an image with an
-             overlapping content box.
+             overlapping content box. Updated to work with Payload CMS data.
 ================================================================================
 */
 
-import { Image } from 'astro:assets';
-import type { ImageMetadata } from 'astro';
-
 export interface Props {
-  image: ImageMetadata;
+  image: string; // URL string instead of ImageMetadata
   altText: string;
   category: string;
   title: string;
@@ -21,15 +18,22 @@ export interface Props {
 }
 
 const { image, altText, category, title, url } = Astro.props;
+
+// Ensure we have a valid image URL
+const imageUrl = image || '/placeholder-image.jpg';
+const imageAlt = altText || title || 'Blog post image';
 ---
 
 <div class="relative group">
   <div>
     <figure class="w-full reveal-me overflow-hidden">
-      <Image
-        src={image}
-        alt={altText}
+      <img
+        src={imageUrl}
+        alt={imageAlt}
         class="w-full h-auto object-cover transition-all duration-500 group-hover:scale-125 group-hover:rotate-3"
+        loading="lazy"
+        width="400"
+        height="300"
       />
     </figure>
 

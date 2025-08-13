@@ -1,16 +1,5 @@
 ---
-// src/components/blocks/BlogV16.astro
-
-/*
-================================================================================
-Component: BlogV16
-Description: A block that displays a header and a grid of the latest blog
-             posts.
-================================================================================
-*/
-
-import BlogCardV16 from '../cards/BlogCardV16.astro';
-import type { Props as BlogPost } from '../cards/BlogCardV16.astro';
+// src/components/blocks/BlogV16.astro - Working with Payload data
 
 export interface Props {
   heading: string;
@@ -19,10 +8,21 @@ export interface Props {
     text: string;
     url: string;
   };
-  posts: BlogPost[];
+  posts: Array<{
+    title: string;
+    category: string;
+    url: string;
+    image: {
+      url: string;
+      alt?: string;
+    };
+  }>;
 }
 
 const { heading, subheading, button, posts } = Astro.props;
+
+// Fallback data for empty posts
+const displayPosts = posts && posts.length > 0 ? posts : [];
 ---
 
 <section
@@ -68,9 +68,63 @@ const { heading, subheading, button, posts } = Astro.props;
     </div>
 
     <!-- Cards Grid -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 relative">
-      <!-- Loop through posts and render a card for each -->
-      {posts.map((post) => <BlogCardV16 {...post} />)}
-    </div>
+    {displayPosts.length > 0 ? (
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 relative">
+        {displayPosts.map((post) => (
+          <div class="relative group">
+            <div>
+              <figure class="w-full reveal-me overflow-hidden">
+                <img
+                  src={post.image.url.startsWith('http') ? post.image.url : `http://localhost:3000${post.image.url}`}
+                  alt={post.image.alt || post.title}
+                  class="w-full h-auto object-cover transition-all duration-500 group-hover:scale-125 group-hover:rotate-3"
+                  loading="lazy"
+                  width="400"
+                  height="300"
+                />
+              </figure>
+
+              <div
+                class="absolute top-[22%] sm:top-[38%] md:top-1/2 lg:top-3/4 inset-x-[5px] mx-auto bg-backgroundBody dark:bg-dark px-6 pt-6 pb-8 max-w-[calc(100%-10px)] reveal-me"
+              >
+                <div class="rv-badge mb-3">
+                  <span class="rv-badge-text">{post.category}</span>
+                </div>
+
+                <div class="blog-title mb-7">
+                  <a href={post.url}>
+                    <h3 class="text-[34px] lg:leading-[1.05] font-normal">
+                      {post.title}
+                    </h3>
+                  </a>
+                </div>
+
+                <div class="w-[90%] mx-auto md:w-auto md:mx-0">
+                  <a
+                    href={post.url}
+                    class="rv-button rv-button-white rv-button-sm-v2 block md:inline-block text-center"
+                  >
+                    <div class="rv-button-top">
+                      <span>Read More</span>
+                    </div>
+                    <div class="rv-button-bottom">
+                      <span>Read More</span>
+                    </div>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    ) : (
+      <!-- Editor Helper -->
+      <div class="text-center py-16">
+        <div class="bg-blue-100 border border-blue-300 text-blue-700 px-6 py-4 rounded-lg inline-block">
+          <p class="font-semibold">📝 Add Blog Posts</p>
+          <p class="text-sm mt-2">Add some blog posts in the Payload admin to see them displayed here.</p>
+        </div>
+      </div>
+    )}
   </div>
 </section>

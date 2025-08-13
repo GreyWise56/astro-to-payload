@@ -1,0 +1,136 @@
+---
+// src/pages/[slug].astro - Dynamic Page Routing with Payload CMS
+
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getPageBySlug, getPageSlugs, getAllGlobals, processBlogV16Block } from '../lib/payload-api';
+
+// Import block components
+import BlogV16 from '../components/blocks/BlogV16.astro';
+import TestBlock from '../components/blocks/TestBlock.astro';
+
+// Static generation - get all possible page slugs
+export async function getStaticPaths() {
+  try {
+    const slugs = await getPageSlugs();
+    
+    return slugs.map((slug: string) => ({
+      params: { slug },
+    }));
+  } catch (error) {
+    console.error('Error getting static paths:', error);
+    return [];
+  }
+}
+
+// Get page data
+const { slug } = Astro.params;
+
+// Handle undefined slug
+if (!slug) {
+  return Astro.redirect('/404');
+}
+
+let pageData;
+let globalData;
+let error;
+
+try {
+  [pageData, globalData] = await Promise.all([
+    getPageBySlug(slug),
+    getAllGlobals(),
+  ]);
+
+  if (!pageData) {
+    return Astro.redirect('/404');
+  }
+} catch (err) {
+  const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
+  console.error('Error fetching page data:', errorMessage);
+  error = errorMessage;
+}
+
+// Process blocks and prepare data
+let processedBlocks = [];
+
+if (pageData?.layout) {
+  processedBlocks = await Promise.all(
+    pageData.layout.map(async (block: any) => {
+      switch (block.blockType) {
+        case 'blog-v16':
+          return await processBlogV16Block(block);
+        // Add other block processors here as you convert them
+        default:
+          return block;
+      }
+    })
+  );
+}
+
+// Meta data
+const title = pageData?.meta?.title || pageData?.title || 'JAM Group Studio';
+const description = pageData?.meta?.description || 'Professional digital marketing and web development services';
+---
+
+<BaseLayout title={title} description={description}>
+  {error ? (
+    <div class="container mx-auto px-4 py-16">
+      <h1 class="text-4xl font-bold text-red-600 mb-4">Error Loading Page</h1>
+      <p class="text-gray-600">{error}</p>
+      <a href="/" class="inline-block mt-4 px-6 py-3 bg-blue-600 text-white rounded hover:bg-blue-700">
+        Return Home
+      </a>
+    </div>
+  ) : pageData ? (
+    <div>
+      <!-- Render page blocks -->
+      {processedBlocks.map((block: any) => {
+        console.log('Rendering block:', block.blockType, block); // Debug log
+        
+        switch (block.blockType) {
+          case 'blog-v16':
+            return <TestBlock 
+              heading={block.heading}
+              subheading={block.subheading}
+            />;
+          
+          // Add other block renderers here
+          default:
+            return (
+              <div class="container mx-auto px-4 py-8">
+                <div class="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded">
+                  <strong>Unknown Block Type:</strong> {block.blockType}
+                  <pre class="mt-2 text-sm overflow-auto">{JSON.stringify(block, null, 2)}</pre>
+                </div>
+              </div>
+            );
+        }
+      })}
+      
+      <!-- Fallback if no blocks -->
+      {(!processedBlocks || processedBlocks.length === 0) && (
+        <div class="container mx-auto px-4 py-16">
+          <h1 class="text-4xl font-bold mb-4">{pageData.title}</h1>
+          <p class="text-gray-600">This page is ready for content blocks.</p>
+          <a href="http://localhost:3000/admin" class="inline-block mt-4 px-6 py-3 bg-blue-600 text-white rounded hover:bg-blue-700">
+            Edit in Admin
+          </a>
+        </div>
+      )}
+    </div>
+  ) : (
+    <div class="container mx-auto px-4 py-16">
+      <h1 class="text-4xl font-bold mb-4">Page Not Found</h1>
+      <p class="text-gray-600">The page you're looking for doesn't exist.</p>
+      <a href="/" class="inline-block mt-4 px-6 py-3 bg-blue-600 text-white rounded hover:bg-blue-700">
+        Return Home
+      </a>
+    </div>
+  )}
+</BaseLayout>
+
+<style>
+  /* Ensure proper spacing between blocks */
+  main > div > * + * {
+    margin-top: 0;
+  }
+</style>
