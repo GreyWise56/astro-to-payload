@@ -1,18 +1,6 @@
 ---
-// src/components/blocks/HeroV2.astro
+// src/components/blocks/HeroV2.astro - Payload CMS Compatible
 
-/*
-================================================================================
-Component: HeroV2
-Description: A hero section with a top label, a main heading with italicized 
-             parts, a CTA button, and a gradient background effect.
-================================================================================
-*/
-
-import type { ImageMetadata } from "astro";
-import { Image } from "astro:assets";
-
-// --- Define the data contract for the component ---
 export interface Props {
   topLabel: {
     part1: string;
@@ -25,10 +13,25 @@ export interface Props {
     text: string;
     url: string;
   };
-  gradientBackground: ImageMetadata;
+  gradientBackground: {
+    url: string;
+    alt?: string;
+  };
 }
 
-const { topLabel, heading, italicHeading1, italicHeading2, button, gradientBackground } = Astro.props;
+const { 
+  topLabel, 
+  heading, 
+  italicHeading1, 
+  italicHeading2, 
+  button, 
+  gradientBackground 
+} = Astro.props;
+
+// Ensure we have a valid background image URL
+const gradientBackgroundUrl = gradientBackground?.url?.startsWith('http') 
+  ? gradientBackground.url 
+  : `http://localhost:3000${gradientBackground?.url || ''}`;
 ---
 
 <section
@@ -38,11 +41,12 @@ const { topLabel, heading, italicHeading1, italicHeading2, button, gradientBackg
     id="hero-gradient-wrapper"
     class="absolute w-full h-fw-full top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 -z-10 blur-[60px] scale-90"
   >
-    <Image
-      src={gradientBackground}
-      alt="hero gradient background"
+    <img
+      src={gradientBackgroundUrl}
+      alt={gradientBackground?.alt || "hero gradient background"}
       id="hero-gradient"
       class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
+      loading="lazy"
     />
   </div>
 

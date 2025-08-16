@@ -1,0 +1,256 @@
+/* CLS-OPTIMIZATION.CSS - Load AFTER main.css */
+/* This file contains targeted fixes for Cumulative Layout Shift issues */
+/* Add this as a separate CSS file or append to your main.css */
+
+/* ============================================================================
+   CLS FIX #1: IMMEDIATE INITIAL STATES FOR ANIMATIONS
+   ============================================================================ */
+
+/* Prevent layout shifts during GSAP loading by setting initial states immediately */
+.reveal-me:not(.gsap-active), 
+.reveal-me-2:not(.gsap-active) {
+  opacity: 0;
+  visibility: visible; /* Reserve space */
+  min-height: 1px;
+}
+
+.text-appear:not(.gsap-active), 
+.text-appear-2:not(.gsap-active) {
+  opacity: 0;
+  visibility: visible;
+  min-height: 1.2em;
+}
+
+.reveal-text:not(.gsap-active), 
+.reveal-text-2:not(.gsap-active) {
+  opacity: 0.2;
+  visibility: visible;
+}
+
+/* ============================================================================
+   CLS FIX #2: MARQUEE CONTAINER STABILITY
+   ============================================================================ */
+
+/* Prevent layout shifts during marquee content duplication */
+.marquee-inner {
+  will-change: transform;
+  backface-visibility: hidden;
+}
+
+.marquee-container, .marquee-reverse-container {
+  overflow: hidden;
+  width: 100%;
+}
+
+
+/* ============================================================================
+   CLS FIX #3: ACCORDION/FAQ HEIGHT MANAGEMENT
+   ============================================================================ */
+
+/* Smooth height transitions prevent layout shifts */
+.accordion-body, .accordion-bodyV4 {
+  overflow: hidden;
+  transition: height 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+.accordion-item, .accordion-itemV4, .accordion-itemV5 {
+  contain: layout !important; /* Prevent external layout impact */
+  border: 1px solid transparent !important;
+  transition: border-color 0.3s ease, padding 0.3s ease !important;
+}
+
+/* ============================================================================
+   CLS FIX #4: IMAGE LOADING PREVENTION
+   ============================================================================ */
+
+/* Reserve space for images before they load */
+img:not([style*="aspect-ratio"]):not(.no-aspect-ratio) {
+  background: #f5f5f5;
+}
+
+/* Fallback aspect ratio for images without dimensions */
+img:not([width]):not([height]):not(.no-aspect-ratio) {
+  aspect-ratio: 16/9; /* Common fallback */
+}
+
+/* Override for specific image types that shouldn't have aspect ratio */
+.logo-image, .icon, .decorative-image, .hero-image {
+  aspect-ratio: auto !important;
+  background: none !important;
+}
+
+/* ============================================================================
+   CLS FIX #5: COUNTER ANIMATION STABILITY
+   ============================================================================ */
+
+/* Reserve space for number changes */
+.counter {
+  min-width: 3ch !important;
+  display: inline-block !important;
+  font-variant-numeric: tabular-nums !important; /* Monospace numbers */
+}
+
+/* ============================================================================
+   CLS FIX #6: HOVER EFFECTS GPU ACCELERATION
+   ============================================================================ */
+
+/* Force elements onto GPU layer to prevent repaints */
+.blog-card, .service-card {
+  will-change: transform;
+}
+
+/* ============================================================================
+   CLS FIX #7: HERO GRADIENT BACKGROUND STABILITY
+   ============================================================================ */
+
+/* Isolate hero animations on GPU layer */
+#hero-gradient-wrapper, #hero-gradient {
+  will-change: transform;
+}
+/* ============================================================================
+   CLS FIX #8: LOADING STATE MANAGEMENT
+   ============================================================================ */
+
+/* Manage page loading states to hide CLS during initialization */
+body:not(.loaded) {
+  opacity: 0.99; /* Very subtle fade, won't break anything */
+}
+
+body.loaded {
+  opacity: 1;
+  transition: opacity 0.2s ease;
+}
+
+/* Mark body as loaded after DOM + GSAP are ready */
+body.gsap-ready.loaded {
+  opacity: 1 !important;
+}
+
+/* ============================================================================
+   CLS FIX #9: SPECIFIC HOMEPAGE COMPONENTS
+   ============================================================================ */
+
+/* Service wrapper horizontal scroll optimization */
+.service-wrapper {
+  will-change: transform;
+}
+
+/* Testimonial cards optimization */
+.testimonial-card, .user-swiper .swiper-slide {
+  will-change: transform !important;
+  transform: translateZ(0) !important;
+}
+
+/* ============================================================================
+   CLS FIX #10: TEXT SPLIT ANIMATION PREPARATION
+   ============================================================================ */
+
+/* Prevent text overflow during split animations */
+.text-appear .line, .text-appear-2 .line {
+  overflow: hidden !important;
+  display: block !important;
+  will-change: transform !important;
+}
+
+/* ============================================================================
+   CLS FIX #11: GSAP LOADING PROTECTION
+   ============================================================================ */
+
+/* Set initial states immediately when GSAP is loading */
+.gsap-loading .reveal-me,
+.gsap-loading .text-appear,
+.gsap-loading .reveal-text {
+  opacity: 0 !important;
+  transform: translateY(20px) !important;
+  visibility: visible !important;
+}
+
+/* Remove CSS transitions once GSAP takes over */
+body.gsap-ready .reveal-me,
+body.gsap-ready .text-appear,
+body.gsap-ready .reveal-text {
+  transition: none !important;
+}
+
+/* ============================================================================
+   CLS FIX #12: CRITICAL PERFORMANCE HINTS
+   ============================================================================ */
+
+/* Critical performance optimizations */
+* {
+  transform-style: preserve-3d;
+}
+
+/* Optimize scroll performance */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Force hardware acceleration for key elements */
+.reveal-me, .text-appear, .reveal-text,
+.marquee-inner, .accordion-body,
+.blog-card, .service-card {
+  backface-visibility: hidden !important;
+  perspective: 1000px !important;
+}
+
+/* ============================================================================
+   CLS FIX #13: JAVASCRIPT HOOK CLASSES
+   ============================================================================ */
+
+/* Classes that JavaScript can use to coordinate with CSS */
+.cls-protected {
+  /* Applied to body when CLS protection is active */
+}
+
+.animations-ready {
+  /* Applied when GSAP animations are initialized */
+}
+
+.content-loaded {
+  /* Applied when all content is ready */
+}
+
+/* ============================================================================
+   RESPONSIVE ADJUSTMENTS
+   ============================================================================ */
+
+/* Mobile-specific CLS optimizations */
+@media (max-width: 768px) {
+  .reveal-me, .text-appear {
+    transform: translateY(30px) !important; /* Smaller movement on mobile */
+  }
+  
+  @media (max-width: 768px) {
+  .marquee-inner {
+    transform: translate3d(0, 0, 0);
+  }
+}
+  
+  /* Reduce animation complexity on mobile */
+  .accordion-body {
+    transition-duration: 0.2s !important;
+  }
+}
+
+/* Desktop optimizations */
+@media (min-width: 1024px) {
+  /* Enhanced GPU acceleration for desktop */
+  .reveal-me, .text-appear, .blog-card, .service-card {
+    transform: translate3d(0, 0, 0) !important;
+  }
+}
+
+/* ============================================================================
+   DEBUGGING HELPERS (Remove in production)
+   ============================================================================ */
+
+/* Uncomment to visualize layout shift zones */
+/*
+.reveal-me, .text-appear, .accordion-body {
+  outline: 1px dashed red !important;
+}
+
+.marquee-inner {
+  outline: 1px dashed blue !important;
+}
+*/

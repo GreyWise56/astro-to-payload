@@ -1,10 +1,21 @@
 ---
-// src/pages/[slug].astro - Now using real BlogV16 component
+// src/pages/[slug].astro - Now supports HeroV1 + HeroV2 + HeroV7 + BlogV16 blocks
 
 import BaseLayout from '../layouts/BaseLayout.astro';
 import BlogV16 from '../components/blocks/BlogV16.astro';
+import HeroV1 from '../components/blocks/HeroV1.astro';
+import HeroV2 from '../components/blocks/HeroV2.astro';
+import HeroV7 from '../components/blocks/HeroV7.astro';
+import HeroV5 from '../components/blocks/HeroV5.astro';
+import HeroV6 from '../components/blocks/HeroV6.astro';
+import HeroV8 from '../components/blocks/HeroV8.astro';
+import HeroV10 from '../components/blocks/HeroV10.astro';
+import HeroV15 from '../components/blocks/HeroV15.astro';
+import HeroV16 from '../components/blocks/HeroV16.astro';
+import HeroV19 from '../components/blocks/HeroV19.astro';
+import HeroV20 from '../components/blocks/HeroV20.astro';
 
-// Static generation
+// Static generation code stays the same...
 export async function getStaticPaths() {
   try {
     console.log('🔍 getStaticPaths: Fetching page slugs...');
@@ -32,7 +43,7 @@ export async function getStaticPaths() {
   }
 }
 
-// Get page data
+// Get page data code stays the same...
 const { slug } = Astro.params;
 
 if (!slug) {
@@ -72,12 +83,114 @@ const title = pageData?.title || 'Page Not Found';
     </div>
   ) : pageData ? (
     <div>
-      <!-- Render page blocks -->
       {pageData.pageBlocks && pageData.pageBlocks.length > 0 ? (
         pageData.pageBlocks.map((block: any) => {
           console.log('🎨 Rendering block:', block.blockType);
           
           switch (block.blockType) {
+            case 'hero-v1':
+              return <HeroV1 
+                badgeText={block.badgeText}
+                heading={block.heading}
+                italicizedWord={block.italicizedWord}
+                description={block.description}
+                primaryButton={block.primaryButton}
+                secondaryButton={block.secondaryButton}
+                backgroundImage={block.backgroundImage}
+              />;
+            
+            case 'hero-v2':
+              return <HeroV2 
+                topLabel={block.topLabel}
+                heading={block.heading}
+                italicHeading1={block.italicHeading1}
+                italicHeading2={block.italicHeading2}
+                button={block.button}
+                gradientBackground={block.gradientBackground}
+              />;
+
+              case 'hero-v5':
+  return <HeroV5 
+    eyebrow={block.eyebrow}
+    heading={block.heading}
+    rating={block.rating}
+    reviewAvatars={block.reviewAvatars}
+    trustedByText={block.trustedByText}
+    button={block.button}
+    mainImage={block.mainImage}
+  />;
+  case 'hero-v6':
+  return <HeroV6 
+    gradientImage={block.gradientImage}
+    italicHeading={block.italicHeading}
+    mainHeading={block.mainHeading}
+    button={block.button}
+    bannerImage={block.bannerImage}
+  />;          
+
+            case 'hero-v7':
+              return <HeroV7 
+                headingPart1={block.headingPart1}
+                headingPart2={block.headingPart2}
+                inlineSliderImages={block.inlineSliderImages}
+                description={block.description}
+                skewedMarqueeImages={block.skewedMarqueeImages}
+                subheading={block.subheading}
+                gradientImage={block.gradientImage}
+              />;
+            case 'hero-v8':
+  return <HeroV8 
+    backgroundImages={block.backgroundImages}
+    gradientBg={block.gradientBg}
+    mainTitle={block.mainTitle}
+    subtitle={block.subtitle}
+    button={block.button}
+  />;
+case 'hero-v10':
+  return <HeroV10 
+    image={block.image}
+    heading={block.heading}
+  />;
+
+  case 'hero-v15':
+  return <HeroV15 
+    heading={block.heading}
+    description={block.description}
+    button={block.button}
+    marqueeText={block.marqueeText}
+    images={block.images}
+    gradientBackground={block.gradientBackground}
+  />;
+
+  case 'hero-v16':
+  return <HeroV16 
+    heading={block.heading}
+    description={block.description}
+    button={block.button}
+    reviewAvatars={block.reviewAvatars}
+    trustedByText={block.trustedByText}
+    video={block.video}
+    gradientBackground={block.gradientBackground}
+  />;
+case 'hero-v19':
+  return <HeroV19 
+    heading={block.heading}
+    description={block.description}
+    button={block.button}
+    images={block.images}
+    circleElement={block.circleElement}
+    gradientBackground={block.gradientBackground}
+  />;
+
+  case 'hero-v20':
+  return <HeroV20 
+    badge={block.badge}
+    heading={block.heading}
+    sliderImages={block.sliderImages}
+    description={block.description}
+    button={block.button}
+    gradientBackground={block.gradientBackground}
+  />;
             case 'blog-v16':
               return <BlogV16 
                 heading={block.heading}
@@ -86,12 +199,15 @@ const title = pageData?.title || 'Page Not Found';
                 posts={block.posts}
               />;
             
-            // Add other block renderers here
             default:
               return (
                 <div class="container mx-auto px-4 py-8">
                   <div class="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded">
                     <strong>Unknown Block Type:</strong> {block.blockType}
+                    <details class="mt-2">
+                      <summary class="cursor-pointer">Debug Info</summary>
+                      <pre class="text-xs mt-2 bg-white p-2 rounded">{JSON.stringify(block, null, 2)}</pre>
+                    </details>
                   </div>
                 </div>
               );

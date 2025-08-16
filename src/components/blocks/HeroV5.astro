@@ -1,20 +1,5 @@
 ---
-// src/components/blocks/HeroV5.astro
-
-/*
-================================================================================
-Component: HeroV5
-Description: A hero section for an SEO agency, featuring a two-column layout
-             with a title, review statistics, and a main image.
-================================================================================
-*/
-
-import { Image } from 'astro:assets';
-import type { ImageMetadata } from 'astro';
-
-// --- Asset Imports ---
-import arrowIconLight from '../../assets/images/home-5/ArrowUpRight.svg';
-import arrowIconDark from '../../assets/images/home-5/ArrowUpRight-dark.svg';
+// src/components/blocks/HeroV5.astro - Payload CMS Compatible (SEO Agency)
 
 export interface Props {
   eyebrow: string;
@@ -23,13 +8,21 @@ export interface Props {
     score: string;
     label: string;
   };
-  reviewAvatars: ImageMetadata[];
+  reviewAvatars: Array<{
+    avatar: {
+      url: string;
+      alt?: string;
+    };
+  }>;
   trustedByText: string;
   button: {
     text: string;
     url: string;
   };
-  mainImage: ImageMetadata;
+  mainImage: {
+    url: string;
+    alt?: string;
+  };
 }
 
 const {
@@ -41,6 +34,19 @@ const {
   button,
   mainImage,
 } = Astro.props;
+
+// Helper function to ensure proper image URLs
+const getImageUrl = (imageObj: { url: string; alt?: string }) => {
+  return imageObj?.url?.startsWith('http') 
+    ? imageObj.url 
+    : `http://localhost:3000${imageObj?.url || ''}`;
+};
+
+// Prepare avatar images
+const avatarImages = reviewAvatars || [];
+
+// Main image URL
+const mainImageUrl = getImageUrl(mainImage);
 ---
 
 <section
@@ -106,34 +112,61 @@ const {
         </figure>
 
         <div class="flex [&>*:not(:first-child)]:-ml-4 my-3">
-          {reviewAvatars.map((avatar, index) => (
-            <Image src={avatar} alt={`User Review Image ${index + 1}`} class="size-[52px]" />
+          {avatarImages.map((item, index) => (
+            <img 
+              src={getImageUrl(item.avatar)} 
+              alt={item.avatar?.alt || `User Review Image ${index + 1}`}
+              class="size-[52px] rounded-full object-cover"
+              loading="lazy"
+            />
           ))}
           <a
             href="#"
             class="bg-secondary relative group dark:bg-backgroundBody border-[1.9px] border-backgroundBody p-4 size-[52px] rounded-full cursor-pointer"
           >
             <figure>
-              <Image
-                src={arrowIconLight}
-                alt="Arrow Icon"
+              <!-- Light mode arrow icons -->
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 16 16"
+                fill="none"
                 class="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 group-hover:-translate-y-12 group-hover:translate-x-8 transition-all duration-500 opacity-100 group-hover:opacity-0 inline dark:hidden"
-              />
-              <Image
-                src={arrowIconLight}
-                alt="Arrow Icon"
+              >
+                <path d="M4 12L12 4M12 4H6M12 4V10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 16 16"
+                fill="none"
                 class="absolute translate-y-6 -translate-x-5 transition-all duration-500 group-hover:-translate-x-[2px] group-hover:translate-y-[1%] opacity-0 group-hover:opacity-100 inline dark:hidden"
-              />
-              <Image
-                src={arrowIconDark}
-                alt="Arrow Icon"
+              >
+                <path d="M4 12L12 4M12 4H6M12 4V10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              <!-- Dark mode arrow icons -->
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 16 16"
+                fill="none"
                 class="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 group-hover:-translate-y-12 group-hover:translate-x-8 transition-all duration-500 opacity-100 group-hover:opacity-0 dark:inline hidden"
-              />
-              <Image
-                src={arrowIconDark}
-                alt="Arrow Icon"
+              >
+                <path d="M4 12L12 4M12 4H6M12 4V10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 16 16"
+                fill="none"
                 class="absolute translate-y-6 -translate-x-5 transition-all duration-500 group-hover:-translate-x-[2px] group-hover:translate-y-[1%] opacity-0 group-hover:opacity-100 dark:inline hidden"
-              />
+              >
+                <path d="M4 12L12 4M12 4H6M12 4V10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
             </figure>
           </a>
         </div>
@@ -163,7 +196,11 @@ const {
     </div>
 
     <figure>
-      <Image src={mainImage} alt="SEO Agency hero image" />
+      <img 
+        src={mainImageUrl} 
+        alt={mainImage?.alt || "SEO Agency hero image"}
+        loading="lazy"
+      />
     </figure>
   </div>
 </section>

@@ -1,44 +1,50 @@
 ---
-// src/components/blocks/HeroV20.astro
-
-/*
-================================================================================
-Component: HeroV20
-Description: A hero section for a social media agency, featuring a large
-             centered heading with an inline image slider.
-================================================================================
-*/
-
-import { Image } from 'astro:assets';
-import type { ImageMetadata } from 'astro';
+// src/components/blocks/HeroV20.astro - Payload CMS Compatible (Social Media Agency) - FINAL HERO!
 
 export interface Props {
   badge: string;
-  headingPart1: string;
-  italicHeading: string;
-  headingPart2: string;
-  sliderImages: {
-    src: ImageMetadata;
+  heading: {
+    headingPart1: string;
+    italicHeading: string;
+    headingPart2: string;
+  };
+  sliderImages: Array<{
+    image: {
+      url: string;
+      alt?: string;
+    };
     alt: string;
-  }[];
+  }>;
   description: string;
   button: {
     text: string;
     url: string;
   };
-  gradientBackground: ImageMetadata;
+  gradientBackground: {
+    url: string;
+    alt?: string;
+  };
 }
 
 const {
   badge,
-  headingPart1,
-  italicHeading,
-  headingPart2,
+  heading,
   sliderImages,
   description,
   button,
   gradientBackground,
 } = Astro.props;
+
+// Helper function to ensure proper image URLs
+const getImageUrl = (imageObj: { url: string; alt?: string }) => {
+  return imageObj?.url?.startsWith('http') 
+    ? imageObj.url 
+    : `http://localhost:3000${imageObj?.url || ''}`;
+};
+
+// Prepare image URLs
+const gradientBackgroundUrl = getImageUrl(gradientBackground);
+const sliderImagesList = sliderImages || [];
 ---
 
 <section
@@ -51,13 +57,14 @@ const {
     class="absolute w-full h-fw-full top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 -z-10 blur-[60px] scale-90"
     aria-hidden="true"
   >
-    <Image
-      src={gradientBackground}
-      alt="gradient background"
+    <img
+      src={gradientBackgroundUrl}
+      alt={gradientBackground?.alt || "gradient background"}
       id="hero-gradient"
       class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
       width="1200"
       height="800"
+      loading="lazy"
     />
   </div>
 
@@ -70,20 +77,26 @@ const {
 
     <!-- Hero Heading -->
     <h1 id="hero-heading" class="xl:leading-[1.1]">
-      {headingPart1} <i class="font-instrument">{italicHeading}</i>
+      {heading.headingPart1} <i class="font-instrument">{heading.italicHeading}</i>
       <span
         class="cta-slider-container max-sm:block sm:inline-block max-sm:mb-5 translate-y-2 sm:translate-y-[20px] max-sm:mt-2.5"
         aria-label="Carousel of social media examples"
       >
         <div class="cta-inline-slider">
-          {sliderImages.map(image => (
+          {sliderImagesList.map((item, index) => (
             <div class="slide">
-                <Image src={image.src} alt={image.alt} width="120" height="80" />
+              <img 
+                src={getImageUrl(item.image)} 
+                alt={item.alt || item.image?.alt || `Social media example ${index + 1}`}
+                width="120" 
+                height="80"
+                loading="lazy"
+              />
             </div>
           ))}
         </div>
       </span>
-      {headingPart2}
+      {heading.headingPart2}
     </h1>
 
     <p class="md:max-w-[670px] mt-3 mx-auto text-center">

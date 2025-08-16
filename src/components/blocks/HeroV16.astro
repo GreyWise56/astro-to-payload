@@ -1,20 +1,5 @@
 ---
-// src/components/blocks/HeroV16.astro
-
-/*
-================================================================================
-Component: HeroV16
-Description: A hero section for a marketing agency, featuring a two-column
-             layout with a video, user testimonials, and a call-to-action.
-================================================================================
-*/
-
-import { Image } from 'astro:assets';
-import type { ImageMetadata } from 'astro';
-
-// --- Asset Imports ---
-import plusIconLight from '../../assets/images/icons/plus-icon.svg';
-import plusIconDark from '../../assets/images/icons/plus-icon-white.svg';
+// src/components/blocks/HeroV16.astro - Payload CMS Compatible (Marketing Agency)
 
 export interface Props {
   heading: string;
@@ -23,13 +8,24 @@ export interface Props {
     text: string;
     url: string;
   };
-  reviewAvatars: ImageMetadata[];
+  reviewAvatars: Array<{
+    avatar: {
+      url: string;
+      alt?: string;
+    };
+  }>;
   trustedByText: string;
   video: {
     url: string;
-    thumbnail: ImageMetadata;
+    thumbnail: {
+      url: string;
+      alt?: string;
+    };
   };
-  gradientBackground: ImageMetadata;
+  gradientBackground: {
+    url: string;
+    alt?: string;
+  };
 }
 
 const {
@@ -41,22 +37,35 @@ const {
   video,
   gradientBackground,
 } = Astro.props;
+
+// Helper function to ensure proper image URLs
+const getImageUrl = (imageObj: { url: string; alt?: string }) => {
+  return imageObj?.url?.startsWith('http') 
+    ? imageObj.url 
+    : `http://localhost:3000${imageObj?.url || ''}`;
+};
+
+// Prepare image URLs
+const avatarImages = reviewAvatars || [];
+const videoThumbnailUrl = getImageUrl(video.thumbnail);
+const gradientBackgroundUrl = getImageUrl(gradientBackground);
 ---
 
 <section
   class="pt-[107px] md:pt-[130px] xl:pt-[180px] relative bg-cover object-cover bg-no-repeat overflow-hidden"
-  style={`background-image: url(${gradientBackground.src})`}
+  style={`background-image: url(${gradientBackgroundUrl})`}
 >
   <!-- Gradient Background Wrapper for smaller screens -->
   <div
     id="hero-gradient-wrapper"
     class="absolute w-full h-full top-0 left-0 -z-10 blur-[85px] md:blur-[80px]"
   >
-    <Image
-      src={gradientBackground}
-      alt="hero-gradient-background"
+    <img
+      src={gradientBackgroundUrl}
+      alt={gradientBackground?.alt || "hero-gradient-background"}
       id="hero-gradient"
       class="absolute left-0 top-1/2 max-md:-translate-y-[60%] lg:scale-75 xl:scale-100 md:-translate-y-1/2"
+      loading="lazy"
     />
   </div>
 
@@ -93,27 +102,42 @@ const {
         <div class="flex items-center lg:flex-col xl:flex-row gap-x-5">
           <!-- user overlap image -->
           <div class="flex [&>*:not(:first-child)]:-ml-4 my-3">
-            {reviewAvatars.map((avatar, index) => (
-                 <Image
-                    src={avatar}
-                    class="border-2 border-secondary size-12 md:size-[60px] object-cover rounded-[48px] md:rounded-[60px]"
-                    alt={`Reviewer avatar ${index + 1}`}
-                />
+            {avatarImages.map((item, index) => (
+              <img
+                src={getImageUrl(item.avatar)}
+                class="border-2 border-secondary size-12 md:size-[60px] object-cover rounded-[48px] md:rounded-[60px]"
+                alt={item.avatar?.alt || `Reviewer avatar ${index + 1}`}
+                loading="lazy"
+              />
             ))}
             <a href="#">
               <figure
                 class="hover:scale-105 duration-300 ease-in-out max-md:size-12"
               >
-                <Image
-                  src={plusIconLight}
+                <!-- Light mode plus icon -->
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="48"
+                  height="48"
+                  viewBox="0 0 48 48"
+                  fill="none"
                   class="block dark:hidden"
-                  alt="See more reviews"
-                />
-                <Image
-                  src={plusIconDark}
-                  alt="See more reviews"
+                >
+                  <circle cx="24" cy="24" r="24" fill="#12D8CC"/>
+                  <path d="M24 16V32M16 24H32" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+                <!-- Dark mode plus icon -->
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="48"
+                  height="48"
+                  viewBox="0 0 48 48"
+                  fill="none"
                   class="dark:block hidden"
-                />
+                >
+                  <circle cx="24" cy="24" r="24" fill="#EDF0F5"/>
+                  <path d="M24 16V32M16 24H32" stroke="#181818" stroke-width="2" stroke-linecap="round"/>
+                </svg>
               </figure>
             </a>
           </div>
@@ -146,7 +170,11 @@ const {
               </div>
             </div>
 
-            <Image src={video.thumbnail} alt="Video thumbnail" />
+            <img 
+              src={videoThumbnailUrl} 
+              alt={video.thumbnail?.alt || "Video thumbnail"}
+              loading="lazy"
+            />
           </a>
         </div>
       </div>

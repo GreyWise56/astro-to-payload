@@ -3377,21 +3377,36 @@ html.lenis{
 }.lenis.lenis-scrolling iframe{
   pointer-events: none;
 }
-@keyframes textRotation{from{transform:rotate(0)}to{transform:rotate(360deg)}}@keyframes marqueeAni{0{
+@keyframes textRotation {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes marqueeAni {
+  0% {
     --tw-translate-x: 0px;
     transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
   }
-100%{
+  100% {
     --tw-translate-x: -100%;
     transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
-  }}@keyframes slide-up{from{
+  }
+}
+
+@keyframes slide-up {
+  from {
     opacity: 0;
     transition-duration: 150ms;
   }
-to{
+  to {
     opacity: 1;
     transition-duration: 150ms;
-  }}.text{
+  }
+}.text{
   position: absolute;
   height: 100%;
   width: 100%;

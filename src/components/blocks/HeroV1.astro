@@ -1,0 +1,103 @@
+---
+// src/components/blocks/HeroV1.astro - Payload CMS Compatible
+
+export interface Props {
+  badgeText?: string;
+  heading: string;
+  italicizedWord?: string;
+  description?: string;
+  primaryButton?: {
+    text: string;
+    url: string;
+  };
+  secondaryButton?: {
+    text: string;
+    url: string;
+  };
+  backgroundImage: {
+    url: string;
+    alt?: string;
+  };
+}
+
+const { 
+  badgeText,
+  heading,
+  italicizedWord,
+  description,
+  primaryButton,
+  secondaryButton,
+  backgroundImage,
+} = Astro.props;
+
+// Split the heading by our special '|' character for line breaks
+const headingLines = heading ? heading.split('|') : ['Default Heading'];
+
+// Ensure we have a valid background image URL
+const backgroundImageUrl = backgroundImage?.url?.startsWith('http') 
+  ? backgroundImage.url 
+  : `http://localhost:3000${backgroundImage?.url || ''}`;
+---
+
+<section class="pt-[137px] md:pt-[160px] xl:pt-[180px] pb-20 md:pb-[100px] relative overflow-hidden">
+  <div id="hero-gradient-wrapper" class="absolute w-full h-full top-0 left-0 -z-10 blur-[35px] md:blur-[60px]">
+    <img 
+      src={backgroundImageUrl}
+      alt={backgroundImage?.alt || "hero gradient background"}
+      id="hero-gradient"
+      class="absolute left-1/2 top-1/2 -translate-x-1/2 max-md:-translate-y-[60%] md:-translate-y-1/2"
+      loading="lazy"
+    />
+  </div>
+
+  <div class="container reveal-me">
+    <div class="text-center">
+      {badgeText && (
+        <div class="rv-badge mb-5 md:mb-10">
+          <span class="rv-badge-text">{badgeText}</span>
+        </div>
+      )}
+
+      <h1 class="mb-7 xl:mb-8 max-sm:text-4xl">
+        {headingLines.map((line, index) => (
+          <>
+            {italicizedWord && line.includes(italicizedWord) 
+              ? <>
+                  {line.split(italicizedWord)[0]}
+                  <span class="font-instrument italic">{italicizedWord}</span>
+                  {line.split(italicizedWord)[1]}
+                </>
+              : line
+            }
+            {index < headingLines.length - 1 && <br />}
+          </>
+        ))}
+      </h1>
+
+      {description && (
+        <p class="mb-10 md:mb-14 xl:mb-[76px] max-w-xl lg:max-w-[750px] mx-auto">
+          {description}
+        </p>
+      )}
+
+      <ul class="flex flex-col md:flex-row justify-center items-center gap-4 md:gap-6 list-none">
+        {primaryButton && (
+          <li class="block md:inline-block w-[90%] mx-auto md:ml-auto md:mr-0 md:w-auto">
+            <a href={primaryButton.url} class="rv-button rv-button-primary block md:inline-block">
+              <div class="rv-button-top"><span>{primaryButton.text}</span></div>
+              <div class="rv-button-bottom"><span class="text-nowrap">{primaryButton.text}</span></div>
+            </a>
+          </li>
+        )}
+        {secondaryButton && (
+          <li class="block md:inline-block w-[90%] mx-auto md:mr-auto md:ml-0 md:w-auto">
+            <a href={secondaryButton.url} class="rv-button rv-button-white block md:inline-block">
+              <div class="rv-button-top"><span>{secondaryButton.text}</span></div>
+              <div class="rv-button-bottom"><span>{secondaryButton.text}</span></div>
+            </a>
+          </li>
+        )}
+      </ul>
+    </div>
+  </div>
+</section>

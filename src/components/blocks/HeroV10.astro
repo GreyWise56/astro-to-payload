@@ -1,19 +1,36 @@
 ---
-// src/components/blocks/HeroV10.astro
-import { Image } from 'astro:assets';
+// src/components/blocks/HeroV10.astro - Payload CMS Compatible (Image Overlay)
 
 export interface Props {
-  image: ImageMetadata;
+  image: {
+    url: string;
+    alt?: string;
+  };
   heading: string;
 }
 
 const { image, heading } = Astro.props;
+
+// Helper function to ensure proper image URL
+const getImageUrl = (imageObj: { url: string; alt?: string }) => {
+  return imageObj?.url?.startsWith('http') 
+    ? imageObj.url 
+    : `http://localhost:3000${imageObj?.url || ''}`;
+};
+
+// Prepare image URL
+const imageUrl = getImageUrl(image);
 ---
 
 <section class="pt-[118px] md:pt-[143px] lg:pt-[120px] pb-16 md:pb-20 lg:pb-[95px] xl:pb-[120px]">
   <div class="relative w-full reveal-me">
     <figure class="hero-img-container">
-      <Image src={image} alt="Hero background image" class="w-[98%] mx-auto min-h-fit scale-hero-img" />
+      <img 
+        src={imageUrl} 
+        alt={image?.alt || "Hero background image"} 
+        class="w-[98%] mx-auto min-h-fit scale-hero-img"
+        loading="lazy"
+      />
     </figure>
     <div class="container">
       <h1

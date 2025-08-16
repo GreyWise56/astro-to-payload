@@ -1,48 +1,66 @@
 ---
-// src/components/blocks/HeroV19.astro
+// src/components/blocks/HeroV19.astro - Payload CMS Compatible (Startup/Brand Strategy)
 
-/*
-================================================================================
-Component: HeroV19
-Description: A hero section for a startup or brand strategy agency, featuring a
-             two-column layout, animated text, and decorative images.
-================================================================================
-*/
-
-import { Image } from 'astro:assets';
-import type { ImageMetadata } from 'astro';
-
-// Define the properties for the component
 export interface Props {
-  headingPart1: string;
-  headingPart2: string;
-  italicHeading: string;
+  heading: {
+    headingPart1: string;
+    headingPart2: string;
+    italicHeading: string;
+  };
   description: string;
   button: {
     text: string;
     url: string;
   };
-  image1: ImageMetadata;
-  image2: ImageMetadata;
-  circleLogoLight: ImageMetadata;
-  circleLogoDark: ImageMetadata;
-  circleText: string;
-  gradientBackground: ImageMetadata;
+  images: {
+    image1: {
+      url: string;
+      alt?: string;
+    };
+    image2: {
+      url: string;
+      alt?: string;
+    };
+  };
+  circleElement: {
+    circleLogoLight: {
+      url: string;
+      alt?: string;
+    };
+    circleLogoDark: {
+      url: string;
+      alt?: string;
+    };
+    circleText: string;
+  };
+  gradientBackground: {
+    url: string;
+    alt?: string;
+  };
 }
 
 const {
-  headingPart1,
-  headingPart2,
-  italicHeading,
+  heading,
   description,
   button,
-  image1,
-  image2,
-  circleLogoLight,
-  circleLogoDark,
-  circleText,
+  images,
+  circleElement,
   gradientBackground,
 } = Astro.props;
+
+// Helper function to ensure proper image URLs
+const getImageUrl = (imageObj: { url: string; alt?: string }) => {
+  return imageObj?.url?.startsWith('http') 
+    ? imageObj.url 
+    : `http://localhost:3000${imageObj?.url || ''}`;
+};
+
+// Prepare image URLs
+const image1Url = getImageUrl(images.image1);
+const image2Url = getImageUrl(images.image2);
+const circleLogoLightUrl = getImageUrl(circleElement.circleLogoLight);
+const circleLogoDarkUrl = getImageUrl(circleElement.circleLogoDark);
+const gradientBackgroundUrl = getImageUrl(gradientBackground);
 ---
 
 <section
@@ -53,11 +71,12 @@ const {
     id="hero-gradient-wrapper"
     class="absolute top-0 md:-top-[10%] left-0 lg:-left-[17%] 2xl:left-0 -z-10 blur-[65px]"
   >
-    <Image
-      src={gradientBackground}
-      alt="hero gradient background"
+    <img
+      src={gradientBackgroundUrl}
+      alt={gradientBackground?.alt || "hero gradient background"}
       id="hero-gradient"
       class="scale-50 left-0 -top-[10%]"
+      loading="lazy"
     />
   </div>
   <div
@@ -68,9 +87,9 @@ const {
       <h1
         class="reveal-me text-5xl sm:text-[55px] md:text-[67px] 2xl:text-8xl font-normal leading-tight 2xl:leading-[1.17] tracking-[-2px] 2xl:tracking-[-2.88px]"
       >
-        {headingPart1} <br class="hidden lg:block" />
-        {headingPart2} <br class="hidden lg:block" />
-        &<i class="font-instrument">{italicHeading}</i>
+        {heading.headingPart1} <br class="hidden lg:block" />
+        {heading.headingPart2} <br class="hidden lg:block" />
+        &<i class="font-instrument">{heading.italicHeading}</i>
       </h1>
       <p class="reveal-me mt-3" set:html={description}></p>
 
@@ -100,35 +119,39 @@ const {
           class="absolute w-[120px] h-[120px] rounded-full flex items-center justify-center mx-auto before:absolute before:content-[''] before:w-[140px] before:h-[140px] before:rounded-full before:bg-white dark:before:bg-secondary -top-[12%] -left-0 lg:-left-[12%]"
         >
           <figure class="relative z-20">
-            <Image
-              src={circleLogoLight}
-              alt="text circle logo"
+            <img
+              src={circleLogoLightUrl}
+              alt={circleElement.circleLogoLight?.alt || "text circle logo"}
               class="inline dark:hidden"
+              loading="lazy"
             />
-            <Image
-              src={circleLogoDark}
-              alt="text circle logo dark"
+            <img
+              src={circleLogoDarkUrl}
+              alt={circleElement.circleLogoDark?.alt || "text circle logo dark"}
               class="hidden dark:inline"
+              loading="lazy"
             />
           </figure>
           <div
             class="text-2 text-[10px] bg-secondary dark:bg-backgroundBody !w-[120px] !h-[120px] rounded-full"
           >
-            {circleText}
+            {circleElement.circleText}
           </div>
         </div>
 
-        <Image
-          src={image1}
-          alt="hero image 1"
+        <img
+          src={image1Url}
+          alt={images.image1?.alt || "hero image 1"}
           class="max-sm:w-full"
+          loading="lazy"
         />
       </figure>
       <figure>
-        <Image
-          src={image2}
-          alt="hero image 2"
+        <img
+          src={image2Url}
+          alt={images.image2?.alt || "hero image 2"}
           class="max-sm:w-full"
+          loading="lazy"
         />
       </figure>
     </div>

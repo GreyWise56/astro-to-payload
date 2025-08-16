@@ -1,19 +1,41 @@
 ---
-// src/components/blocks/HeroV6.astro
-import { Image } from 'astro:assets';
+// src/components/blocks/HeroV6.astro - Payload CMS Compatible (Banner)
 
 export interface Props {
-  gradientImage: ImageMetadata;
+  gradientImage: {
+    url: string;
+    alt?: string;
+  };
   italicHeading: string;
   mainHeading: string;
   button: {
     text: string;
     url: string;
   };
-  bannerImage: ImageMetadata;
+  bannerImage: {
+    url: string;
+    alt?: string;
+  };
 }
 
-const { gradientImage, italicHeading, mainHeading, button, bannerImage } = Astro.props;
+const { 
+  gradientImage, 
+  italicHeading, 
+  mainHeading, 
+  button, 
+  bannerImage 
+} = Astro.props;
+
+// Helper function to ensure proper image URLs
+const getImageUrl = (imageObj: { url: string; alt?: string }) => {
+  return imageObj?.url?.startsWith('http') 
+    ? imageObj.url 
+    : `http://localhost:3000${imageObj?.url || ''}`;
+};
+
+// Prepare image URLs
+const gradientImageUrl = getImageUrl(gradientImage);
+const bannerImageUrl = getImageUrl(bannerImage);
 ---
 
 <section class="relative overflow-hidden">
@@ -22,11 +44,12 @@ const { gradientImage, italicHeading, mainHeading, button, bannerImage } = Astro
       id="hero-gradient-wrapper"
       class="absolute w-full h-full top-[37%] left-0 -z-10 blur-[35px] md:blur-[60px] sm:scale-50 md:scale-75 lg:scale-90"
     >
-      <Image
-        src={gradientImage}
-        alt="hero gradient background"
+      <img
+        src={gradientImageUrl}
+        alt={gradientImage?.alt || "hero gradient background"}
         id="hero-gradient"
         class="absolute left-1/2 top-[1/2] -translate-x-1/2 -translate-y-1/2"
+        loading="lazy"
       />
     </div>
     <div class="container">
@@ -52,10 +75,11 @@ const { gradientImage, italicHeading, mainHeading, button, bannerImage } = Astro
     </div>
   </div>
   <figure class="w-full reveal-me scale-small-img">
-    <Image
-      src={bannerImage}
-      alt="Hero Banner Big Image"
+    <img
+      src={bannerImageUrl}
+      alt={bannerImage?.alt || "Hero Banner Big Image"}
       class="w-full"
+      loading="lazy"
     />
   </figure>
 </section>
