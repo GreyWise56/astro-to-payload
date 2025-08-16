@@ -1,28 +1,143 @@
 ---
-// src/components/blocks/BlogV19.astro
+// src/components/blocks/BlogV19.astro - Dynamic version
 
 /*
 ================================================================================
-Component: BlogV19
-Description: A block that displays a header and a grid of featured blog posts.
+Component: BlogV19 (Dynamic)
+Description: A block that displays a header and a grid of featured blog posts
+             with dynamic content loading from Blog collection.
 ================================================================================
 */
 
-import BlogPostCardV19 from '../cards/BlogPostCardV19.astro';
-import type { Props as BlogPost } from '../cards/BlogPostCardV19.astro';
-
-// Define the properties for the entire block
 export interface Props {
   badge: string;
   heading: string;
-  posts: BlogPost[];
   button: {
     text: string;
     url: string;
   };
+  arrowIcons: {
+    lightArrow: {
+      url: string;
+      alt?: string;
+    };
+    darkArrow: {
+      url: string;
+      alt?: string;
+    };
+  };
+  blogSettings: {
+    displayType: 'latest' | 'category' | 'manual';
+    numberOfPosts?: number;
+    category?: {
+      id: string;
+      slug: string;
+      title: string;
+    };
+    manualPosts?: Array<{
+      id: string;
+      title: string;
+      slug: string;
+      createdAt: string;
+      featuredImage?: {
+        url: string;
+        alt?: string;
+      };
+      categories?: Array<{
+        title: string;
+      }>;
+    }>;
+    excludePosts?: Array<{
+      id: string;
+    }>;
+    activeCardIndex?: number;
+  };
 }
 
-const { badge, heading, posts, button } = Astro.props;
+const { badge, heading, button, arrowIcons, blogSettings } = Astro.props;
+
+// Helper function for image URLs
+const getImageUrl = (imageObj: { url: string; alt?: string } | undefined): string => {
+  if (!imageObj?.url) return '/placeholder-blog.jpg';
+  return imageObj.url.startsWith('http') 
+    ? imageObj.url 
+    : `http://localhost:3000${imageObj.url}`;
+};
+
+// Prepare arrow icon URLs with fallbacks
+const lightArrowUrl = arrowIcons?.lightArrow ? getImageUrl(arrowIcons.lightArrow) : '/arrow-light.svg';
+const darkArrowUrl = arrowIcons?.darkArrow ? getImageUrl(arrowIcons.darkArrow) : '/arrow-dark.svg';
+
+// Fetch blog posts based on settings
+let displayPosts: Array<{
+  title: string;
+  category: string;
+  url: string;
+  image: {
+    url: string;
+    alt?: string;
+  };
+  isActive: boolean;
+}> = [];
+
+try {
+  const baseUrl = 'http://localhost:3000/api/blog?depth=2';
+  
+  if (blogSettings?.displayType === 'manual' && blogSettings.manualPosts?.length) {
+    // Use manually selected posts
+    displayPosts = blogSettings.manualPosts.map((post, index) => ({
+      title: post.title || 'Untitled Post',
+      category: post.categories?.[0]?.title || 'Blog',
+      url: `/blog/${post.slug}`,
+      image: {
+        url: getImageUrl(post.featuredImage),
+        alt: post.featuredImage?.alt || post.title,
+      },
+      isActive: blogSettings.activeCardIndex === index,
+    }));
+  } else {
+    // Build query parameters for latest or category posts
+    const params = new URLSearchParams();
+    
+    if (blogSettings?.numberOfPosts) {
+      params.append('limit', blogSettings.numberOfPosts.toString());
+    }
+    
+    // Add category filter
+    if (blogSettings?.displayType === 'category' && blogSettings.category?.id) {
+      params.append('where[categories][in]', blogSettings.category.id);
+    }
+    
+    // Add exclusions
+    if (blogSettings?.excludePosts?.length) {
+      const excludeIds = blogSettings.excludePosts.map(p => p.id).join(',');
+      params.append('where[id][not_in]', excludeIds);
+    }
+    
+    // Sort by latest
+    params.append('sort', '-createdAt');
+    
+    const fetchUrl = params.toString() ? `${baseUrl}&${params.toString()}` : baseUrl;
+    const response = await fetch(fetchUrl);
+    const data = await response.json();
+    
+    if (data.docs && Array.isArray(data.docs)) {
+      displayPosts = data.docs.map((post: any, index: number) => ({
+        title: post.title || 'Untitled Post',
+        category: post.categories?.[0]?.title || 'Blog',
+        url: `/blog/${post.slug}`,
+        image: {
+          url: getImageUrl(post.featuredImage),
+          alt: post.featuredImage?.alt || post.title,
+        },
+        isActive: blogSettings?.activeCardIndex === index,
+      }));
+    }
+  }
+} catch (error) {
+  console.error('Error fetching blog posts:', error);
+  // displayPosts will remain empty array, showing the editor helper
+}
 ---
 
 <section
@@ -40,14 +155,107 @@ const { badge, heading, posts, button } = Astro.props;
       </h2>
     </div>
 
-    <!-- Blog Posts grid  -->
-    <div
-      class="flex max-lg:flex-wrap items-start justify-center max-lg:gap-y-5 md:space-x-[30px] overflow-hidden"
-      aria-label="Featured blog posts"
-    >
-      <!-- Loop through posts and render a card for each -->
-      {posts.map((post) => <BlogPostCardV19 {...post} />)}
-    </div>
+    {displayPosts.length > 0 ? (
+      <!-- Blog Posts grid -->
+      <div
+        class="flex max-lg:flex-wrap items-start justify-center max-lg:gap-y-5 md:space-x-[30px] overflow-hidden"
+        aria-label="Featured blog posts"
+      >
+        {displayPosts.map((post) => (
+          <article
+            class:list={[
+              "blog-card border dark:border-dark p-2.5 group relative cursor-pointer min-h-[565px] reveal-me",
+              { "active-card": post.isActive }
+            ]}
+          >
+            <a
+              href={post.url}
+              class="w-full"
+              aria-labelledby={`blog-title-${post.title.toLowerCase().replace(/\s+/g, '-')}`}
+            >
+              <figure class="overflow-hidden h-[238px]">
+                <img
+                  src={post.image.url}
+                  alt={post.image.alt || post.title}
+                  class="w-full h-full transition-all duration-500 group-hover:scale-125 group-hover:rotate-3 object-cover"
+                  width="370"
+                  height="238"
+                  loading="lazy"
+                />
+              </figure>
+              <div class="px-2.5">
+                <div class="rv-badge mt-7">
+                  <span class="rv-badge-text">{post.category}</span>
+                </div>
+
+                <div class="blog-title mt-3.5 mb-[30px]">
+                  <h3
+                    id={`blog-title-${post.title.toLowerCase().replace(/\s+/g, '-')}`}
+                    class="text-[25px] md:text-3xl lg:text-[32px] lg:leading-[1.2] lg:tracking-[-0.72px]"
+                  >
+                    {post.title}
+                  </h3>
+                </div>
+
+                <div class="absolute bottom-[22px]">
+                  <div class="rv-button rv-button-primary2 w-full md:w-auto">
+                    <div class="rv-button-top !text-center flex items-center">
+                      <span class="pr-1">Read more</span>
+                      <img
+                        class="inline dark:hidden"
+                        src={lightArrowUrl}
+                        alt=""
+                        width="16"
+                        height="16"
+                        aria-hidden="true"
+                        loading="lazy"
+                      />
+                      <img
+                        class="hidden dark:inline"
+                        src={darkArrowUrl}
+                        alt=""
+                        width="16"
+                        height="16"
+                        aria-hidden="true"
+                        loading="lazy"
+                      />
+                    </div>
+                    <div class="rv-button-bottom !text-center flex items-center">
+                      <span class="pr-1">Read more</span>
+                      <img
+                        class="inline"
+                        src={lightArrowUrl}
+                        alt=""
+                        width="16"
+                        height="16"
+                        aria-hidden="true"
+                        loading="lazy"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </article>
+        ))}
+      </div>
+    ) : (
+      <!-- Editor Helper -->
+      <div class="text-center py-16">
+        <div class="bg-blue-100 border border-blue-300 text-blue-700 px-6 py-4 rounded-lg inline-block">
+          <p class="font-semibold">📝 No Blog Posts Found</p>
+          <p class="text-sm mt-2">
+            {blogSettings?.displayType === 'manual' 
+              ? 'Please select some blog posts in the block settings.'
+              : 'Create some blog posts in the admin or adjust your filter settings.'
+            }
+          </p>
+          <a href="http://localhost:3000/admin/collections/blog" class="text-xs underline mt-1 block">
+            → Manage Blog Posts
+          </a>
+        </div>
+      </div>
+    )}
 
     <div class="flex justify-center mt-[56px] mx-auto reveal-me">
       <a

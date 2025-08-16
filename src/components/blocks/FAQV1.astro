@@ -1,0 +1,172 @@
+---
+// src/components/blocks/FAQV1.astro - With Auto FAQ Schema Generation
+
+/*
+================================================================================
+Component: FAQV1
+Description: FAQ section with expandable items and automatic FAQ schema generation
+================================================================================
+*/
+
+export interface Props {
+  heading: string;
+  italicizedWord: string;
+  faqItems: Array<{
+    question: string;
+    answer: any; // Rich text content
+  }>;
+  button: {
+    text: string;
+    url: string;
+  };
+  backgroundImage: {
+    url: string;
+    alt?: string;
+  };
+  seoSettings?: {
+    enableSchema?: boolean;
+    schemaContext?: string;
+  };
+}
+
+const { heading, italicizedWord, faqItems, button, backgroundImage, seoSettings } = Astro.props;
+
+// Helper function for image URLs
+const getImageUrl = (imageObj: { url: string; alt?: string }) => {
+  return imageObj?.url?.startsWith('http') 
+    ? imageObj.url 
+    : `http://localhost:3000${imageObj?.url || ''}`;
+};
+
+// Split heading at italic word
+const headingParts = heading.split(italicizedWord);
+const backgroundImageUrl = getImageUrl(backgroundImage);
+
+// Helper function to extract text from rich text content
+const extractTextFromRichText = (richTextContent: any): string => {
+  if (typeof richTextContent === 'string') return richTextContent;
+  
+  if (richTextContent && Array.isArray(richTextContent)) {
+    return richTextContent
+      .map((node: any) => {
+        if (node.type === 'paragraph' && node.children) {
+          return node.children.map((child: any) => child.text || '').join('');
+        }
+        return node.text || '';
+      })
+      .join(' ');
+  }
+  
+  return '';
+};
+
+// Generate FAQ Schema JSON-LD for SEO
+const generateFAQSchema = () => {
+  if (!seoSettings?.enableSchema || !faqItems?.length) return null;
+  
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "name": seoSettings.schemaContext || `${heading} - JAM Group`,
+    "mainEntity": faqItems.map(item => ({
+      "@type": "Question",
+      "name": item.question,
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": extractTextFromRichText(item.answer)
+      }
+    }))
+  };
+  
+  return faqSchema;
+};
+
+const faqSchema = generateFAQSchema();
+---
+
+<!-- Inject FAQ Schema into page head -->
+{faqSchema && (
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)}></script>
+)}
+
+<section class="pt-14 md:pt-16 lg:pt-[88px] xl:pt-[100px] pb-14 md:pb-16 lg:pb-[88px] xl:pb-[100px] relative overflow-hidden">
+  <!-- Background Image -->
+  <div class="absolute scale-y-[3.4] sm:scale-y-[1.6] md:scale-y-[1.5] lg:scale-y-[1.5] xl:scale-y-[1.4] 2xl:scale-y-[1] scale-x-[2.8] md:scale-x-[1.9] lg:scale-x-[1.7] left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2 -z-30">
+    <img 
+      src={backgroundImageUrl} 
+      alt={backgroundImage?.alt || "gradient background"} 
+      width="1200" 
+      height="800"
+      loading="lazy"
+    />
+  </div>
+  
+  <div class="container">
+    <!-- FAQ Heading -->
+    <h2 class="mb-10 md:mb-20 text-center text-appear">
+      {headingParts[0]}<span class="font-instrument italic">{italicizedWord}</span>{headingParts[1]}
+    </h2>
+
+    <!-- FAQ Items -->
+    {faqItems && faqItems.length > 0 ? (
+      <div class="max-w-[900px] w-full mx-auto [&>*:not(:last-child)]:mb-6 reveal-me">
+        {faqItems.map((item, index) => (
+          <div class="faq-item border-b border-gray-200 dark:border-gray-700 pb-6">
+            <details class="group">
+              <summary class="flex justify-between items-center cursor-pointer list-none">
+                <h3 class="text-lg md:text-xl font-medium pr-4">
+                  {item.question}
+                </h3>
+                <div class="flex-shrink-0 w-6 h-6 rounded-full border border-gray-400 flex items-center justify-center transition-transform group-open:rotate-45">
+                  <span class="text-gray-600 text-lg leading-none">+</span>
+                </div>
+              </summary>
+              <div class="mt-4 text-gray-600 dark:text-gray-300 prose prose-sm dark:prose-invert max-w-none">
+                <!-- Render rich text content -->
+                {typeof item.answer === 'string' ? (
+                  <p>{item.answer}</p>
+                ) : (
+                  <div set:html={extractTextFromRichText(item.answer)} />
+                )}
+              </div>
+            </details>
+          </div>
+        ))}
+      </div>
+    ) : (
+      <!-- Editor Helper -->
+      <div class="text-center py-16">
+        <div class="bg-blue-100 border border-blue-300 text-blue-700 px-6 py-4 rounded-lg inline-block">
+          <p class="font-semibold">❓ No FAQ Items Found</p>
+          <p class="text-sm mt-2">Add some FAQ questions and answers in the block settings.</p>
+          <p class="text-xs mt-1 text-blue-600">🤖 FAQ schema will be auto-generated for SEO!</p>
+        </div>
+      </div>
+    )}
+
+    <!-- CTA Button -->
+    <ul class="flex justify-center mt-[56px] mx-auto list-none reveal-me">
+      <li class="block md:inline-block w-[90%] mx-auto md:w-auto text-center">
+        <a href={button.url} class="rv-button rv-button-white block md:inline-block">
+          <div class="rv-button-top"><span>{button.text}</span></div>
+          <div class="rv-button-bottom"><span>{button.text}</span></div>
+        </a>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<style>
+  /* Custom FAQ styling */
+  .faq-item details[open] summary {
+    @apply mb-4;
+  }
+  
+  .faq-item details summary::-webkit-details-marker {
+    display: none;
+  }
+  
+  .faq-item details[open] .group-open\:rotate-45 {
+    transform: rotate(45deg);
+  }
+</style>

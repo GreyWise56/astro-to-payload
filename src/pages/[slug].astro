@@ -3,6 +3,9 @@
 
 import BaseLayout from '../layouts/BaseLayout.astro';
 import BlogV16 from '../components/blocks/BlogV16.astro';
+import BlogV5 from '../components/blocks/BlogV5.astro';
+import BlogV10 from '../components/blocks/BlogV10.astro';
+import BlogV19 from '../components/blocks/BlogV19.astro';
 import HeroV1 from '../components/blocks/HeroV1.astro';
 import HeroV2 from '../components/blocks/HeroV2.astro';
 import HeroV7 from '../components/blocks/HeroV7.astro';
@@ -14,6 +17,8 @@ import HeroV15 from '../components/blocks/HeroV15.astro';
 import HeroV16 from '../components/blocks/HeroV16.astro';
 import HeroV19 from '../components/blocks/HeroV19.astro';
 import HeroV20 from '../components/blocks/HeroV20.astro';
+import FAQV1 from '../components/blocks/FAQV1.astro';
+import FAQV2 from '../components/blocks/FAQV2.astro';
 
 // Static generation code stays the same...
 export async function getStaticPaths() {
@@ -192,13 +197,55 @@ case 'hero-v19':
     gradientBackground={block.gradientBackground}
   />;
             case 'blog-v16':
-              return <BlogV16 
-                heading={block.heading}
-                subheading={block.subheading}
-                button={block.button}
-                posts={block.posts}
-              />;
-            
+  return <BlogV16 
+    heading={block.heading}
+    subheading={block.subheading}
+    button={block.button}
+    blogSettings={block.blogSettings}
+  />;
+
+  case 'blog-v5':
+  return <BlogV5 
+    eyebrow={block.eyebrow}
+    heading={block.heading}
+    button={block.button}
+    blogSettings={block.blogSettings}
+  />;
+
+  case 'blog-v10':
+  return <BlogV10 
+    heading={block.heading}
+    button={block.button}
+    arrowIcons={block.arrowIcons}
+    blogSettings={block.blogSettings}
+  />;
+
+  case 'blog-v19':
+  return <BlogV19 
+    badge={block.badge}
+    heading={block.heading}
+    button={block.button}
+    arrowIcons={block.arrowIcons}
+    blogSettings={block.blogSettings}
+  />;
+
+  case 'faq-v1':
+  return <FAQV1 
+    heading={block.heading}
+    italicizedWord={block.italicizedWord}
+    faqItems={block.faqItems}
+    button={block.button}
+    backgroundImage={block.backgroundImage}
+    seoSettings={block.seoSettings}
+  />;
+
+  case 'faq-v2':
+  return <FAQV2 
+    heading={block.heading}
+    subheading={block.subheading}
+    faqItems={block.faqItems}
+    seoSettings={block.seoSettings}
+  />;
             default:
               return (
                 <div class="container mx-auto px-4 py-8">

@@ -1,5 +1,5 @@
 ---
-// src/components/blocks/BlogV16.astro - Working with Payload data
+// src/components/blocks/BlogV16.astro - Dynamic blog post loading
 
 export interface Props {
   heading: string;
@@ -8,21 +8,108 @@ export interface Props {
     text: string;
     url: string;
   };
-  posts: Array<{
-    title: string;
-    category: string;
-    url: string;
-    image: {
-      url: string;
-      alt?: string;
+  blogSettings: {
+    displayType: 'latest' | 'category' | 'manual';
+    numberOfPosts?: number;
+    category?: {
+      id: string;
+      slug: string;
+      title: string;
     };
-  }>;
+    manualPosts?: Array<{
+      id: string;
+      title: string;
+      slug: string;
+      excerpt?: string;
+      featuredImage?: {
+        url: string;
+        alt?: string;
+      };
+      categories?: Array<{
+        title: string;
+      }>;
+    }>;
+    excludePosts?: Array<{
+      id: string;
+    }>;
+  };
 }
 
-const { heading, subheading, button, posts } = Astro.props;
+const { heading, subheading, button, blogSettings } = Astro.props;
 
-// Fallback data for empty posts
-const displayPosts = posts && posts.length > 0 ? posts : [];
+// Helper function for image URLs
+const getImageUrl = (imageObj: { url: string; alt?: string }) => {
+  return imageObj?.url?.startsWith('http') 
+    ? imageObj.url 
+    : `http://localhost:3000${imageObj?.url || ''}`;
+};
+
+// Fetch blog posts based on settings
+let displayPosts: Array<{
+  title: string;
+  category: string;
+  url: string;
+  image: {
+    url: string;
+    alt?: string;
+  };
+}> = [];
+
+try {
+  let fetchUrl = 'http://localhost:3000/api/blog?depth=2';
+  
+  if (blogSettings.displayType === 'manual' && blogSettings.manualPosts) {
+    // Use manually selected posts
+    displayPosts = blogSettings.manualPosts.map(post => ({
+      title: post.title,
+      category: post.categories?.[0]?.title || 'Blog',
+      url: `/blog/${post.slug}`,
+      image: {
+        url: getImageUrl(post.featuredImage || { url: '/placeholder-blog.jpg' }),
+        alt: post.featuredImage?.alt || post.title,
+      },
+    }));
+  } else {
+    // Build query parameters for latest or category posts
+    const params = new URLSearchParams();
+    
+    if (blogSettings.numberOfPosts) {
+      params.append('limit', blogSettings.numberOfPosts.toString());
+    }
+    
+    // Add category filter
+    if (blogSettings.displayType === 'category' && blogSettings.category) {
+      params.append('where[categories][in]', blogSettings.category.id);
+    }
+    
+    // Add exclusions
+    if (blogSettings.excludePosts && blogSettings.excludePosts.length > 0) {
+      const excludeIds = blogSettings.excludePosts.map(p => p.id).join(',');
+      params.append('where[id][not_in]', excludeIds);
+    }
+    
+    // Sort by latest
+    params.append('sort', '-createdAt');
+    
+    const response = await fetch(`${fetchUrl}&${params.toString()}`);
+    const data = await response.json();
+    
+    if (data.docs && Array.isArray(data.docs)) {
+      displayPosts = data.docs.map((post: any) => ({
+        title: post.title,
+        category: post.categories?.[0]?.title || 'Blog',
+        url: `/blog/${post.slug}`,
+        image: {
+          url: getImageUrl(post.featuredImage || { url: '/placeholder-blog.jpg' }),
+          alt: post.featuredImage?.alt || post.title,
+        },
+      }));
+    }
+  }
+} catch (error) {
+  console.error('Error fetching blog posts:', error);
+  // displayPosts will remain empty array, showing the editor helper
+}
 ---
 
 <section
@@ -75,7 +162,7 @@ const displayPosts = posts && posts.length > 0 ? posts : [];
             <div>
               <figure class="w-full reveal-me overflow-hidden">
                 <img
-                  src={post.image.url.startsWith('http') ? post.image.url : `http://localhost:3000${post.image.url}`}
+                  src={post.image.url}
                   alt={post.image.alt || post.title}
                   class="w-full h-auto object-cover transition-all duration-500 group-hover:scale-125 group-hover:rotate-3"
                   loading="lazy"
@@ -121,8 +208,16 @@ const displayPosts = posts && posts.length > 0 ? posts : [];
       <!-- Editor Helper -->
       <div class="text-center py-16">
         <div class="bg-blue-100 border border-blue-300 text-blue-700 px-6 py-4 rounded-lg inline-block">
-          <p class="font-semibold">📝 Add Blog Posts</p>
-          <p class="text-sm mt-2">Add some blog posts in the Payload admin to see them displayed here.</p>
+          <p class="font-semibold">📝 No Blog Posts Found</p>
+          <p class="text-sm mt-2">
+            {blogSettings.displayType === 'manual' 
+              ? 'Please select some blog posts in the block settings.'
+              : 'Create some blog posts in the admin or adjust your filter settings.'
+            }
+          </p>
+          <a href="http://localhost:3000/admin/collections/blog" class="text-xs underline mt-1 block">
+            → Manage Blog Posts
+          </a>
         </div>
       </div>
     )}

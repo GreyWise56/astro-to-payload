@@ -1,31 +1,65 @@
 ---
-// src/components/blocks/FaqV2.astro
+// src/components/blocks/FAQV2.astro - With Auto FAQ Schema Generation
 
 /*
 ================================================================================
-Component: FaqV2
-Description: A block that displays a header and a multi-column grid of FAQ items.
+Component: FAQV2
+Description: FAQ section with two-column header and three-column grid layout
+             with automatic FAQ schema generation
 ================================================================================
 */
 
-import FaqItemV2 from '../cards/FaqItemV2.astro';
-import type { Props as FaqItemProps } from '../cards/FaqItemV2.astro';
-
-// Define the properties for the entire block
 export interface Props {
   heading: string;
   subheading: string;
-  faqs: FaqItemProps[];
+  faqItems: Array<{
+    question: string;
+    answer: string;
+  }>;
+  seoSettings?: {
+    enableSchema?: boolean;
+    schemaContext?: string;
+  };
 }
 
-const { heading, subheading, faqs } = Astro.props;
+const { heading, subheading, faqItems, seoSettings } = Astro.props;
 
 // Logic to distribute the FAQs into three columns
-const columns: FaqItemProps[][] = [[], [], []];
-faqs.forEach((faq, index) => {
-  columns[index % 3].push(faq);
-});
+const columns: Array<{question: string; answer: string}[]> = [[], [], []];
+if (faqItems && faqItems.length > 0) {
+  faqItems.forEach((faq, index) => {
+    columns[index % 3].push(faq);
+  });
+}
+
+// Generate FAQ Schema JSON-LD for SEO
+const generateFAQSchema = () => {
+  if (!seoSettings?.enableSchema || !faqItems?.length) return null;
+  
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "name": seoSettings.schemaContext || `${heading} - JAM Group`,
+    "mainEntity": faqItems.map(item => ({
+      "@type": "Question",
+      "name": item.question,
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": item.answer
+      }
+    }))
+  };
+  
+  return faqSchema;
+};
+
+const faqSchema = generateFAQSchema();
 ---
+
+<!-- Inject FAQ Schema into page head -->
+{faqSchema && (
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)}></script>
+)}
 
 <section
   class="pt-14 md:pt-16 lg:pt-[88px] xl:pt-[100px] pb-14 md:pb-16 lg:pb-[88px] xl:pb-[100px] relative overflow-hidden"
@@ -46,18 +80,46 @@ faqs.forEach((faq, index) => {
       </div>
     </div>
 
-    <!-- FAQ Accordion Items Grid -->
-    <div
-      class="w-full mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[30px] items-start"
-    >
-      <!-- Render the three columns -->
-      {columns.map(column => (
-        <div class="space-y-[30px]">
-          {column.map(faq => (
-            <FaqItemV2 question={faq.question} answer={faq.answer} />
-          ))}
+    {faqItems && faqItems.length > 0 ? (
+      <!-- FAQ Accordion Items Grid -->
+      <div
+        class="w-full mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[30px] items-start"
+      >
+        <!-- Render the three columns -->
+        {columns.map((column) => (
+          <div class="space-y-[30px]">
+            {column.map((faq) => (
+              <div class="reveal-me">
+                <div
+                  class="accordion-itemV4 overflow-hidden relative w-full lg:max-w-[370px] bg-backgroundBody dark:bg-dark border data-[active=true]:border-black data-[active=false]:border-black/10 dark:data-[active=false]:border-white/10 dark:data-[active=true]:border-white/10 duration-300 px-4 md:px-[30px] pt-4 md:pt-[30px] pb-8 md:pb-[60px] space-y-6"
+                >
+                  <div class="accordion-headerV4 cursor-pointer">
+                    <h3
+                      class="text-[23px] md:text-[25px] tracking-normal font-normal md:leading-[25.2px]"
+                    >
+                      {faq.question}
+                    </h3>
+                    <div class="accordion-header-iconV4 dark:border-dark"></div>
+                  </div>
+                  <p class="accordion-bodyV4 duration-300 h-0 overflow-hidden">
+                    {faq.answer}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        ))}
+      </div>
+    ) : (
+      <!-- Editor Helper -->
+      <div class="text-center py-16">
+        <div class="bg-blue-100 border border-blue-300 text-blue-700 px-6 py-4 rounded-lg inline-block">
+          <p class="font-semibold">❓ No FAQ Items Found</p>
+          <p class="text-sm mt-2">Add some FAQ questions and answers in the block settings.</p>
+          <p class="text-xs mt-1 text-blue-600">🤖 FAQ schema will be auto-generated for SEO!</p>
+          <p class="text-xs text-blue-500">💡 Works best with 3, 6, 9, or 12 items for even columns</p>
         </div>
-      ))}
-    </div>
+      </div>
+    )}
   </div>
 </section>
