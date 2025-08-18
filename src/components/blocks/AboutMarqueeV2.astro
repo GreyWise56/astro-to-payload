@@ -3,22 +3,61 @@
 
 /*
 ================================================================================
-Component: AboutMarqueeV2
+Component: AboutMarqueeV2 (Payload Block Version)
 Description: A block that displays a prominent heading followed by a skewed,
-             infinitely scrolling marquee of images.
+             infinitely scrolling marquee of images from Payload CMS.
 ================================================================================
 */
 
-import MarqueeImageCard from '../cards/MarqueeImageCard.astro';
-import type { Props as MarqueeImage } from '../cards/MarqueeImageCard.astro';
+// Note: We inline the marquee card HTML since Payload serves images as URLs, not ImageMetadata
 
-// Define the properties for the entire block
+// Define the properties for the entire block (from Payload)
 export interface Props {
-  heading: string;
-  marqueeImages: MarqueeImage[];
+  heading: any; // RichText from Payload
+  marqueeImages: Array<{
+    image: {
+      url: string;
+      alt?: string;
+    };
+    alt: string;
+    id?: string;
+  }>;
 }
 
 const { heading, marqueeImages } = Astro.props;
+
+// Convert Payload RichText to HTML string
+const getTextContent = (richTextContent: any): string => {
+  if (typeof richTextContent === 'string') {
+    return richTextContent;
+  }
+  
+  if (richTextContent?.root?.children) {
+    return richTextContent.root.children
+      .map((child: any) => {
+        if (child.type === 'paragraph' && child.children) {
+          return child.children.map((textNode: any) => textNode.text || '').join('');
+        }
+        return child.text || '';
+      })
+      .join(' ');
+  }
+  
+  return '';
+};
+
+const headingContent = getTextContent(heading);
+// Add the helper function
+const getImageUrl = (imageObj: { url: string; alt?: string }) => {
+  return imageObj?.url?.startsWith('http') 
+    ? imageObj.url 
+    : `http://localhost:3000${imageObj?.url || ''}`;
+};
+// Transform marquee images to the format expected by MarqueeImageCard
+const transformedImages = marqueeImages?.map((item) => ({
+  image: getImageUrl(item.image),  // ✅ Use the helper function
+  altText: item.alt || item.image?.alt || 'Marquee image',
+})) || [];
 ---
 
 <!--
@@ -39,7 +78,7 @@ animation defined in a global script.
       <h2
         id="about-heading"
         class="reveal-text-2 text-3xl lg:text-5xl lg:leading-[1.5] text-secondary dark:text-backgroundBody mb-8"
-        set:html={heading}
+        set:html={headingContent}
       />
     </div>
   </div>
@@ -58,8 +97,14 @@ animation defined in a global script.
           class="z-50 flex gap-5 w-fit flex-nowrap whitespace-nowrap will-change-transform marquee-inner reveal-me"
           aria-live="polite"
         >
-          <!-- Loop through marqueeImages and render a card for each -->
-          {marqueeImages.map((item) => <MarqueeImageCard {...item} />)}
+          <!-- Loop through transformed marquee images and render a card for each -->
+          {transformedImages.map((item) => (
+            <figure
+              class="marquee-part flex items-center justify-center size-[370px] z-50 flex-shrink-0"
+            >
+              <img src={item.image} alt={item.altText} width="370" height="370" />
+            </figure>
+          ))}
         </div>
       </div>
     </div>

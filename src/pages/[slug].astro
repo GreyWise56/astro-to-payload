@@ -19,6 +19,9 @@ import HeroV19 from '../components/blocks/HeroV19.astro';
 import HeroV20 from '../components/blocks/HeroV20.astro';
 import FAQV1 from '../components/blocks/FAQV1.astro';
 import FAQV2 from '../components/blocks/FAQV2.astro';
+import AboutDescriptionV5 from '../components/blocks/AboutDescriptionV5.astro';
+import AboutMarqueeV2 from '../components/blocks/AboutMarqueeV2.astro';
+import AboutV6 from '../components/blocks/AboutV6.astro';
 
 // Static generation code stays the same...
 export async function getStaticPaths() {
@@ -245,6 +248,25 @@ case 'hero-v19':
     subheading={block.subheading}
     faqItems={block.faqItems}
     seoSettings={block.seoSettings}
+  />;
+
+  case 'about-description-v5':
+    return <AboutDescriptionV5 
+      description={block.description}
+    />;
+
+    case 'about-marquee-v2':
+  return <AboutMarqueeV2 
+    heading={block.heading}
+    marqueeImages={block.marqueeImages}
+  />;
+
+  case 'about-v6':
+  return <AboutV6 
+    badge={block.badge}
+    heading={block.heading}
+    subheading={block.subheading}
+    button={block.button}
   />;
             default:
               return (

@@ -1,8 +1,9 @@
 ---
-// src/components/blocks/AboutV6.astro
+// src/components/blocks/AboutV6.astro (Payload Block Version)
+
 export interface Props {
   badge: string;
-  heading: string;
+  heading: any; // RichText from Payload
   subheading: string;
   button: {
     text: string;
@@ -11,6 +12,28 @@ export interface Props {
 }
 
 const { badge, heading, subheading, button } = Astro.props;
+
+// Convert Payload RichText to HTML string
+const getTextContent = (richTextContent: any): string => {
+  if (typeof richTextContent === 'string') {
+    return richTextContent;
+  }
+  
+  if (richTextContent?.root?.children) {
+    return richTextContent.root.children
+      .map((child: any) => {
+        if (child.type === 'paragraph' && child.children) {
+          return child.children.map((textNode: any) => textNode.text || '').join('');
+        }
+        return child.text || '';
+      })
+      .join(' ');
+  }
+  
+  return '';
+};
+
+const headingContent = getTextContent(heading);
 ---
 
 <section class="pt-6 lg:pt-12 pb-14 md:pb-16 lg:pb-[88px] xl:pb-[100px] relative overflow-hidden">
@@ -19,7 +42,7 @@ const { badge, heading, subheading, button } = Astro.props;
       <div class="rv-badge reveal-me">
         <span class="rv-badge-text">{badge}</span>
       </div>
-      <h2 class="mt-3 mb-8 text-center text-appear" set:html={heading}>
+      <h2 class="mt-3 mb-8 text-center text-appear" set:html={headingContent}>
       </h2>
     </div>
     <div class="reveal-me">

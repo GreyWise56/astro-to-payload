@@ -3,17 +3,39 @@
 
 /*
 ================================================================================
-Component: AboutDescriptionV5
+Component: AboutDescriptionV5 (Payload Block Version)
 Description: A simple block that displays a single, prominent paragraph of
-             descriptive text.
+             descriptive text from Payload CMS.
 ================================================================================
 */
 
 export interface Props {
-  description: string;
+  description: any; // RichText from Payload
 }
 
 const { description } = Astro.props;
+
+// Convert Payload RichText to HTML string if needed
+const getTextContent = (richTextContent: any): string => {
+  if (typeof richTextContent === 'string') {
+    return richTextContent;
+  }
+  
+  if (richTextContent?.root?.children) {
+    return richTextContent.root.children
+      .map((child: any) => {
+        if (child.type === 'paragraph' && child.children) {
+          return child.children.map((textNode: any) => textNode.text || '').join('');
+        }
+        return child.text || '';
+      })
+      .join(' ');
+  }
+  
+  return '';
+};
+
+const textContent = getTextContent(description);
 ---
 
 <section
@@ -22,7 +44,7 @@ const { description } = Astro.props;
   <div class="container reveal-me">
     <h3
       class="reveal-text-2 text-2xl text-secondary/90 dark:text-backgroundBody/70 text-left lg:text-3xl xl:text-4xl font-normal lg:leading-[1.2] lg:tracking-[0.72px]"
-      set:html={description}
+      set:html={textContent}
     >
     </h3>
   </div>
